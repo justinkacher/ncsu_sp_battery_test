@@ -9,7 +9,7 @@ rm = pyvisa.ResourceManager()
 
 keithley = rm.open_resource('USB0::0x05E6::0x2450::04366211::INSTR')
 
-print(keithley.query("*IDN?"))      # query's the Identity of the device connected
+#print(keithley.query("*IDN?"))      # query's the Identity of the device connected
 
 
 # battery connection:
