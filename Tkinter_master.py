@@ -1,232 +1,141 @@
+from collections import namedtuple
 from tkinter import *
 import tkinter as tk
-
-#from mass.hx711_as_tkinter import *
-
-
-#hx711 libraries
 from tkinter.constants import *
-#from mass.RaspberryPi_Read import *
-#from hx711 import HX711                 #library will not import properly when not on Raspberry Pi
-#import RPi.GPIO as GPIO                 #library will not import properly when not on Raspberry pi
-#rpi read libraries
-#import RPi.GPIO as GPIO
+from tkinter.ttk import Labelframe
 
+#number of batteries to test
+numbatteries = 12
 
-#from matplotlib.pyplot import gray
 
 window = tk.Tk()
 window.title("18650 Battery Profile")
+window.geometry("1200x800")
 
 
-
-'''
-top test progress bar
-- to do - color to green when test is active
-- to do - color to red if test is flagged as incorrect and set to re perform
-'''
-
-
-#Setup Page --------------------------------------------------------------
-
-setupframe = Frame(window)
-setupframe.pack(side = BOTTOM)
-
-#Setup Page --------------------------------------------------------------
-
-#progress bar -------------------------------------------------------------
-progframe = Frame(window)
-progframe.pack(side = TOP)
-
-
-toplblmass = tk.Label(
-    progframe,
-    text = "Mass",
-    padx = 10,
-    bg = "gray"
-    )
-toplblocv = tk.Label(
-    progframe,
-    text = "Open Circuit Voltage",
-    padx = 10,
-    bg = "gray"
-    )
-toplbldcir = tk.Label(
-    progframe,
-    text = "DC Internal resistance",
-    padx = 10,
-    bg = "gray"
-    )
-toplblacir = tk.Label(
-    progframe,
-    text = "AC Internal resistance",
-    padx = 10,
-    bg = "gray"
-    )
-toplblcaprat = tk.Label(
-    progframe,
-    text = "Capacity Ratio",
-    padx = 10,
-    bg = "gray"
-    )
-
-
-toplblmass.pack(side = LEFT)
-toplblocv.pack(side = LEFT)
-toplbldcir.pack(side = RIGHT)
-toplblacir.pack(side = RIGHT)
-toplblcaprat.pack(side = RIGHT)
-
-#progress bar -------------------------------------------------------------
-
-
-
-
-
-#mass page ----------------------------------------------------------------
-massframe = Frame(window)
-
-#frame creation ##########################
-def showmassframe():
-    massframe.pack(side = BOTTOM)
-    toplblmass.config(
-        bg = "green"
-    )
-
+#3 columns
+scaleframe = tk.Frame(window,
+    borderwidth=5,
+    relief = GROOVE,
     
-    Lframe = Frame(massframe)
-    Lframe.pack(side = LEFT)
-
-    rightoutputframe = Frame(massframe)
-    rightoutputframe.pack(  
-            side = RIGHT,
-            padx = 20
-        )
-
-    topRframe = Frame(rightoutputframe)
-    topRframe.pack(side = TOP)
-
-    midRframe = Frame(rightoutputframe)
-    midRframe.pack()
-
-    botRframe = Frame(rightoutputframe)
-    botRframe.pack(
-            side = BOTTOM,
-            pady = 10
-            )
-    ##########################################
+)
+scaleframe.grid(column = 1,row = 1)
+site1frame = tk.Frame(window,
+    borderwidth=5,
+    relief = GROOVE
+)
+site1frame.grid(column = 2,row = 1)
+site2frame = tk.Frame(window,
+    borderwidth=5,
+    relief = GROOVE
+)
+site2frame.grid(column = 3,row = 1)
 
 
-    #Tare Button
-    print("generating tare button")
-    tarebutton = tk.Button(
-            Lframe,
-            text="Tare",
-            height = 10,
-            width = 20,
-            font = ("Courier",10),
-            #command = fcntare
-        )
-    tarebutton.pack(side = TOP)
-    print("pack")
+#scale #########################################
 
-    #TAKE MEASURE BUTTON
-    print("generating measure btn")
-    measurebutton = tk.Button(
-            Lframe,
-            text="Take Measurement",
-            height = 10,
-            width = 20,
-            font = ("Courier",10),
-            #command = fmeasure
-        )
-    measurebutton.pack(side = BOTTOM)
-    print("Done")
+scalelbl = tk.Label(
+    scaleframe,
+    text = "Scale"
+    )
+scalelbl.grid(row = 0)
 
-    #SAVE VALUE LABEL
-    print("generating save lbl")
-    checkvallbl = tk.LabelFrame(
-            topRframe,
-            text = "Save this value?",
-            height = 20,
-            width=20,
-            font = ("Courier",10)
-        )
-    checkvallbl.pack()
-    print("Done")
+ID1lbl = tk.Label(
+    scaleframe,
+    text = "ID: "
+    )
+ID1lbl.grid(row = 1)
 
-    #VALUE OF MEASURE LABEL
-    print("generating val lbl")
-    measurevallbl = tk.Label(
-            checkvallbl,
-            text = "measureval",
-            font = ("Courier",40)
-        )
-    measurevallbl.pack()
-    print("Done")
-'''
-    #YES BUTTON
-    print("generating 'yes' button")
-    yesbtn = tk.Button(
-            botRframe,
-            text = "YES",
-            height=3,
-            width=10,
-            font = ("Courier",10)
-        )
-    yesbtn.pack(side = LEFT)
-    print("Done")
+tarebtn = tk.Button(
+    scaleframe,
+    text = "Tare",
+    width = 30,
+    height = 5
+    )
+tarebtn.grid(row = 2)
 
-    #NO BUTTON
-    print("generating 'no' button")
-    nobtn = tk.Button(
-            botRframe,
-            text = "NO",
-            height=3,
-            width=10,
-            font = ("Courier",10)
-        )
-    nobtn.pack(side = RIGHT)
-    print("Done")
-'''
-def hidemassframe():
-    toplblmass.config(bg = "gray")
-    massframe.pack_forget()
+readbtn = tk.Button(
+    scaleframe,
+    text = "Read",
+    width = 30,
+    height = 5
+)
+readbtn.grid(row = 3)
 
-#end mass page ----------------------------------------------------------------
+masslbl = tk.Label(
+    scaleframe,
+    text = "Read Value:"
+    )
+masslbl.grid(row = 4)
 
+#scale #########################################
 
-#open circuit voltage -----------------------------------------------------
-ocvframe = Frame(window)
-def showocv():
-    ocvframe.pack(side = BOTTOM)
-    toplblocv.config(bg = "green")
+#site 1#########################################
+site1lbl = tk.Label(site1frame,
+    text = "Site 1"
+    )
+site1lbl.grid(row = 1,columnspan=2)
 
-#open circuit voltage -----------------------------------------------------
+ID2lbl = tk.Label(site1frame,
+    text = "ID:"
+)
+ID2lbl.grid(row = 2,columnspan=2)
 
+data1lbl = tk.Label(site1frame,
+    text = "Mass: \nOpen Circuit Volatage: \nDC Internal Resistance: \nAC Internal Resistance: \nCapacity Ratio: "
+)
+data1lbl.grid(row = 3,columnspan=2)
 
-#DC internal resistance ---------------------------------------------------
+start1btn = tk.Button(site1frame,
+    text = "Start"
+)
+start1btn.grid(row = 4, column = 1)
 
-#DC internal resistance ---------------------------------------------------
+remove1btn = tk.Button(site1frame,
+    text = "Remove"
+)
+remove1btn.grid(row = 4, column = 2)
 
+#site 1#########################################
 
-#AC internal resistance ---------------------------------------------------
+#site 2#########################################
 
-#AC internal resistance ---------------------------------------------------
+site2lbl = tk.Label(site2frame,
+    text = "Site 2"
+    )
+site2lbl.grid(row = 1,columnspan=2)
 
-#Capacity Ratio -----------------------------------------------------------
+ID3lbl = tk.Label(site2frame,
+    text = "ID:"
+)
+ID3lbl.grid(row = 2,columnspan=2)
 
-#Capacity Ratio -----------------------------------------------------------
+data2lbl = tk.Label(site2frame,
+    text = "Mass: \nOpen Circuit Volatage: \nDC Internal Resistance: \nAC Internal Resistance: \nCapacity Ratio: "
+)
+data2lbl.grid(row = 3,columnspan=2)
+
+start2btn = tk.Button(site2frame,
+    text = "Start"
+)
+start2btn.grid(row = 4, column = 1)
+
+remove2btn = tk.Button(site2frame,
+    text = "Remove"
+)
+remove2btn.grid(row = 4, column = 2)
+
+#site 2#########################################
 
 
 
 
 
-#window.show_frame(progframe)
-if input('mass? y/n') == 'y':
-    showmassframe()
-if input('y/n') == 'n':
-    hidemassframe()
+
+
+
+
+
 
 
 window.mainloop()
