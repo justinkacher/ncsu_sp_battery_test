@@ -121,59 +121,98 @@ massvallbl.place(y=400,width = 390,height = 50)
 #scale #########################################
 
 #site 1#########################################
-site1lbl = tk.Label(site1frame,
-    text = "Site 1"
+site1lbl = tk.Label(
+    site1frame,
+    text = "Site 1",
+    font = ("Arial",30)
     )
-site1lbl.grid(row = 1,columnspan=2)
+site1lbl.grid(row = 1, sticky = N)
+site1lbl.place(width = 390)
 
-ID2lbl = tk.Label(site1frame,
-    text = "ID:"
+ID2lbl = tk.Label(
+    site1frame,
+    text = "ID"
 )
-ID2lbl.grid(row = 2,columnspan=2)
+ID2lbl.grid(row = 2)
+ID2lbl.place(y=60,width = 390)
 
-data1lbl = tk.Label(site1frame,
-    text = "Mass: \nOpen Circuit Volatage: \nDC Internal Resistance: \nAC Internal Resistance: \nCapacity Ratio: "
+ID2num = tk.Label(
+    site1frame,
+    text = "----"
 )
-data1lbl.grid(row = 3,columnspan=2)
+ID2num.grid(row = 3)
+ID2num.place(y=100, width = 390)
 
-start1btn = tk.Button(site1frame,
+
+data1lbl = tk.Label(
+    site1frame,
+    text = "Mass: \n\nOpen Circuit Volatage: \n\nDC Internal Resistance: \n\nAC Internal Resistance: \n\nCapacity Ratio: ",
+    justify=LEFT
+)
+data1lbl.grid(row = 3)
+data1lbl.place(y=150,x=50, width = 200)
+
+start1btn = tk.Button(
+    site1frame,
     text = "Start"
 )
-start1btn.grid(row = 4, column = 1)
+start1btn.grid(row = 5)
+start1btn.place(y= 400,x=25,width = 150, height = 50)
 
-remove1btn = tk.Button(site1frame,
+remove1btn = tk.Button(
+    site1frame,
     text = "Remove"
 )
-remove1btn.grid(row = 4, column = 2)
+remove1btn.grid(row = 5)
+remove1btn.place(y = 400,x=225,width = 150,height = 50)
 
 #site 1#########################################
 
 #site 2#########################################
 
-site2lbl = tk.Label(site2frame,
-    text = "Site 2"
+site2lbl = tk.Label(
+    site2frame,
+    text = "Site 2",
+    font = ("Arial",30)
     )
-site2lbl.grid(row = 1,columnspan=2)
+site2lbl.grid(row = 1, sticky = N)
+site2lbl.place(width = 390)
 
-ID3lbl = tk.Label(site2frame,
+ID3lbl = tk.Label(
+    site2frame,
     text = "ID:"
 )
-ID3lbl.grid(row = 2,columnspan=2)
+ID3lbl.grid(row = 2)
+ID3lbl.place(y=60,width = 390)
 
-data2lbl = tk.Label(site2frame,
-    text = "Mass: \nOpen Circuit Volatage: \nDC Internal Resistance: \nAC Internal Resistance: \nCapacity Ratio: "
+ID3num = tk.Label(
+    site2frame,
+    text = "----"
 )
-data2lbl.grid(row = 3,columnspan=2)
+ID3num.grid(row = 3)
+ID3num.place(y=100, width = 390)
 
-start2btn = tk.Button(site2frame,
+data2lbl = tk.Label(
+    site2frame,
+    text = "Mass: \n\nOpen Circuit Volatage: \n\nDC Internal Resistance: \n\nAC Internal Resistance: \n\nCapacity Ratio: ",
+    justify=LEFT
+)
+data2lbl.grid(row = 3)
+data2lbl.place(y=150,x=50, width = 200)
+
+start2btn = tk.Button(
+    site2frame,
     text = "Start"
 )
-start2btn.grid(row = 4, column = 1)
+start2btn.grid(row = 5)
+start2btn.place(y= 400,x=25,width = 150, height = 50)
 
-remove2btn = tk.Button(site2frame,
+remove2btn = tk.Button(
+    site2frame,
     text = "Remove"
 )
-remove2btn.grid(row = 4, column = 2)
+remove2btn.grid(row = 5)
+remove2btn.place(y = 400,x=225,width = 150,height = 50)
 
 #site 2#########################################
 
