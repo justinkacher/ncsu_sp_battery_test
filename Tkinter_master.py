@@ -1,13 +1,66 @@
 from collections import namedtuple
+#from distutils.log import error
 from tkinter import *
 import tkinter as tk
 from tkinter.constants import *
 from tkinter.ttk import Labelframe
 
-from matplotlib import scale
+
+#from matplotlib import scale
+import tkcommands as tkcommands
+from tkcommands import starttest
+import config
+
+
+
+
+
+
+
+
+
+
+
+ 
+config.initialize()
+errorstate = config.msgsite1
+errorstate2 = config.msgsite2
+
+
+
+
+
+
+
+def errorlblupdate():
+    tkcommands.starttest()
+    refresh(errorlbl)
+    
+
+def errorlbl2update():
+    tkcommands.starttest()
+    refresh2(errorlbl2)
+
+def refresh(x):
+    x.configure(
+        text = config.msgsite1
+    )
+def refresh2(x):
+        x.configure(
+        text = config.msgsite2
+    )
+
+
+
+
+
+
+
 
 #number of batteries to test
 numbatteries = 12
+
+
 
 
 window = tk.Tk()
@@ -16,6 +69,8 @@ window.geometry("1200x600")
 window.resizable(0,0)
 window.grid_rowconfigure(1,weight = 1)
 window.grid_columnconfigure(2,weight = 1)
+
+
 
 
 #3 columns
@@ -154,17 +209,27 @@ data1lbl.place(y=150,x=50, width = 200)
 
 start1btn = tk.Button(
     site1frame,
-    text = "Start"
+    text = "Start",
+    bg = '#8dc989',
+    command = errorlblupdate
 )
 start1btn.grid(row = 5)
 start1btn.place(y= 400,x=25,width = 150, height = 50)
 
 remove1btn = tk.Button(
     site1frame,
-    text = "Remove"
+    text = "Remove",
+    bg = '#ab5454'
 )
 remove1btn.grid(row = 5)
 remove1btn.place(y = 400,x=225,width = 150,height = 50)
+
+errorlbl = Label(
+    site1frame,
+    text = errorstate
+    )
+errorlbl.grid(row = 6)
+errorlbl.place(y=500, width = 390)
 
 #site 1#########################################
 
@@ -202,17 +267,27 @@ data2lbl.place(y=150,x=50, width = 200)
 
 start2btn = tk.Button(
     site2frame,
-    text = "Start"
+    text = "Start",
+    bg = '#8dc989',
+    command = errorlbl2update
 )
 start2btn.grid(row = 5)
 start2btn.place(y= 400,x=25,width = 150, height = 50)
 
 remove2btn = tk.Button(
     site2frame,
-    text = "Remove"
+    text = "Remove",
+    bg = '#ab5454'
 )
 remove2btn.grid(row = 5)
 remove2btn.place(y = 400,x=225,width = 150,height = 50)
+
+errorlbl2 = Label(
+    site2frame,
+    text = errorstate2
+    )
+errorlbl2.grid(row = 6)
+errorlbl2.place(y=500, width = 390)
 
 #site 2#########################################
 
@@ -222,9 +297,12 @@ remove2btn.place(y = 400,x=225,width = 150,height = 50)
 
 
 
-
-
-
-
-
 window.mainloop()
+
+
+
+
+
+
+
+
