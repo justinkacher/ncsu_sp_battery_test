@@ -5,18 +5,11 @@ import tkinter as tk
 from tkinter.constants import *
 from tkinter.ttk import Labelframe
 
-
+import time
 #from matplotlib import scale
-import tkcommands as tkcommands
-from tkcommands import starttest
+import tkcommands
 import config
-
-
-
-
-
-
-
+import scaletest
 
 
 
@@ -32,33 +25,79 @@ errorstate2 = config.msgsite2
 
 
 
-def errorlblupdate():
-    tkcommands.starttest()
-    refresh(errorlbl)
-    
+def readscale():
+    scaletest.read()
+    refreshscale()
+def tarescale():
+    scaletest.tare()
+    refreshscale()
+def refreshscale():
+    massvallbl.configure(
+        text = config.scalevalue
+    )
+    IDnum.configure(
+        text = config.IDscale
+    )
 
-def errorlbl2update():
-    tkcommands.starttest()
-    refresh2(errorlbl2)
 
-def refresh(x):
-    x.configure(
+
+
+
+
+
+
+def starttest1():
+    tkcommands.checkstate1()
+    errorlbl.configure(
         text = config.msgsite1
     )
-def refresh2(x):
-        x.configure(
+    ID2num.configure(
+        text = config.IDsite1
+    )
+    massvallbl.configure(
+        text = config.scalevalue
+    )
+    IDnum.configure(
+        text = config.IDscale
+    )
+
+
+def starttest2():
+    tkcommands.checkstate2()
+    errorlbl2.configure(
         text = config.msgsite2
+    )
+    ID3num.configure(
+        text = config.IDsite2
+    )
+    massvallbl.configure(
+        text = config.scalevalue
+    )
+    IDnum.configure(
+        text = config.IDscale
+    )
+
+def removetest1():
+    tkcommands.rmvcheckstate1()
+    errorlbl.configure(
+        text = config.msgsite1
+    )
+    ID2num.configure(
+        text = config.IDsite1
+    )
+
+def removetest2():
+    tkcommands.rmvcheckstate2()
+    errorlbl2.configure(
+        text = config.msgsite2
+    )
+    ID3num.configure(
+        text = config.IDsite2
     )
 
 
 
 
-
-
-
-
-#number of batteries to test
-numbatteries = 12
 
 
 
@@ -137,7 +176,7 @@ ID1lbl.place(y=60,width = 390)
 
 IDnum = tk.Label(
     scaleframe,
-    text = "----"
+    text = config.IDscale
 )
 IDnum.grid(row = 3)
 IDnum.place(y=100, width = 390)
@@ -145,7 +184,8 @@ IDnum.place(y=100, width = 390)
 tarebtn = tk.Button(
     scaleframe,
     text = "Tare",
-    height = 5
+    height = 5,
+    command = tarescale
     )
 tarebtn.grid(row = 4)
 tarebtn.place(x=25,y = 150,width = 350,height = 100)
@@ -153,7 +193,8 @@ tarebtn.place(x=25,y = 150,width = 350,height = 100)
 readbtn = tk.Button(
     scaleframe,
     text = "Read",
-    height = 5
+    height = 5,
+    command = readscale
 )
 readbtn.grid(row = 5)
 readbtn.place(x = 25,y=250,width = 350, height = 100)
@@ -161,7 +202,7 @@ readbtn.place(x = 25,y=250,width = 350, height = 100)
 
 readvallbl = tk.Label(
     scaleframe,
-    text = "Read Value"
+    text = config.scalevalue
     )
 readvallbl.grid(row = 6)
 readvallbl.place(y = 350, width = 390, height = 50)
@@ -193,7 +234,7 @@ ID2lbl.place(y=60,width = 390)
 
 ID2num = tk.Label(
     site1frame,
-    text = "----"
+    text = config.IDsite1
 )
 ID2num.grid(row = 3)
 ID2num.place(y=100, width = 390)
@@ -211,7 +252,7 @@ start1btn = tk.Button(
     site1frame,
     text = "Start",
     bg = '#8dc989',
-    command = errorlblupdate
+    command = starttest1
 )
 start1btn.grid(row = 5)
 start1btn.place(y= 400,x=25,width = 150, height = 50)
@@ -219,14 +260,15 @@ start1btn.place(y= 400,x=25,width = 150, height = 50)
 remove1btn = tk.Button(
     site1frame,
     text = "Remove",
-    bg = '#ab5454'
+    bg = '#ab5454',
+    command = removetest1
 )
 remove1btn.grid(row = 5)
 remove1btn.place(y = 400,x=225,width = 150,height = 50)
 
 errorlbl = Label(
     site1frame,
-    text = errorstate
+
     )
 errorlbl.grid(row = 6)
 errorlbl.place(y=500, width = 390)
@@ -252,7 +294,7 @@ ID3lbl.place(y=60,width = 390)
 
 ID3num = tk.Label(
     site2frame,
-    text = "----"
+    text = config.IDsite2
 )
 ID3num.grid(row = 3)
 ID3num.place(y=100, width = 390)
@@ -269,7 +311,7 @@ start2btn = tk.Button(
     site2frame,
     text = "Start",
     bg = '#8dc989',
-    command = errorlbl2update
+    command = starttest2
 )
 start2btn.grid(row = 5)
 start2btn.place(y= 400,x=25,width = 150, height = 50)
@@ -277,14 +319,15 @@ start2btn.place(y= 400,x=25,width = 150, height = 50)
 remove2btn = tk.Button(
     site2frame,
     text = "Remove",
-    bg = '#ab5454'
+    bg = '#ab5454',
+    command = removetest2
 )
 remove2btn.grid(row = 5)
 remove2btn.place(y = 400,x=225,width = 150,height = 50)
 
 errorlbl2 = Label(
     site2frame,
-    text = errorstate2
+
     )
 errorlbl2.grid(row = 6)
 errorlbl2.place(y=500, width = 390)

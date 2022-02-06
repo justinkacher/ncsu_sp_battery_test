@@ -2,25 +2,40 @@
 #FALSE = test is ended/inactive
 
 from pickle import FALSE, TRUE
-from time import sleep
 import config as config
+import site1test
+import site2test
 
-def starttest():
-    if config.site1state==TRUE:
+
+
+
+
+def checkstate1():
+    if config.site1state == TRUE:
         config.msgsite1 = "ERROR: Site 1 is Active"
     else:
-        config.msgsite1 = "Test Active\nDO NOT REMOVE"
-        #turn on safety light
-        #run tests
+        site1test.runtest()
+        config.msgsite1 = "Test Site Active\nDO NOT REMOVE"
 
-    
+def checkstate2():
+    if config.site2state == TRUE:
+        config.msgsite2 = "ERROR: Site 1 is Active"
+    else:
+        site2test.runtest()
+        config.msgsite2 = "Test Site Active\nDO NOT REMOVE"
+
+def rmvcheckstate1():
+    if config.site1state == TRUE:
+        config.msgsite1 = "ERROR: Site 1 is Active"
+    else:
+        config.msgsite1 = "Remove"
+        config.IDsite1 = "--"
+
+
+def rmvcheckstate2():
     if config.site2state == TRUE:
         config.msgsite2 = "ERROR: Site 2 is Active"
     else:
-        config.msgsite2 = "Test Active\nDO NOT REMOVE"
-        #turn on safety light
-        # run tests
-
-
-
+        config.msgsite2 = "Remove"
+        config.IDsite2 = "--"
 
