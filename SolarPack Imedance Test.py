@@ -73,7 +73,7 @@ while iteration >=0:    # infinite while loop; breaks when voltLimit is reached
     current = keithley.read()                   # a query command asks the instrument to return specifed information # a read is required before next set or query
     print(current)
     currentL.append(float(current))
-    keithley.write(f'TRAC:DATA? {iteration}, {iteration},"defbuffer1", SOUR')
+    keithley.write(f'TRAC:DATA? {iteration}, {iteration},"defbuffer1", SOUR')       # reads source value
     volt = keithley.read()
     print(volt)
     voltageL.append(float(volt))
