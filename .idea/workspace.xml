@@ -20,10 +20,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="399bd4ca-f68b-43cc-99d5-d1f9dd58404d" name="Default Changelist" comment=" 1">
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Barcode.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/ncsu_sp_battery_test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ncsu_sp_battery_test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Battery Test Methods.py" beforeDir="false" afterPath="$PROJECT_DIR$/Battery Test Methods.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SolarPack Imedance Test.py" beforeDir="false" afterPath="$PROJECT_DIR$/SolarPack Imedance Test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Battery Test Methods.py" beforeDir="false" afterPath="$PROJECT_DIR$/Battery_Test_Methods.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/site1test.py" beforeDir="false" afterPath="$PROJECT_DIR$/site1test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,7 +58,7 @@
     <property name="last_opened_file_path" value="$USER_HOME$" />
     <property name="settings.editor.selected.configurable" value="org.jetbrains.plugins.github.ui.GithubSettingsConfigurable" />
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.site1test">
     <configuration default="true" type="PythonConfigurationType" factoryName="Python" singleton="false">
       <module name="ncsu_sp_battery_test" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -99,6 +101,32 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="site1test" type="PythonConfigurationType" factoryName="Python" singleton="false" temporary="true" nameIsGenerated="true">
+      <module name="ncsu_sp_battery_test" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$USER_HOME$/.conda/envs/SMU/bin/python" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/site1test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.site1test" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -126,13 +154,34 @@
     </state>
     <state x="302" y="182" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1050@0.0.1680.1050" timestamp="1643763052643" />
     <state x="302" y="203" width="1167" height="682" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.25.1680.1025@0.25.1680.1025" timestamp="1643318412448" />
+    <state x="627" y="284" key="FileChooserDialogImpl" timestamp="1644108875894">
+      <screen x="0" y="0" width="1680" height="1050" />
+    </state>
+    <state x="627" y="284" key="FileChooserDialogImpl/0.0.1680.1050@0.0.1680.1050" timestamp="1644108875894" />
+    <state width="1659" height="304" key="GridCell.Tab.0.bottom" timestamp="1644164183953">
+      <screen x="0" y="0" width="1680" height="1050" />
+    </state>
+    <state width="1659" height="304" key="GridCell.Tab.0.bottom/0.0.1680.1050@0.0.1680.1050" timestamp="1644164183953" />
+    <state width="1659" height="304" key="GridCell.Tab.0.center" timestamp="1644164183951">
+      <screen x="0" y="0" width="1680" height="1050" />
+    </state>
+    <state width="1659" height="304" key="GridCell.Tab.0.center/0.0.1680.1050@0.0.1680.1050" timestamp="1644164183951" />
+    <state width="1659" height="304" key="GridCell.Tab.0.left" timestamp="1644164183950">
+      <screen x="0" y="0" width="1680" height="1050" />
+    </state>
+    <state width="1659" height="304" key="GridCell.Tab.0.left/0.0.1680.1050@0.0.1680.1050" timestamp="1644164183950" />
+    <state width="1659" height="304" key="GridCell.Tab.0.right" timestamp="1644164183952">
+      <screen x="0" y="0" width="1680" height="1050" />
+    </state>
+    <state width="1659" height="304" key="GridCell.Tab.0.right/0.0.1680.1050@0.0.1680.1050" timestamp="1644164183952" />
     <state x="347" y="180" key="SettingsEditor" timestamp="1643318177846">
       <screen x="0" y="25" width="1680" height="1025" />
     </state>
     <state x="347" y="180" key="SettingsEditor/0.25.1680.1025@0.25.1680.1025" timestamp="1643318177846" />
-    <state x="629" y="462" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1643318566072">
-      <screen x="0" y="25" width="1680" height="1025" />
+    <state x="629" y="448" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1644163809183">
+      <screen x="0" y="0" width="1680" height="1050" />
     </state>
+    <state x="629" y="448" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1680.1050@0.0.1680.1050" timestamp="1644163809183" />
     <state x="629" y="462" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.25.1680.1025@0.25.1680.1025" timestamp="1643318566072" />
     <state x="846" y="0" width="834" height="1050" key="dock-window-1" timestamp="1643319262949">
       <screen x="0" y="25" width="1680" height="1025" />
