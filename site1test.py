@@ -14,7 +14,7 @@ def runtest():
 
     batterySite = 1
 
-    battery_dict = {'Cell ID': site1state, 'Battery Test Holder': batterySite}
+    battery_dict = {'Cell ID': config.site1state, 'Battery Test Holder': batterySite}
 
     # turn ON test site led
     BTM.start_test_LED(batterySite)
@@ -33,10 +33,10 @@ def runtest():
     battery_dict.update({'Capacity measurment times': measTimeL, 'Capacity voltage measurments': voltageL, 'Capacity current': currentL})
 
     # turn OFF test side led
-    finish_test_LED(batterySite)
+    Battery_Test_Methods.finish_test_LED(batterySite)
 
     # turn dictionary to dataframe
     # uses series so columns can be of differnt length
     fileFolder = 'C:/Users/nwoodwa/Desktop/SolarPack/'
     df_battery_dict = pd.DataFrame({key: pd.Series(value) for key, value in battery_dict.items()})
-    df_battery_dict.to_excel(fileFolder+'Test cell ' + str(site1state) + '.xlsx')
+    df_battery_dict.to_excel(fileFolder+'Test cell ' + str(config.site1state) + '.xlsx')
