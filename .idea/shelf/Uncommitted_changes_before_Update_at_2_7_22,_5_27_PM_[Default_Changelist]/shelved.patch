@@ -1,0 +1,779 @@
+Index: site1test.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import Battery_Test_Methods as BTM\n\n\nfrom pickle import FALSE, TRUE\nimport config\nimport time\n\n\ndef runtest():\n    # config.IDsite1 = config.IDscale\n    # config.IDscale = \"--\"\n    # config.scalevalue = \"--\"\n    # config.site1state = TRUE\n    #\n    # BTM.meas_VOC()\n\n\n\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- site1test.py	(revision c6b1eef46f0c0b1b2a95d4d54d15753bad4d5857)
++++ site1test.py	(date 1644272853590)
+@@ -1,18 +1,45 @@
+ import Battery_Test_Methods as BTM
+ 
+-
+ from pickle import FALSE, TRUE
++import pandas as pd
+ import config
+ import time
+ 
+ 
++
+ def runtest():
+-    # config.IDsite1 = config.IDscale
+-    # config.IDscale = "--"
+-    # config.scalevalue = "--"
+-    # config.site1state = TRUE
+-    #
+-    # BTM.meas_VOC()
++    batterySite = 1
++    config.IDsite1 = config.IDscale
++    config.IDscale = "--"
++    config.scalevalue = "--"
++    config.site1state = TRUE
++
++    # create dictionary to store all data
++    batteryVals_Dict = {}
++    batteryVals_Dict['Cell ID'] = IDsite1
++    batteryVals_Dict['Cell holder'] = batterySite
++
++    # turn ON battery site test led
++    BTM.start_test_LED(batterySite)
++
++    # get Voc value
++    voc = BTM.meas_VOC(batterySite)        # returns single value of Voc
++    batteryVals_Dict['Voc'] = voc
++
++    # get impedance value
++    impedance = BTM.dc_Impedance(batterySite)
++    batteryVals_Dict['DC Impedance'] = impedance
+ 
++    # get ratio capacity
++    currentL, voltageL, measTimeL = BTM.ratio_Capacity_BK8502(batterySite)
++    batteryVals_Dict.update({'Capacity Measurement Times': measTimeL, 'Capacity Voltage': voltageL, 'Capacity Current':currentL})
++    
++    # turn OFF battery site test led
++    BTM.finish_test_LED(batterySite)
++
++    # save all data to dataframe to be exported to excel
++    # loops through dictionary and adds key to df header and content as pd.series, which allows columns (arrays) of unequal length
++    df_batteryVals = pd.Dataframe(({key:pd.Series(value) for key, value in batteryVals_Dict.items()}))
++    df_batteryVals.to_excel(str(config.IDsite1) + '.xlsx')
+ 
+ 
+Index: Battery_Test_Methods.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import pyvisa\nimport time\nimport pandas as pd\nimport numpy as np\nfrom scipy.stats import linregress\nfrom statistics import mean\n\nprint('run')\n\n# \n# \n# # a Keithley 2450 SourceMeter is used for the open voltage reading, voltage reading during discharge,\n# # and both the source and meter for impedence testing\n# \n# rm = pyvisa.ResourceManager()\n# #print(rm.list_resources())     # returns a tuple of connected devices # 'USB0::0x05E6::0x2450::04366211::INSTR'\n# keithley = rm.open_resource('USB0::0x05E6::0x2450::04366211::INSTR')\n# # print(keithley.query(\"*IDN?\"))      # query's the Identity of the device connected\n# keithley.write('*RST')      # first line is to reset the instrument\n# \n# \n# \n# \n# # BK 8502 DC Load Supply is used for to discharge the cells at 10A\n# # a relay is used to turn on/off the load supply connection\n# import RPi.GPIO as GPIO\n# \n# GPIO.setmode(GPIO.board)\n# GPIO.setup(17, GPIO.OUT)\n# \n# \n# \n# \n# \n# ## Open Circuit Voltage\n# # battery connection:\n# # Sense Hi connect to positive terminal\n# # Sense Lo connect to negative terminal\n# # returns voltage measurement\n# def meas_VOC():\n#     keithley.write('*RST')                  # first line is to reset the instrument\n#     keithley.write('SENS:CURR:RSEN OFF')    # OFF = 2-Wire mode #  set On for 4-wire sense mode\n#     keithley.write('SENS:FUNC \"VOLT\"')      # set measure, sense, to voltage\n#     keithley.write('READ? \"defbuffer1\"')    # a ? is used for a query command otherwise is a set command\n#     voltage = keithley.read()               # defbuffer1 returns sense value\n#     return voltage\n# \n# \n# ##  DC Internal Resistance (DC Impedance Test)\n# # battery connection Keithley:\n# # Sense Hi and Force Hi connect to positive terminal\n# # Sense Lo and Force Lo connect to negative terminal\n# \n# # four sense probe. Keithley measure current in terms of ohm\n# def dc_Impedance():\n#     sourceVoltage = 2.65          # Charging: VSource > VBattery; Discharging: VS < VB # 18650 is 3.7v; max charging is 4.2v and min discharge final is 2.75\n#     voltageRange = 20            # 20mV, 200mV, 2V, 20V, 200V\n#     sourceLimit = 1.05              # Current Limit = Charge or Discharge rate # units A => 460e-3 A =.46 A = 460mA\n#     currentRange = 1             # Max 1.05A\n# \n#     keithley.write('*RST')      # first line is to reset the instrument\n#     keithley.write('OUTP:SMOD HIMP')                    # turn on high-impedance output mode\n#     keithley.write('SENS:CURR:RSEN ON')                 # set to 4-wire sense mode  # OFF = 2-Wire mode\n#     keithley.write('SENS:FUNC \"CURR\"')                  # set measure, sense, to current\n#     keithley.write(f'SENS:CURR:RANG {currentRange}')    # set current range # can also be 'SENS:CURR:RANG:AUTO ON'\n#     keithley.write('SENS:CURR:UNIT OHM')               # set measure units to Ohm, can also be Watt or Amp\n#     keithley.write('SOUR:FUNC VOLT')                    # set source to voltage\n#     keithley.write(f'SOUR:VOLT {sourceVoltage}')        # set output voltage => discharge or charge test\n#     keithley.write('SOUR:VOLT:READ:BACK ON')            # turn on source read back\n#     keithley.write(f'SOUR:VOLT:RANG {voltageRange}')    # set source range\n#     keithley.write(f'SOUR:VOLT:ILIM {sourceLimit}')     # set source (current) limit\n#     keithley.write('OUTP ON')                           # turn on output, source\n# \n#     time.sleep(5)   # to let the battery reach a steady state discharge\n# \n#     keithley.write('READ? \"defbuffer1\"')\n#     impedance = keithley.read()                         # units = Ohm\n#     # print(impedance)\n#     impedanceL.append(float(impedance))\n# \n#     keithley.write('OUTP OFF')\n#     return impedance\n# \n# \n# \n# \n# ## linear sweep DC impedance\n# # Apply a current and measure voltage = resistance\n# # (V2-V1)/(I2-I1) = DC internal resistance\n# # current sweep: current limit is linearly changed and voltage response is observed, giving the resistance as the slope of the lined\n# # Kiethley: set voltage source to discharge or charge and ues current limit to set the constant current level\n# # returns slope = impedance value in along with list of voltage and currents used to calculate impedance\n# # currentLimit = np.linespace(0, 0.1, 25)     # returns array; start value, end value, number of points\n# # slope, intercept, r_value, p_value, std_err = linregress(x, y)\n# \n# ## AC Internal Resistance\n# # battery connection:\n# # Sense Hi and Force Hi connect to positive terminal\n# # Sense Lo and Force Lo connect to negative terminal\n# \n# \n# \n# \n# \n# ## Capacity Test\n# # BK8502 needs to be set to 10A discharge\n# # battery connection:\n# # Keithley Sense Hi and Lo connected to postive (red) and negative (black) wires respectfully\n# # BK8502 Load High connect to positive (red) terminal\n# # BK8502 Ground connect to normally open (NO) relay, relay Com connect to cell negative (black) wire\n# \n# # Physical set up required\n#     # 1. Turn on BK8502: Press on Button in\n#     # 2. Turn on Supply: Press ## Button and make sure it says \"10.0A\" and \"On\" on the display\n#     # To set BK8502 load to 10A:\n# \n# # returns list of currentL, voltageL , measTimeL\n# def full_Capacity_BK8502():\n#     keithley.write('*RST')                              # first line is to reset the instrument\n#     keithley.write('OUTP:SMOD HIMP')                    # turn on high-impedance output mode\n#     keithley.write('SENS:CURR:RSEN OFF')                # set to 4-wire sense mode  # OFF = 2-Wire mode # by default?\n#     keithley.write('SENS:FUNC \"VOLT\"')                  # set measure, sense, to current\n#     keithley.write('SENS:CURR:RANG:AUTO ON')            # set current range to auto\n# \n#     iteration = 1           # iteration must start at 1 for Keithly write\n#     voltLimit = 2.75        # voltage which to stop the test\n#     voltageL = []           # list of voltage readings\n#     measTimeL = []          # list of times of readings\n# \n#     rollingList = []        # list of voltage rolling  averaging for determinging when we reach the end test voltLimit; helps to ignore random drops/spikes\n# \n#     GPIO.output(17, 1)      # turn relay, thus DC Load, ON\n#     startTime = time.time()\n# \n#     while iteration >= 0:    # infinite while loop; breaks when voltLimit is reached\n#         #print(iteration)\n# \n#         keithley.write('READ? \"defbuffer1\"')\n#         voltage = keithley.read()\n#         # print(voltage)\n#         voltageL.append(float(voltage))\n# \n#         time = time.time() - startTime\n#         measTimeL.append(float(time))\n# \n# \n#         # takes the rolling average voltage\n#         # this average is used to determine when to break from the tests\n#         rollingList.append(float(volt))\n#         if len(rollingList) > 15:\n#             rollingList.pop(0)              # removes the very first item in list when there are 10 measurements\n# \n#             if mean(rollingList) <= voltLimit:  # <= voltLimit for Discharging # >= voltLimit for Charging\n#                 # print('break')\n#                 break                           # breaks out of while loop when the specified condition is met\n#         iteration += 1\n#         time.sleep(1)      # sleep is in seconds    # 1 second between measurements\n# \n#     GPIO.output(17, 0)      # turn relay, thus DC Load, OFF\n# \n#     return currentL, voltageL, measTimeL\n# \n# \n# # keithley is limited to 1.05A max\n# # returns list of currentL, voltageL , measTimeL\n# def full_Capacity_Keithley():\n#     # full battery testing on keithley 2450 https://www.mouser.com/pdfdocs/RechargeableBattery_2450_AN1.PDF\n#     # 1. set to four-wire configuration\n#     # 2. set to source voltage, measure (sense) load current\n#     # 3. use high impedance output off state; opens output relay when output is turned off to prevent drainage when not testing\n#     # 4. set output voltage. Charging: VSource > VBattery (current is positive); Discharging: VS < VB (current is negative)\n#     # 5. turn voltage soucre readback function to measure battery voltage\n#     # 6. set current limit to charge or discharge the battery\n# \n#     sourceVoltage = 2.65          # Charging: VSource > VBattery; Discharging: VS < VB # 18650 is 3.7v; max charging is 4.2v and min discharge final is 2.75\n#     voltageRange = 20            # 20mV, 200mV, 2V, 20V, 200V\n#     sourceLimit = 1.05              # Current Limit = Charge or Discharge rate # units A => 460e-3 A =.46 A = 460mA\n#     currentRange = 1             # Max 1.05A\n# \n#     keithley.write('*RST')      # first line is to reset the instrument\n#     keithley.write('OUTP:SMOD HIMP')                    # turn on high-impedance output mode\n#     keithley.write('SENS:CURR:RSEN ON')                 # set to 4-wire sense mode  # OFF = 2-Wire mode\n#     keithley.write('SENS:FUNC \"CURR\"')                  # set measure, sense, to current\n#     keithley.write(f'SENS:CURR:RANG {currentRange}')    # set current range # can also be 'SENS:CURR:RANG:AUTO ON'\n#     #keithley.write('SENS:CURR:UNIT OHM')               # set measure units to Ohm, can also be Watt or Amp\n#     keithley.write('SOUR:FUNC VOLT')                    # set source to voltage\n#     keithley.write(f'SOUR:VOLT {sourceVoltage}')        # set output voltage => discharge or charge test\n#     keithley.write('SOUR:VOLT:READ:BACK ON')            # turn on source read back\n#     keithley.write(f'SOUR:VOLT:RANG {voltageRange}')    # set source range\n#     keithley.write(f'SOUR:VOLT:ILIM {sourceLimit}')     # set source (current) limit\n#     keithley.write('OUTP ON')                           # turn on output, source\n# \n#     iteration = 1           # iteration must start at 1 for Keithly write\n#     voltLimit = 2.75        # voltage which to stop the test\n#     currentL = []           # list of current readings; should be constant\n#     voltageL = []           # list of voltage readings\n#     measTimeL = []          # list of times the measurements occurred\n# \n#     rollingList = []\n# \n#     # 7. read load current, source voltage, and time stamp\n#     # 8. stop tset when battery reaches desired voltage\n# \n#     while iteration >= 0:    # infinite while loop; breaks when voltLimit is reached\n#         keithley.write('READ? \"defbuffer1\"')        # a ? is used for a query command otherwise is a set command\n#         current = keithley.read()                   # a query command asks the instrument to return specifed information # a read is required before next set or query\n#         print(current)\n#         currentL.append(float(current))\n#         keithley.write(f'TRAC:DATA? {iteration}, {iteration},\"defbuffer1\", SOUR')       # reads source value\n#         volt = keithley.read()\n#         print(volt)\n#         voltageL.append(float(volt))\n#         keithley.write(f'TRAC:DATA? {iteration}, {iteration}, \"defbuffer1\", REL')\n#         timeSec = keithley.read()\n#         print(float(timeSec))\n#         measTimeL.append(float(timeSec))\n# \n#         # takes the rolling average voltage\n#         # this average is used to determine when to break from the tests\n#         # onlyy breaks after the first 15 measurements have been collected\n#         rollingList.append(float(volt))\n#         if len(rollingList) > 15:\n#             rollingList.pop(0)              #removes the very first item in list when there are 10 measurements\n# \n#             if mean(rollingList) <= voltLimit:  # <= voltLimit for Discharging # >= voltLimit for Charging\n#                 print('break')\n#                 break                           # breaks out of while loop when the specified condition is met\n# \n#         if iteration >= 15:\n#             break\n# \n#         iteration += 1\n#         time.sleep(1)      # sleep is in seconds\n# \n#     keithley.write('OUTP OFF')\n#     return currentL, voltageL , measTimeL\n# \n# \n# \n# ## Ratio Capacity Test\n# # Takes voltage discharge for 30 seconds\n# # Comapare to baseline of full capacity cells by impedence\n# \n# # returns lists of currentL, voltageL , measTimeL\n# def ratio_Capacity_BK8502():\n#     keithley.write('*RST')                              # first line is to reset the instrument\n#     keithley.write('OUTP:SMOD HIMP')                    # turn on high-impedance output mode\n# #    keithley.write('SENS:CURR:RSEN OFF')                # set to 4-wire sense mode  # OFF = 2-Wire mode # by default?\n#     keithley.write('SENS:FUNC \"VOLT\"')                  # set measure, sense, to current\n#     keithley.write('SENS:CURR:RANG:AUTO ON')            # set current range to auto\n# \n#     stopTime = 30           # discharge for 30 seconds\n#     testTime = 0            # initiate testTime to zero seconds\n#     voltageL = []           # list of voltage readings\n#     measTimeL = []          # list of times of readings\n# \n#     GPIO.output(17, 1)      # turn relay, thus DC Load, ON\n#     startTime = time.time()\n# \n#     while testTime >= stopTime:    # loop until 30 seconds, stoptime has passed\n#         keithley.write('READ? \"defbuffer1\"')        # get voltage sense reading\n#         voltage = keithley.read()\n#         # print(voltage)\n#         voltageL.append(float(voltage))\n# \n#         time = time.time() - startTime\n#         measTimeL.append(float(time))\n# \n#         time.sleep(1)      # sleep is in seconds    # 1 second between measurements\n# \n#     GPIO.output(17, 0)      # turn relay, thus DC Load, OFF\n# \n#     return currentL, voltageL, measTimeL\n# \n# \n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- Battery_Test_Methods.py	(revision c6b1eef46f0c0b1b2a95d4d54d15753bad4d5857)
++++ Battery_Test_Methods.py	(date 1644272853578)
+@@ -5,271 +5,377 @@
+ from scipy.stats import linregress
+ from statistics import mean
+ 
+-print('run')
++
++
++
++
++# a Keithley 2450 SourceMeter is used for the open voltage reading, voltage reading during discharge,
++# and both the source and meter for impedence testing
++
++rm = pyvisa.ResourceManager()
++#print(rm.list_resources())     # returns a tuple of connected devices # 'USB0::0x05E6::0x2450::04366211::INSTR'
++keithley = rm.open_resource('USB0::0x05E6::0x2450::04366211::INSTR')
++# print(keithley.query("*IDN?"))      # query's the Identity of the device connected
++keithley.write('*RST')      # first line is to reset the instrument
++
++
++
++
++# BK 8502 DC Load Supply is used for to discharge the cells at 10A
++# a relay is used to turn on/off the load supply connection
++import RPi.GPIO as GPIO
++GPIO.setmode(GPIO.board)
++GPIO.setup(17, GPIO.OUT)
++
++# Relay 1: BK8502 Load ground - NC = nothing, NO = battery 1
++# Relay 2: Keithley Sense ground - NC = battery 1, NO = battery 2
++# Relay 3: Keithley Force ground - NC = battery 1, NO = battery 2
++# Relay 4: BK8502 Load ground - NC = nothing, NO = battery 2
++# Relay 5: BK8502 Load pos - NC = nothing, NO = battery 1
++# Realy 6: Keithley Force pos - NC = battery 1, NO = battery 2
++# Relay 7: Keithley Force pos - NC = battery 1, NO = battery 2
++# Relay 8: BK8502 Load pos - NC = nothing, NO = battery 2
++# Relay 9: LED ground - NC = nothing, NO = Battery 1 indicator
++# Relay 10: LED ground - NC = nothing, NO = Battery 2 indicator
++
++relays = {'R1': 17, 'R2': 17, 'R3': 17, 'R4': 17, 'R5': 17, 'R6': 17, 'R7': 17, 'R8': 17, 'LED_1': 17, 'LED_2': 17}
++
++# loop to set up each relay pin to output 
++for key, value in relays():
++   GPIO.setup(value, GPIO.OUT)      # GPIO.setup(17, GPIO.OUT)
++
++
++# turn ON LED for which battery is being tested
++def start_test_LED(battery):
++    if battery is 1:
++        GPIO.output(relays['LED_1'], 1)      # LED 1 = R8 # relays on to NO positions
++    if battery is 2:
++        GPIO.output(relays['LED_2'], 1)      # LED 2 = R9 # relays on to NO positions
++
++# turn OFF LED for which battery is being tested
++def finish_test_LED(battery):
++    if battery is 1:
++        GPIO.output(relays['LED_1'],0)      # LED 1 = R8 # relays off to NC positions
++    if battery is 2:
++        GPIO.output(relays['LED_2'], 1)      # LED 2 = R9 # relays off to NC positions
+ 
+-# 
+-# 
+-# # a Keithley 2450 SourceMeter is used for the open voltage reading, voltage reading during discharge,
+-# # and both the source and meter for impedence testing
+-# 
+-# rm = pyvisa.ResourceManager()
+-# #print(rm.list_resources())     # returns a tuple of connected devices # 'USB0::0x05E6::0x2450::04366211::INSTR'
+-# keithley = rm.open_resource('USB0::0x05E6::0x2450::04366211::INSTR')
+-# # print(keithley.query("*IDN?"))      # query's the Identity of the device connected
+-# keithley.write('*RST')      # first line is to reset the instrument
+-# 
+-# 
+-# 
+-# 
+-# # BK 8502 DC Load Supply is used for to discharge the cells at 10A
+-# # a relay is used to turn on/off the load supply connection
+-# import RPi.GPIO as GPIO
+-# 
+-# GPIO.setmode(GPIO.board)
+-# GPIO.setup(17, GPIO.OUT)
+-# 
+-# 
+-# 
+-# 
+-# 
+-# ## Open Circuit Voltage
+-# # battery connection:
+-# # Sense Hi connect to positive terminal
+-# # Sense Lo connect to negative terminal
+-# # returns voltage measurement
+-# def meas_VOC():
+-#     keithley.write('*RST')                  # first line is to reset the instrument
+-#     keithley.write('SENS:CURR:RSEN OFF')    # OFF = 2-Wire mode #  set On for 4-wire sense mode
+-#     keithley.write('SENS:FUNC "VOLT"')      # set measure, sense, to voltage
+-#     keithley.write('READ? "defbuffer1"')    # a ? is used for a query command otherwise is a set command
+-#     voltage = keithley.read()               # defbuffer1 returns sense value
+-#     return voltage
+-# 
+-# 
+-# ##  DC Internal Resistance (DC Impedance Test)
+-# # battery connection Keithley:
+-# # Sense Hi and Force Hi connect to positive terminal
+-# # Sense Lo and Force Lo connect to negative terminal
+-# 
+-# # four sense probe. Keithley measure current in terms of ohm
+-# def dc_Impedance():
+-#     sourceVoltage = 2.65          # Charging: VSource > VBattery; Discharging: VS < VB # 18650 is 3.7v; max charging is 4.2v and min discharge final is 2.75
+-#     voltageRange = 20            # 20mV, 200mV, 2V, 20V, 200V
+-#     sourceLimit = 1.05              # Current Limit = Charge or Discharge rate # units A => 460e-3 A =.46 A = 460mA
+-#     currentRange = 1             # Max 1.05A
+-# 
+-#     keithley.write('*RST')      # first line is to reset the instrument
+-#     keithley.write('OUTP:SMOD HIMP')                    # turn on high-impedance output mode
+-#     keithley.write('SENS:CURR:RSEN ON')                 # set to 4-wire sense mode  # OFF = 2-Wire mode
+-#     keithley.write('SENS:FUNC "CURR"')                  # set measure, sense, to current
+-#     keithley.write(f'SENS:CURR:RANG {currentRange}')    # set current range # can also be 'SENS:CURR:RANG:AUTO ON'
+-#     keithley.write('SENS:CURR:UNIT OHM')               # set measure units to Ohm, can also be Watt or Amp
+-#     keithley.write('SOUR:FUNC VOLT')                    # set source to voltage
+-#     keithley.write(f'SOUR:VOLT {sourceVoltage}')        # set output voltage => discharge or charge test
+-#     keithley.write('SOUR:VOLT:READ:BACK ON')            # turn on source read back
+-#     keithley.write(f'SOUR:VOLT:RANG {voltageRange}')    # set source range
+-#     keithley.write(f'SOUR:VOLT:ILIM {sourceLimit}')     # set source (current) limit
+-#     keithley.write('OUTP ON')                           # turn on output, source
+-# 
+-#     time.sleep(5)   # to let the battery reach a steady state discharge
+-# 
+-#     keithley.write('READ? "defbuffer1"')
+-#     impedance = keithley.read()                         # units = Ohm
+-#     # print(impedance)
+-#     impedanceL.append(float(impedance))
+-# 
+-#     keithley.write('OUTP OFF')
+-#     return impedance
+-# 
+-# 
+-# 
+-# 
+-# ## linear sweep DC impedance
+-# # Apply a current and measure voltage = resistance
+-# # (V2-V1)/(I2-I1) = DC internal resistance
+-# # current sweep: current limit is linearly changed and voltage response is observed, giving the resistance as the slope of the lined
+-# # Kiethley: set voltage source to discharge or charge and ues current limit to set the constant current level
+-# # returns slope = impedance value in along with list of voltage and currents used to calculate impedance
+-# # currentLimit = np.linespace(0, 0.1, 25)     # returns array; start value, end value, number of points
+-# # slope, intercept, r_value, p_value, std_err = linregress(x, y)
+-# 
+-# ## AC Internal Resistance
+-# # battery connection:
+-# # Sense Hi and Force Hi connect to positive terminal
+-# # Sense Lo and Force Lo connect to negative terminal
+-# 
+-# 
+-# 
+-# 
+-# 
+-# ## Capacity Test
+-# # BK8502 needs to be set to 10A discharge
+-# # battery connection:
+-# # Keithley Sense Hi and Lo connected to postive (red) and negative (black) wires respectfully
+-# # BK8502 Load High connect to positive (red) terminal
+-# # BK8502 Ground connect to normally open (NO) relay, relay Com connect to cell negative (black) wire
+-# 
+-# # Physical set up required
+-#     # 1. Turn on BK8502: Press on Button in
+-#     # 2. Turn on Supply: Press ## Button and make sure it says "10.0A" and "On" on the display
+-#     # To set BK8502 load to 10A:
+-# 
+-# # returns list of currentL, voltageL , measTimeL
+-# def full_Capacity_BK8502():
+-#     keithley.write('*RST')                              # first line is to reset the instrument
+-#     keithley.write('OUTP:SMOD HIMP')                    # turn on high-impedance output mode
+-#     keithley.write('SENS:CURR:RSEN OFF')                # set to 4-wire sense mode  # OFF = 2-Wire mode # by default?
+-#     keithley.write('SENS:FUNC "VOLT"')                  # set measure, sense, to current
+-#     keithley.write('SENS:CURR:RANG:AUTO ON')            # set current range to auto
+-# 
+-#     iteration = 1           # iteration must start at 1 for Keithly write
+-#     voltLimit = 2.75        # voltage which to stop the test
+-#     voltageL = []           # list of voltage readings
+-#     measTimeL = []          # list of times of readings
+-# 
+-#     rollingList = []        # list of voltage rolling  averaging for determinging when we reach the end test voltLimit; helps to ignore random drops/spikes
+-# 
+-#     GPIO.output(17, 1)      # turn relay, thus DC Load, ON
+-#     startTime = time.time()
+-# 
+-#     while iteration >= 0:    # infinite while loop; breaks when voltLimit is reached
+-#         #print(iteration)
+-# 
+-#         keithley.write('READ? "defbuffer1"')
+-#         voltage = keithley.read()
+-#         # print(voltage)
+-#         voltageL.append(float(voltage))
+-# 
+-#         time = time.time() - startTime
+-#         measTimeL.append(float(time))
+-# 
+-# 
+-#         # takes the rolling average voltage
+-#         # this average is used to determine when to break from the tests
+-#         rollingList.append(float(volt))
+-#         if len(rollingList) > 15:
+-#             rollingList.pop(0)              # removes the very first item in list when there are 10 measurements
+-# 
+-#             if mean(rollingList) <= voltLimit:  # <= voltLimit for Discharging # >= voltLimit for Charging
+-#                 # print('break')
+-#                 break                           # breaks out of while loop when the specified condition is met
+-#         iteration += 1
+-#         time.sleep(1)      # sleep is in seconds    # 1 second between measurements
+-# 
+-#     GPIO.output(17, 0)      # turn relay, thus DC Load, OFF
+-# 
+-#     return currentL, voltageL, measTimeL
+-# 
+-# 
+-# # keithley is limited to 1.05A max
+-# # returns list of currentL, voltageL , measTimeL
+-# def full_Capacity_Keithley():
+-#     # full battery testing on keithley 2450 https://www.mouser.com/pdfdocs/RechargeableBattery_2450_AN1.PDF
+-#     # 1. set to four-wire configuration
+-#     # 2. set to source voltage, measure (sense) load current
+-#     # 3. use high impedance output off state; opens output relay when output is turned off to prevent drainage when not testing
+-#     # 4. set output voltage. Charging: VSource > VBattery (current is positive); Discharging: VS < VB (current is negative)
+-#     # 5. turn voltage soucre readback function to measure battery voltage
+-#     # 6. set current limit to charge or discharge the battery
+-# 
+-#     sourceVoltage = 2.65          # Charging: VSource > VBattery; Discharging: VS < VB # 18650 is 3.7v; max charging is 4.2v and min discharge final is 2.75
+-#     voltageRange = 20            # 20mV, 200mV, 2V, 20V, 200V
+-#     sourceLimit = 1.05              # Current Limit = Charge or Discharge rate # units A => 460e-3 A =.46 A = 460mA
+-#     currentRange = 1             # Max 1.05A
+-# 
+-#     keithley.write('*RST')      # first line is to reset the instrument
+-#     keithley.write('OUTP:SMOD HIMP')                    # turn on high-impedance output mode
+-#     keithley.write('SENS:CURR:RSEN ON')                 # set to 4-wire sense mode  # OFF = 2-Wire mode
+-#     keithley.write('SENS:FUNC "CURR"')                  # set measure, sense, to current
+-#     keithley.write(f'SENS:CURR:RANG {currentRange}')    # set current range # can also be 'SENS:CURR:RANG:AUTO ON'
+-#     #keithley.write('SENS:CURR:UNIT OHM')               # set measure units to Ohm, can also be Watt or Amp
+-#     keithley.write('SOUR:FUNC VOLT')                    # set source to voltage
+-#     keithley.write(f'SOUR:VOLT {sourceVoltage}')        # set output voltage => discharge or charge test
+-#     keithley.write('SOUR:VOLT:READ:BACK ON')            # turn on source read back
+-#     keithley.write(f'SOUR:VOLT:RANG {voltageRange}')    # set source range
+-#     keithley.write(f'SOUR:VOLT:ILIM {sourceLimit}')     # set source (current) limit
+-#     keithley.write('OUTP ON')                           # turn on output, source
+-# 
+-#     iteration = 1           # iteration must start at 1 for Keithly write
+-#     voltLimit = 2.75        # voltage which to stop the test
+-#     currentL = []           # list of current readings; should be constant
+-#     voltageL = []           # list of voltage readings
+-#     measTimeL = []          # list of times the measurements occurred
+-# 
+-#     rollingList = []
+-# 
+-#     # 7. read load current, source voltage, and time stamp
+-#     # 8. stop tset when battery reaches desired voltage
+-# 
+-#     while iteration >= 0:    # infinite while loop; breaks when voltLimit is reached
+-#         keithley.write('READ? "defbuffer1"')        # a ? is used for a query command otherwise is a set command
+-#         current = keithley.read()                   # a query command asks the instrument to return specifed information # a read is required before next set or query
+-#         print(current)
+-#         currentL.append(float(current))
+-#         keithley.write(f'TRAC:DATA? {iteration}, {iteration},"defbuffer1", SOUR')       # reads source value
+-#         volt = keithley.read()
+-#         print(volt)
+-#         voltageL.append(float(volt))
+-#         keithley.write(f'TRAC:DATA? {iteration}, {iteration}, "defbuffer1", REL')
+-#         timeSec = keithley.read()
+-#         print(float(timeSec))
+-#         measTimeL.append(float(timeSec))
+-# 
+-#         # takes the rolling average voltage
+-#         # this average is used to determine when to break from the tests
+-#         # onlyy breaks after the first 15 measurements have been collected
+-#         rollingList.append(float(volt))
+-#         if len(rollingList) > 15:
+-#             rollingList.pop(0)              #removes the very first item in list when there are 10 measurements
+-# 
+-#             if mean(rollingList) <= voltLimit:  # <= voltLimit for Discharging # >= voltLimit for Charging
+-#                 print('break')
+-#                 break                           # breaks out of while loop when the specified condition is met
+-# 
+-#         if iteration >= 15:
+-#             break
+-# 
+-#         iteration += 1
+-#         time.sleep(1)      # sleep is in seconds
+-# 
+-#     keithley.write('OUTP OFF')
+-#     return currentL, voltageL , measTimeL
+-# 
+-# 
+-# 
+-# ## Ratio Capacity Test
+-# # Takes voltage discharge for 30 seconds
+-# # Comapare to baseline of full capacity cells by impedence
+-# 
+-# # returns lists of currentL, voltageL , measTimeL
+-# def ratio_Capacity_BK8502():
+-#     keithley.write('*RST')                              # first line is to reset the instrument
+-#     keithley.write('OUTP:SMOD HIMP')                    # turn on high-impedance output mode
+-# #    keithley.write('SENS:CURR:RSEN OFF')                # set to 4-wire sense mode  # OFF = 2-Wire mode # by default?
+-#     keithley.write('SENS:FUNC "VOLT"')                  # set measure, sense, to current
+-#     keithley.write('SENS:CURR:RANG:AUTO ON')            # set current range to auto
+-# 
+-#     stopTime = 30           # discharge for 30 seconds
+-#     testTime = 0            # initiate testTime to zero seconds
+-#     voltageL = []           # list of voltage readings
+-#     measTimeL = []          # list of times of readings
+-# 
+-#     GPIO.output(17, 1)      # turn relay, thus DC Load, ON
+-#     startTime = time.time()
+-# 
+-#     while testTime >= stopTime:    # loop until 30 seconds, stoptime has passed
+-#         keithley.write('READ? "defbuffer1"')        # get voltage sense reading
+-#         voltage = keithley.read()
+-#         # print(voltage)
+-#         voltageL.append(float(voltage))
+-# 
+-#         time = time.time() - startTime
+-#         measTimeL.append(float(time))
+-# 
+-#         time.sleep(1)      # sleep is in seconds    # 1 second between measurements
+-# 
+-#     GPIO.output(17, 0)      # turn relay, thus DC Load, OFF
+-# 
+-#     return currentL, voltageL, measTimeL
+-# 
+-# 
++
++## Open Circuit Voltage
++# battery connection:
++# Sense Hi connect to positive terminal
++# Sense Lo connect to negative terminal
++# returns voltage measurement
++def meas_VOC(battery):
++    # set keithley sense pos and sense gnd to battery holder 1 or 2 that is being tested
++    if battery is 1:
++        GPIO.output(relays['R7'], 0)      # sense pos = R7 # relays off to NC positions
++        GPIO.output(relays['R2'], 0)      # sense gnd = R2 # relays off to NC positions
++    if battery is 2:
++        GPIO.output(relays['R7'], 1)      # sense pos = R7 # relays on to NO positions
++        GPIO.output(relays['R2'], 1)      # sense gnd = R2 # relays on to NO positions
++
++    keithley.write('*RST')                  # first line is to reset the instrument
++    keithley.write('SENS:CURR:RSEN OFF')    # OFF = 2-Wire mode #  set On for 4-wire sense mode
++    keithley.write('SENS:FUNC "VOLT"')      # set measure, sense, to voltage
++
++    # loop 10 times and compute the average Voc
++    vocL = []
++    for i in range(10):
++        keithley.write('READ? "defbuffer1"')    # a ? is used for a query command otherwise is a set command
++        voltage = keithley.read()               # defbuffer1 returns sense value
++        vocL.append(voltage)
++
++
++    return mean(vocL)
++
++
++##  DC Internal Resistance (DC Impedance Test)
++# battery connection Keithley:
++# Sense Hi and Force Hi connect to positive terminal
++# Sense Lo and Force Lo connect to negative terminal
++
++# four sense probe. Keithley measure current in terms of ohm
++def dc_Impedance(battery):
++    # set keithley sense pos and sense gnd to battery holder 1 or 2 that is being tested
++    # set keithley force pos and force gnd to battery holder 1 or 2 that is being tested
++    if battery is 1:
++        GPIO.output(relays['R7'], 0)      # sense pos = R7 # relays off to NC positions
++        GPIO.output(relays['R2'], 0)      # sense gnd = R2 # relays off to NC positions
++        GPIO.output(relays['R6'], 0)      # force pos = R6 # relays off to NC positions
++        GPIO.output(relays['R3'], 0)      # force gnd = R3 # relays off to NC positions
++    if battery is 2:
++        GPIO.output(relays['R7'], 1)      # sense pos = R7 # relays on to NO positions
++        GPIO.output(relays['R2'], 1)      # sense gnd = R2 # relays on to NO positions
++        GPIO.output(relays['R6'], 1)      # force pos = R6 # relays off to NO positions
++        GPIO.output(relays['R3'], 1)      # force gnd = R3 # relays off to NO positions
++
++
++    sourceVoltage = 2.65          # Charging: VSource > VBattery; Discharging: VS < VB # 18650 is 3.7v; max charging is 4.2v and min discharge final is 2.75
++    voltageRange = 20            # 20mV, 200mV, 2V, 20V, 200V
++    sourceLimit = 1.05              # Current Limit = Charge or Discharge rate # units A => 460e-3 A =.46 A = 460mA
++    currentRange = 1             # Max 1.05A
++
++    keithley.write('*RST')      # first line is to reset the instrument
++    keithley.write('OUTP:SMOD HIMP')                    # turn on high-impedance output mode
++    keithley.write('SENS:CURR:RSEN ON')                 # set to 4-wire sense mode  # OFF = 2-Wire mode
++    keithley.write('SENS:FUNC "CURR"')                  # set measure, sense, to current
++    keithley.write(f'SENS:CURR:RANG {currentRange}')    # set current range # can also be 'SENS:CURR:RANG:AUTO ON'
++    keithley.write('SENS:CURR:UNIT OHM')               # set measure units to Ohm, can also be Watt or Amp
++    keithley.write('SOUR:FUNC VOLT')                    # set source to voltage
++    keithley.write(f'SOUR:VOLT {sourceVoltage}')        # set output voltage => discharge or charge test
++    keithley.write('SOUR:VOLT:READ:BACK ON')            # turn on source read back
++    keithley.write(f'SOUR:VOLT:RANG {voltageRange}')    # set source range
++    keithley.write(f'SOUR:VOLT:ILIM {sourceLimit}')     # set source (current) limit
++    keithley.write('OUTP ON')                           # turn on output, source
++
++    time.sleep(5)   # to let the battery reach a steady state discharge
++
++    # loop 10 times to and return the average DC impedance
++    impedanceL = []
++    for i in range(10):
++        keithley.write('READ? "defbuffer1"')
++        impedance = keithley.read()                         # units = Ohm
++        # print(impedance)
++        impedanceL.append(float(impedance))
++
++    keithley.write('OUTP OFF')      # turn keithley
++    return mean(impedanceL)
++
++
++
++
++## linear sweep DC impedance
++# Apply a current and measure voltage = resistance
++# (V2-V1)/(I2-I1) = DC internal resistance
++# current sweep: current limit is linearly changed and voltage response is observed, giving the resistance as the slope of the lined
++# Kiethley: set voltage source to discharge or charge and ues current limit to set the constant current level
++# returns slope = impedance value in along with list of voltage and currents used to calculate impedance
++# currentLimit = np.linespace(0, 0.1, 25)     # returns array; start value, end value, number of points
++# slope, intercept, r_value, p_value, std_err = linregress(x, y)
++
++## AC Internal Resistance
++# battery connection:
++# Sense Hi and Force Hi connect to positive terminal
++# Sense Lo and Force Lo connect to negative terminal
++
++
++
++
++
++## Capacity Test
++# BK8502 needs to be set to 10A discharge
++# battery connection:
++# Keithley Sense Hi and Lo connected to postive (red) and negative (black) wires respectfully
++# BK8502 Load High connect to positive (red) terminal
++# BK8502 Ground connect to normally open (NO) relay, relay Com connect to cell negative (black) wire
++
++# Physical set up required
++    # 1. Turn on BK8502: Press on Button in
++    # 2. Turn on Supply: Press ## Button and make sure it says "10.0A" and "On" on the display
++    # To set BK8502 load to 10A:
++
++# returns list of currentL, voltageL , measTimeL
++def full_Capacity_BK8502(battery):
++    # set keithley sense pos and sense gnd to battery holder 1 or 2 that is being tested
++    # set BK8502 load pos on for battery holder 1 or 2 that is being tested
++    # set BK8502 load gnd on for batter holder 1 or 2 that is being tested
++    if battery is 1:
++        GPIO.output(relays['R7'], 0)      # sense pos = R7 # relays off to NC positions
++        GPIO.output(relays['R2'], 0)      # sense gnd = R2 # relays off to NC positions
++        GPIO.output(relays['R5'], 1)      # load pos = R5 # relays on to NO positions
++        GPIO.output(relays['R3'], 1)      # load gnd = R3 # relays on to NO positions
++    if battery is 2:
++        GPIO.output(relays['R7'], 1)      # sense pos = R7 # relays on to NO positions
++        GPIO.output(relays['R2'], 1)      # sense gnd = R2 # relays on to NO positions
++        GPIO.output(relays['R8'], 1)      # load pos = R5 # relays on to NO positions
++        GPIO.output(relays['R3'], 1)      # load gnd = R3 # relays on to NO positions
++
++
++
++
++    keithley.write('*RST')                              # first line is to reset the instrument
++    keithley.write('OUTP:SMOD HIMP')                    # turn on high-impedance output mode
++    keithley.write('SENS:CURR:RSEN OFF')                # set to 4-wire sense mode  # OFF = 2-Wire mode # by default?
++    keithley.write('SENS:FUNC "VOLT"')                  # set measure, sense, to current
++    keithley.write('SENS:CURR:RANG:AUTO ON')            # set current range to auto
++
++    iteration = 1           # iteration must start at 1 for Keithly write
++    voltLimit = 2.75        # voltage which to stop the test
++    voltageL = []           # list of voltage readings
++    measTimeL = []          # list of times of readings
++
++    rollingList = []        # list of voltage rolling  averaging for determinging when we reach the end test voltLimit; helps to ignore random drops/spikes
++
++    GPIO.output(17, 1)      # turn relay, thus DC Load, ON
++    startTime = time.time()
++
++    while iteration >= 0:    # infinite while loop; breaks when voltLimit is reached
++        #print(iteration)
++
++        keithley.write('READ? "defbuffer1"')
++        voltage = keithley.read()
++        # print(voltage)
++        voltageL.append(float(voltage))
++
++        time = time.time() - startTime
++        measTimeL.append(float(time))
++
++
++        # takes the rolling average voltage
++        # this average is used to determine when to break from the tests
++        rollingList.append(float(volt))
++        if len(rollingList) > 15:
++            rollingList.pop(0)              # removes the very first item in list when there are 10 measurements
++
++            if mean(rollingList) <= voltLimit:  # <= voltLimit for Discharging # >= voltLimit for Charging
++                # print('break')
++                break                           # breaks out of while loop when the specified condition is met
++        iteration += 1
++        time.sleep(1)      # sleep is in seconds    # 1 second between measurements
++
++
++    # turn relay, thus DC Load, OFF
++    if battery is 1:
++        GPIO.output(relays['R5'], 0)      # load pos = R5 # relays off to NC positions
++        GPIO.output(relays['R3'], 0)      # load gnd = R3 # relays off to NC positions
++    if battery is 2:
++        GPIO.output(relays['R8'], 0)      # load pos = R5 # relays off to NC positions
++        GPIO.output(relays['R3'], 0)      # load gnd = R3 # relays off to NC positions
++
++    return currentL, voltageL, measTimeL
++
++
++# keithley is limited to 1.05A max
++# returns list of currentL, voltageL , measTimeL
++def full_Capacity_Keithley():
++    # full battery testing on keithley 2450 https://www.mouser.com/pdfdocs/RechargeableBattery_2450_AN1.PDF
++    # 1. set to four-wire configuration
++    # 2. set to source voltage, measure (sense) load current
++    # 3. use high impedance output off state; opens output relay when output is turned off to prevent drainage when not testing
++    # 4. set output voltage. Charging: VSource > VBattery (current is positive); Discharging: VS < VB (current is negative)
++    # 5. turn voltage soucre readback function to measure battery voltage
++    # 6. set current limit to charge or discharge the battery
++
++    sourceVoltage = 2.65          # Charging: VSource > VBattery; Discharging: VS < VB # 18650 is 3.7v; max charging is 4.2v and min discharge final is 2.75
++    voltageRange = 20            # 20mV, 200mV, 2V, 20V, 200V
++    sourceLimit = 1.05              # Current Limit = Charge or Discharge rate # units A => 460e-3 A =.46 A = 460mA
++    currentRange = 1             # Max 1.05A
++
++    keithley.write('*RST')      # first line is to reset the instrument
++    keithley.write('OUTP:SMOD HIMP')                    # turn on high-impedance output mode
++    keithley.write('SENS:CURR:RSEN ON')                 # set to 4-wire sense mode  # OFF = 2-Wire mode
++    keithley.write('SENS:FUNC "CURR"')                  # set measure, sense, to current
++    keithley.write(f'SENS:CURR:RANG {currentRange}')    # set current range # can also be 'SENS:CURR:RANG:AUTO ON'
++    #keithley.write('SENS:CURR:UNIT OHM')               # set measure units to Ohm, can also be Watt or Amp
++    keithley.write('SOUR:FUNC VOLT')                    # set source to voltage
++    keithley.write(f'SOUR:VOLT {sourceVoltage}')        # set output voltage => discharge or charge test
++    keithley.write('SOUR:VOLT:READ:BACK ON')            # turn on source read back
++    keithley.write(f'SOUR:VOLT:RANG {voltageRange}')    # set source range
++    keithley.write(f'SOUR:VOLT:ILIM {sourceLimit}')     # set source (current) limit
++    keithley.write('OUTP ON')                           # turn on output, source
++
++    iteration = 1           # iteration must start at 1 for Keithly write
++    voltLimit = 2.75        # voltage which to stop the test
++    currentL = []           # list of current readings; should be constant
++    voltageL = []           # list of voltage readings
++    measTimeL = []          # list of times the measurements occurred
++
++    rollingList = []
++
++    # 7. read load current, source voltage, and time stamp
++    # 8. stop tset when battery reaches desired voltage
++
++    while iteration >= 0:    # infinite while loop; breaks when voltLimit is reached
++        keithley.write('READ? "defbuffer1"')        # a ? is used for a query command otherwise is a set command
++        current = keithley.read()                   # a query command asks the instrument to return specifed information # a read is required before next set or query
++        print(current)
++        currentL.append(float(current))
++        keithley.write(f'TRAC:DATA? {iteration}, {iteration},"defbuffer1", SOUR')       # reads source value
++        volt = keithley.read()
++        print(volt)
++        voltageL.append(float(volt))
++        keithley.write(f'TRAC:DATA? {iteration}, {iteration}, "defbuffer1", REL')
++        timeSec = keithley.read()
++        print(float(timeSec))
++        measTimeL.append(float(timeSec))
++
++        # takes the rolling average voltage
++        # this average is used to determine when to break from the tests
++        # onlyy breaks after the first 15 measurements have been collected
++        rollingList.append(float(volt))
++        if len(rollingList) > 15:
++            rollingList.pop(0)              #removes the very first item in list when there are 10 measurements
++
++            if mean(rollingList) <= voltLimit:  # <= voltLimit for Discharging # >= voltLimit for Charging
++                print('break')
++                break                           # breaks out of while loop when the specified condition is met
++
++        if iteration >= 15:
++            break
++
++        iteration += 1
++        time.sleep(1)      # sleep is in seconds
++
++    keithley.write('OUTP OFF')
++    return currentL, voltageL , measTimeL
++
++
++
++## Ratio Capacity Test
++# Takes voltage discharge for 30 seconds
++# Comapare to baseline of full capacity cells by impedence
++
++# returns lists of currentL, voltageL , measTimeL
++def ratio_Capacity_BK8502(battery):
++    # set keithley sense pos and sense gnd to battery holder 1 or 2 that is being tested
++    # set BK8502 load pos on for battery holder 1 or 2 that is being tested
++    # set BK8502 load gnd on for batter holder 1 or 2 that is being tested
++    if battery is 1:
++        GPIO.output(relays['R7'], 0)      # sense pos = R7 # relays off to NC positions
++        GPIO.output(relays['R2'], 0)      # sense gnd = R2 # relays off to NC positions
++        GPIO.output(relays['R5'], 1)      # load pos = R5 # relays on to NO positions
++        GPIO.output(relays['R3'], 1)      # load gnd = R3 # relays on to NO positions
++    if battery is 2:
++        GPIO.output(relays['R7'], 1)      # sense pos = R7 # relays on to NO positions
++        GPIO.output(relays['R2'], 1)      # sense gnd = R2 # relays on to NO positions
++        GPIO.output(relays['R8'], 1)      # load pos = R5 # relays on to NO positions
++        GPIO.output(relays['R3'], 1)      # load gnd = R3 # relays on to NO positions
++
++    keithley.write('*RST')                              # first line is to reset the instrument
++    keithley.write('OUTP:SMOD HIMP')                    # turn on high-impedance output mode
++#    keithley.write('SENS:CURR:RSEN OFF')                # set to 4-wire sense mode  # OFF = 2-Wire mode # by default?
++    keithley.write('SENS:FUNC "VOLT"')                  # set measure, sense, to current
++    keithley.write('SENS:CURR:RANG:AUTO ON')            # set current range to auto
++
++    stopTime = 30           # discharge for 30 seconds
++    testTime = 0            # initiate testTime to zero seconds
++    voltageL = []           # list of voltage readings
++    measTimeL = []          # list of times of readings
++
++    GPIO.output(17, 1)      # turn relay, thus DC Load, ON
++    startTime = time.time()
++
++    while testTime >= stopTime:    # loop until 30 seconds, stoptime has passed
++        keithley.write('READ? "defbuffer1"')        # get voltage sense reading
++        voltage = keithley.read()
++        # print(voltage)
++        voltageL.append(float(voltage))
++
++        time = time.time() - startTime
++        measTimeL.append(float(time))
++
++        time.sleep(1)      # sleep is in seconds    # 1 second between measurements
++
++    GPIO.output(17, 0)      # turn relay, thus DC Load, OFF
++
++    # turn relay, thus DC Load, OFF
++    if battery is 1:
++        GPIO.output(relays['R5'], 0)      # load pos = R5 # relays off to NC positions
++        GPIO.output(relays['R3'], 0)      # load gnd = R3 # relays off to NC positions
++    if battery is 2:
++        GPIO.output(relays['R8'], 0)      # load pos = R5 # relays off to NC positions
++        GPIO.output(relays['R3'], 0)      # load gnd = R3 # relays off to NC positions
++
++    return currentL, voltageL, measTimeL
++
++
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"BranchesTreeState\">\n    <expand>\n      <path>\n        <item name=\"ROOT\" type=\"e8cecc67:BranchNodeDescriptor\" />\n        <item name=\"LOCAL_ROOT\" type=\"e8cecc67:BranchNodeDescriptor\" />\n      </path>\n      <path>\n        <item name=\"ROOT\" type=\"e8cecc67:BranchNodeDescriptor\" />\n        <item name=\"REMOTE_ROOT\" type=\"e8cecc67:BranchNodeDescriptor\" />\n      </path>\n      <path>\n        <item name=\"ROOT\" type=\"e8cecc67:BranchNodeDescriptor\" />\n        <item name=\"REMOTE_ROOT\" type=\"e8cecc67:BranchNodeDescriptor\" />\n        <item name=\"GROUP_NODE:origin\" type=\"e8cecc67:BranchNodeDescriptor\" />\n      </path>\n    </expand>\n    <select />\n  </component>\n  <component name=\"ChangeListManager\">\n    <list default=\"true\" id=\"399bd4ca-f68b-43cc-99d5-d1f9dd58404d\" name=\"Default Changelist\" comment=\" 1\">\n      <change afterPath=\"$PROJECT_DIR$/Barcode.py\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/.idea/misc.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/misc.xml\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/.idea/ncsu_sp_battery_test.iml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/ncsu_sp_battery_test.iml\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/Battery Test Methods.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Battery_Test_Methods.py\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/site1test.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/site1test.py\" afterDir=\"false\" />\n    </list>\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\n  </component>\n  <component name=\"FileTemplateManagerImpl\">\n    <option name=\"RECENT_TEMPLATES\">\n      <list>\n        <option value=\"Python Script\" />\n      </list>\n    </option>\n  </component>\n  <component name=\"Git.Settings\">\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\n  </component>\n  <component name=\"GithubDefaultAccount\">\n    <option name=\"defaultAccountId\" value=\"4552ab25-701b-467d-8b4f-8826f662dfa7\" />\n  </component>\n  <component name=\"ProjectId\" id=\"24ISBSxpeVnIBDzupXCjIeDR46S\" />\n  <component name=\"ProjectViewState\">\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\n    <option name=\"showLibraryContents\" value=\"true\" />\n  </component>\n  <component name=\"PropertiesComponent\">\n    <property name=\"ASKED_SHARE_PROJECT_CONFIGURATION_FILES\" value=\"true\" />\n    <property name=\"RunOnceActivity.OpenProjectViewOnStart\" value=\"true\" />\n    <property name=\"RunOnceActivity.ShowReadmeOnStart\" value=\"true\" />\n    <property name=\"SHARE_PROJECT_CONFIGURATION_FILES\" value=\"true\" />\n    <property name=\"last_opened_file_path\" value=\"$USER_HOME$\" />\n    <property name=\"settings.editor.selected.configurable\" value=\"org.jetbrains.plugins.github.ui.GithubSettingsConfigurable\" />\n  </component>\n  <component name=\"RunManager\" selected=\"Python.site1test\">\n    <configuration default=\"true\" type=\"PythonConfigurationType\" factoryName=\"Python\" singleton=\"false\">\n      <module name=\"ncsu_sp_battery_test\" />\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\n      <option name=\"PARENT_ENVS\" value=\"true\" />\n      <envs>\n        <env name=\"PYTHONUNBUFFERED\" value=\"1\" />\n      </envs>\n      <option name=\"SDK_HOME\" value=\"$USER_HOME$/.conda/envs/SMU/bin/python\" />\n      <option name=\"WORKING_DIRECTORY\" value=\"\" />\n      <option name=\"IS_MODULE_SDK\" value=\"false\" />\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\n      <option name=\"SCRIPT_NAME\" value=\"\" />\n      <option name=\"PARAMETERS\" value=\"\" />\n      <option name=\"SHOW_COMMAND_LINE\" value=\"false\" />\n      <option name=\"EMULATE_TERMINAL\" value=\"false\" />\n      <option name=\"MODULE_MODE\" value=\"false\" />\n      <option name=\"REDIRECT_INPUT\" value=\"false\" />\n      <option name=\"INPUT_FILE\" value=\"\" />\n      <method v=\"2\" />\n    </configuration>\n    <configuration name=\"ncsu_sp_battery_test\" type=\"PythonConfigurationType\" factoryName=\"Python\" nameIsGenerated=\"true\">\n      <module name=\"ncsu_sp_battery_test\" />\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\n      <option name=\"PARENT_ENVS\" value=\"true\" />\n      <envs>\n        <env name=\"PYTHONUNBUFFERED\" value=\"1\" />\n      </envs>\n      <option name=\"SDK_HOME\" value=\"$USER_HOME$/.conda/envs/SMU/bin/python\" />\n      <option name=\"WORKING_DIRECTORY\" value=\"$PROJECT_DIR$/..\" />\n      <option name=\"IS_MODULE_SDK\" value=\"false\" />\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\n      <option name=\"SCRIPT_NAME\" value=\"$PROJECT_DIR$\" />\n      <option name=\"PARAMETERS\" value=\"\" />\n      <option name=\"SHOW_COMMAND_LINE\" value=\"false\" />\n      <option name=\"EMULATE_TERMINAL\" value=\"false\" />\n      <option name=\"MODULE_MODE\" value=\"false\" />\n      <option name=\"REDIRECT_INPUT\" value=\"false\" />\n      <option name=\"INPUT_FILE\" value=\"\" />\n      <method v=\"2\" />\n    </configuration>\n    <configuration name=\"site1test\" type=\"PythonConfigurationType\" factoryName=\"Python\" singleton=\"false\" temporary=\"true\" nameIsGenerated=\"true\">\n      <module name=\"ncsu_sp_battery_test\" />\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\n      <option name=\"PARENT_ENVS\" value=\"true\" />\n      <envs>\n        <env name=\"PYTHONUNBUFFERED\" value=\"1\" />\n      </envs>\n      <option name=\"SDK_HOME\" value=\"$USER_HOME$/.conda/envs/SMU/bin/python\" />\n      <option name=\"WORKING_DIRECTORY\" value=\"$PROJECT_DIR$\" />\n      <option name=\"IS_MODULE_SDK\" value=\"false\" />\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\n      <option name=\"SCRIPT_NAME\" value=\"$PROJECT_DIR$/site1test.py\" />\n      <option name=\"PARAMETERS\" value=\"\" />\n      <option name=\"SHOW_COMMAND_LINE\" value=\"false\" />\n      <option name=\"EMULATE_TERMINAL\" value=\"false\" />\n      <option name=\"MODULE_MODE\" value=\"false\" />\n      <option name=\"REDIRECT_INPUT\" value=\"false\" />\n      <option name=\"INPUT_FILE\" value=\"\" />\n      <method v=\"2\" />\n    </configuration>\n    <recent_temporary>\n      <list>\n        <item itemvalue=\"Python.site1test\" />\n      </list>\n    </recent_temporary>\n  </component>\n  <component name=\"SvnConfiguration\">\n    <configuration />\n  </component>\n  <component name=\"Vcs.Log.Tabs.Properties\">\n    <option name=\"TAB_STATES\">\n      <map>\n        <entry key=\"MAIN\">\n          <value>\n            <State />\n          </value>\n        </entry>\n      </map>\n    </option>\n    <option name=\"oldMeFiltersMigrated\" value=\"true\" />\n  </component>\n  <component name=\"VcsManagerConfiguration\">\n    <MESSAGE value=\"update\" />\n    <MESSAGE value=\" 1\" />\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\" 1\" />\n  </component>\n  <component name=\"WindowStateProjectService\">\n    <state x=\"302\" y=\"182\" width=\"1167\" height=\"682\" key=\"#com.intellij.execution.impl.EditConfigurationsDialog\" timestamp=\"1643763052643\">\n      <screen x=\"0\" y=\"0\" width=\"1680\" height=\"1050\" />\n    </state>\n    <state x=\"302\" y=\"182\" key=\"#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1050@0.0.1680.1050\" timestamp=\"1643763052643\" />\n    <state x=\"302\" y=\"203\" width=\"1167\" height=\"682\" key=\"#com.intellij.execution.impl.EditConfigurationsDialog/0.25.1680.1025@0.25.1680.1025\" timestamp=\"1643318412448\" />\n    <state x=\"627\" y=\"284\" key=\"FileChooserDialogImpl\" timestamp=\"1644108875894\">\n      <screen x=\"0\" y=\"0\" width=\"1680\" height=\"1050\" />\n    </state>\n    <state x=\"627\" y=\"284\" key=\"FileChooserDialogImpl/0.0.1680.1050@0.0.1680.1050\" timestamp=\"1644108875894\" />\n    <state width=\"1659\" height=\"304\" key=\"GridCell.Tab.0.bottom\" timestamp=\"1644164183953\">\n      <screen x=\"0\" y=\"0\" width=\"1680\" height=\"1050\" />\n    </state>\n    <state width=\"1659\" height=\"304\" key=\"GridCell.Tab.0.bottom/0.0.1680.1050@0.0.1680.1050\" timestamp=\"1644164183953\" />\n    <state width=\"1659\" height=\"304\" key=\"GridCell.Tab.0.center\" timestamp=\"1644164183951\">\n      <screen x=\"0\" y=\"0\" width=\"1680\" height=\"1050\" />\n    </state>\n    <state width=\"1659\" height=\"304\" key=\"GridCell.Tab.0.center/0.0.1680.1050@0.0.1680.1050\" timestamp=\"1644164183951\" />\n    <state width=\"1659\" height=\"304\" key=\"GridCell.Tab.0.left\" timestamp=\"1644164183950\">\n      <screen x=\"0\" y=\"0\" width=\"1680\" height=\"1050\" />\n    </state>\n    <state width=\"1659\" height=\"304\" key=\"GridCell.Tab.0.left/0.0.1680.1050@0.0.1680.1050\" timestamp=\"1644164183950\" />\n    <state width=\"1659\" height=\"304\" key=\"GridCell.Tab.0.right\" timestamp=\"1644164183952\">\n      <screen x=\"0\" y=\"0\" width=\"1680\" height=\"1050\" />\n    </state>\n    <state width=\"1659\" height=\"304\" key=\"GridCell.Tab.0.right/0.0.1680.1050@0.0.1680.1050\" timestamp=\"1644164183952\" />\n    <state x=\"347\" y=\"180\" key=\"SettingsEditor\" timestamp=\"1643318177846\">\n      <screen x=\"0\" y=\"25\" width=\"1680\" height=\"1025\" />\n    </state>\n    <state x=\"347\" y=\"180\" key=\"SettingsEditor/0.25.1680.1025@0.25.1680.1025\" timestamp=\"1643318177846\" />\n    <state x=\"629\" y=\"448\" key=\"com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2\" timestamp=\"1644163809183\">\n      <screen x=\"0\" y=\"0\" width=\"1680\" height=\"1050\" />\n    </state>\n    <state x=\"629\" y=\"448\" key=\"com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1680.1050@0.0.1680.1050\" timestamp=\"1644163809183\" />\n    <state x=\"629\" y=\"462\" key=\"com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.25.1680.1025@0.25.1680.1025\" timestamp=\"1643318566072\" />\n    <state x=\"846\" y=\"0\" width=\"834\" height=\"1050\" key=\"dock-window-1\" timestamp=\"1643319262949\">\n      <screen x=\"0\" y=\"25\" width=\"1680\" height=\"1025\" />\n    </state>\n    <state x=\"846\" y=\"0\" width=\"834\" height=\"1050\" key=\"dock-window-1/0.25.1680.1025@0.25.1680.1025\" timestamp=\"1643319262949\" />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/workspace.xml	(revision c6b1eef46f0c0b1b2a95d4d54d15753bad4d5857)
++++ .idea/workspace.xml	(date 1644272324988)
+@@ -20,11 +20,8 @@
+   </component>
+   <component name="ChangeListManager">
+     <list default="true" id="399bd4ca-f68b-43cc-99d5-d1f9dd58404d" name="Default Changelist" comment=" 1">
+-      <change afterPath="$PROJECT_DIR$/Barcode.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/ncsu_sp_battery_test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ncsu_sp_battery_test.iml" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Battery Test Methods.py" beforeDir="false" afterPath="$PROJECT_DIR$/Battery_Test_Methods.py" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Battery_Test_Methods.py" beforeDir="false" afterPath="$PROJECT_DIR$/Battery_Test_Methods.py" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/site1test.py" beforeDir="false" afterPath="$PROJECT_DIR$/site1test.py" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+@@ -158,30 +155,30 @@
+       <screen x="0" y="0" width="1680" height="1050" />
+     </state>
+     <state x="627" y="284" key="FileChooserDialogImpl/0.0.1680.1050@0.0.1680.1050" timestamp="1644108875894" />
+-    <state width="1659" height="304" key="GridCell.Tab.0.bottom" timestamp="1644164183953">
++    <state width="1659" height="304" key="GridCell.Tab.0.bottom" timestamp="1644272228170">
+       <screen x="0" y="0" width="1680" height="1050" />
+     </state>
+-    <state width="1659" height="304" key="GridCell.Tab.0.bottom/0.0.1680.1050@0.0.1680.1050" timestamp="1644164183953" />
+-    <state width="1659" height="304" key="GridCell.Tab.0.center" timestamp="1644164183951">
++    <state width="1659" height="304" key="GridCell.Tab.0.bottom/0.0.1680.1050@0.0.1680.1050" timestamp="1644272228170" />
++    <state width="1659" height="304" key="GridCell.Tab.0.center" timestamp="1644272228167">
+       <screen x="0" y="0" width="1680" height="1050" />
+     </state>
+-    <state width="1659" height="304" key="GridCell.Tab.0.center/0.0.1680.1050@0.0.1680.1050" timestamp="1644164183951" />
+-    <state width="1659" height="304" key="GridCell.Tab.0.left" timestamp="1644164183950">
++    <state width="1659" height="304" key="GridCell.Tab.0.center/0.0.1680.1050@0.0.1680.1050" timestamp="1644272228167" />
++    <state width="1659" height="304" key="GridCell.Tab.0.left" timestamp="1644272228165">
+       <screen x="0" y="0" width="1680" height="1050" />
+     </state>
+-    <state width="1659" height="304" key="GridCell.Tab.0.left/0.0.1680.1050@0.0.1680.1050" timestamp="1644164183950" />
+-    <state width="1659" height="304" key="GridCell.Tab.0.right" timestamp="1644164183952">
++    <state width="1659" height="304" key="GridCell.Tab.0.left/0.0.1680.1050@0.0.1680.1050" timestamp="1644272228165" />
++    <state width="1659" height="304" key="GridCell.Tab.0.right" timestamp="1644272228168">
+       <screen x="0" y="0" width="1680" height="1050" />
+     </state>
+-    <state width="1659" height="304" key="GridCell.Tab.0.right/0.0.1680.1050@0.0.1680.1050" timestamp="1644164183952" />
++    <state width="1659" height="304" key="GridCell.Tab.0.right/0.0.1680.1050@0.0.1680.1050" timestamp="1644272228168" />
+     <state x="347" y="180" key="SettingsEditor" timestamp="1643318177846">
+       <screen x="0" y="25" width="1680" height="1025" />
+     </state>
+     <state x="347" y="180" key="SettingsEditor/0.25.1680.1025@0.25.1680.1025" timestamp="1643318177846" />
+-    <state x="629" y="448" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1644163809183">
++    <state x="629" y="448" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1644164192932">
+       <screen x="0" y="0" width="1680" height="1050" />
+     </state>
+-    <state x="629" y="448" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1680.1050@0.0.1680.1050" timestamp="1644163809183" />
++    <state x="629" y="448" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1680.1050@0.0.1680.1050" timestamp="1644164192932" />
+     <state x="629" y="462" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.25.1680.1025@0.25.1680.1025" timestamp="1643318566072" />
+     <state x="846" y="0" width="834" height="1050" key="dock-window-1" timestamp="1643319262949">
+       <screen x="0" y="25" width="1680" height="1025" />
