@@ -123,7 +123,9 @@ print('Impedance is '+str(impedance))
 
 
 # Test 3
-print("   Starting Test 3/3: Measuring DC Impedance...")
+print("Disconnect Keithley Force wires and connect BK 8502 DC Load & then turn on")
+input("Press Enter to start test 3 >>")
+print("   Starting Test 3/3: Measuring Total Discharge...")
 
 
 keithley.write('*RST')                              # first line is to reset the instrument
