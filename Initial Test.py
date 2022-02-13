@@ -11,6 +11,9 @@ import pandas as pd
 import numpy as np
 from scipy.stats import linregress
 from statistics import mean
+import winsound
+frequency = 2500  # Set Frequency To 2500 Hertz
+duration = 2000  # Set Duration To 1000 ms == 1 second
 
 
 ### User INPUT ###
@@ -22,24 +25,16 @@ fileFolder = 'C:/Users/nwoodwa/Desktop/SolarPack/'
 # and both the source and meter for impedence testing
 # connect to Kiethley
 rm = pyvisa.ResourceManager()
-print(rm.list_resources())     # returns a tuple of connected devices # 'USB0::0x05E6::0x2450::04366211::INSTR'
-#keithley = rm.open_resource('USB0::0x05E6::0x2450::04366211::INSTR')
-keithley = rm.open_resource('ASRL/dev/ttyACM0::INSTR')
-
+# print(rm.list_resources())     # returns a tuple of connected devices # 'USB0::0x05E6::0x2450::04366211::INSTR'
+keithley = rm.open_resource('USB0::0x05E6::0x2450::04366211::INSTR')
 # print(keithley.query("*IDN?"))      # query's the Identity of the device connected
 keithley.write('*RST')
 
 # Connect to Arduino
 # sets serial connection with arduino uno and establish pin connections
-<<<<<<< HEAD
-arduinoPort = 'ttyo/ttyACM0'
-arduinoB = pyfirmata.Arduino(arduinoPort)         # arduino uno #if MEGA then use ArduinoMega(arduinoPort)
-it = pyfirmata.util.Iterator(self.arduinoB)
-=======
 arduinoPort = 'COM4'
 arduinoB = pyfirmata.Arduino(arduinoPort)  # arduino uno #if MEGA then use ArduinoMega(arduinoPort)
 it = pyfirmata.util.Iterator(arduinoB)
->>>>>>> 0e35bb9340f89294f6e05b54b51d0c209ba5acf6
 it.start()
 # a: analog,  d: digital
 # i: input, o: output, s: servo, p: pwm
@@ -165,23 +160,15 @@ cell_Dict['DC Impedance (Ohms)'] = impedance
 print('      Impedance is {:.1f} m-Ohm'.format(impedance))
 
 
-<<<<<<< HEAD
-# Test 3
-print("make sure BK is connected and on")
-input("press enter to continue >>")
-print("   Starting Test 3/3: Measuring DC Impedance...")
-=======
->>>>>>> 0e35bb9340f89294f6e05b54b51d0c209ba5acf6
 
 # Test 3
 print("Disconnect Keithley Force wires and connect BK 8502 DC Load & then turn on")
 input("Press Enter to start test 3 >>")
 print("   Starting Test 3/3: Measuring Total Discharge...")
 
-keithley.write('*RST')  # first line is to reset the instrument
-# keithley.write('SENS:CURR: RSEN OFF')  # set to 4-wire sense mode  # OFF = 2-Wire mode # by default?
+keithley.write('*RST')  # first line is to reset the instrument # 2-Wire mode by default
 keithley.write('SENS:FUNC "VOLT"')  # set measure, sense, to current
-keithley.write('SENS:CURR:RANG:AUTO ON')  # set current range to auto
+keithley.write('SENS:VOLT:RANG:AUTO ON')  # set voltage range to auto
 
 iteration = 1  # iteration must start at 1 for Keithly write
 voltLimit = 3.4  # voltage which to stop the test
@@ -219,13 +206,13 @@ while iteration >= 0:  # infinite while loop; breaks when voltLimit is reached
     iteration += 1
 
 
-    time.sleep(0.1)
+    time.sleep(10)
 
 
     cell_Dict.update({'Capacity Time': measTimeL, 'Capacity Voltage': voltageL})
 
-    # saves data every 2 minutes (120 seconds) = 12 iterations
-    if iteration % 12:
+    # saves data every 150 seconds => 15 iterations
+    if iteration % 15:
         tSave = threading.Thread(target=save_DF)
         tSave.start()
 
@@ -237,5 +224,5 @@ bk_POS.write(0)
 bk_GND.write(0)
 
 print("TURN OFF BK 8502")
-
 print("Testing Complete")
+winsound.Beep(frequency, duration)
