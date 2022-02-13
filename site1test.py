@@ -33,7 +33,7 @@ def runtest():
     battery_dict.update({'Capacity measurment times': measTimeL, 'Capacity voltage measurments': voltageL, 'Capacity current': currentL})
 
     # turn OFF test side led
-    Battery_Test_Methods.finish_test_LED(batterySite)
+    BTM.finish_test_LED(batterySite)
 
     # turn dictionary to dataframe
     # uses series so columns can be of differnt length

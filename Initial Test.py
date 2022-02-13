@@ -25,15 +25,17 @@ fileFolder = 'C:/Users/nwoodwa/Desktop/SolarPack/'
 # and both the source and meter for impedence testing
 # connect to Kiethley
 rm = pyvisa.ResourceManager()
-# print(rm.list_resources())     # returns a tuple of connected devices # 'USB0::0x05E6::0x2450::04366211::INSTR'
-keithley = rm.open_resource('USB0::0x05E6::0x2450::04366211::INSTR')
+print(rm.list_resources())     # returns a tuple of connected devices # 'USB0::0x05E6::0x2450::04366211::INSTR'
+#keithley = rm.open_resource('USB0::0x05E6::0x2450::04366211::INSTR')
+keithley = rm.open_resource('ASRL/dev/ttyACM0::INSTR')
+
 # print(keithley.query("*IDN?"))      # query's the Identity of the device connected
 keithley.write('*RST')
 
 
 # Connect to Arduino
 # sets serial connection with arduino uno and establish pin connections
-arduinoPort = 'ttyo/USB0'
+arduinoPort = 'ttyo/ttyACM0'
 arduinoB = pyfirmata.Arduino(arduinoPort)         # arduino uno #if MEGA then use ArduinoMega(arduinoPort)
 it = pyfirmata.util.Iterator(self.arduinoB)
 it.start()
@@ -123,6 +125,8 @@ print('Impedance is '+str(impedance))
 
 
 # Test 3
+print("make sure BK is connected and on")
+input("press enter to continue >>")
 print("   Starting Test 3/3: Measuring DC Impedance...")
 
 
