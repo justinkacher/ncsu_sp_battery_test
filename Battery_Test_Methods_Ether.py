@@ -39,7 +39,7 @@ def query_Keithley(command):
 # a Keithley 2450 SourceMeter is used for the open voltage reading, voltage reading during discharge,
 # and both the source and meter for impedence testing
 #initialize connection and reset
-initialize connection and reset
+#initialize connection and reset
 TCP_IP = "169.254.246.87"
 TCP_Port = 5025
 keithley = socket.socket()
@@ -237,11 +237,11 @@ def dc_Impedance():
 def ratio_Capacity_BK8502(battery):
 
 
-    send('*RST')                              # first line is to reset the instrument
-    send('OUTP:SMOD HIMP')                    # turn on high-impedance output mode
+    send_Keithley('*RST')                              # first line is to reset the instrument
+    send_Keithley('OUTP:SMOD HIMP')                    # turn on high-impedance output mode
 #    send('SENS:CURR:RSEN OFF')                # set to 4-wire sense mode  # OFF = 2-Wire mode # by default?
-    send('SENS:FUNC "VOLT"')                  # set measure, sense, to current
-    send('SENS:CURR:RANG:AUTO ON')            # set current range to auto
+    send_Keithley('SENS:FUNC "VOLT"')                  # set measure, sense, to current
+    send_Keithley('SENS:CURR:RANG:AUTO ON')            # set current range to auto
 
     stopTime = 30           # discharge for 30 seconds
     testTime = 0            # initiate testTime to zero seconds
@@ -255,8 +255,8 @@ def ratio_Capacity_BK8502(battery):
     startTime = time.time()
 
     while testTime >= stopTime:    # loop until 30 seconds, stoptime has passed
-        send('READ? "defbuffer1"')        # get voltage sense reading
-        voltage = recieve()
+        send_Keithley('READ? "defbuffer1"')        # get voltage sense reading
+        voltage = recieve_Keithley()
         # print(voltage)
         voltageL.append(float(voltage))
 
@@ -271,4 +271,4 @@ def ratio_Capacity_BK8502(battery):
     GPIO.output(relays['Sense_BK_POS'], 0)      # relays off to NC = sense 
     GPIO.output(relays['Sense_BK_NEG'], 0)   
 
-    return currentL, voltageL, measTimeL
+    return voltageL, measTimeL
