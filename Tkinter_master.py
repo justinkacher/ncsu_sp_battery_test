@@ -21,29 +21,28 @@ from statistics import mean
 
 
  
-config.initialize()
-errorstate = config.msgsite1
-errorstate2 = config.msgsite2
+
+def scan_cell():
+    cell_Name = input('>> Cell number (scan barcode)')
+    cell_Dict = {'Cell Number': cell_Name}
 
 
 
 
 
-
-
-def readscale():
-    scaletest.read()
-    refreshscale()
-def tarescale():
-    scaletest.tare()
-    refreshscale()
-def refreshscale():
-    massvallbl.configure(
-        text = config.scalevalue
-    )
-    IDnum.configure(
-        text = config.IDscale
-    )
+# def readscale():
+#     scaletest.read()
+#     refreshscale()
+# def tarescale():
+#     scaletest.tare()
+#     refreshscale()
+# def refreshscale():
+#     massvallbl.configure(
+#         text = 
+#     )
+#     IDnum.configure(
+#         text = IDnum
+#     )
 
 
 
@@ -57,6 +56,7 @@ def starttest1():
     cell_Dict = {}
     battery = 1
     BTM.battery_selection(battery)
+    scan_cell()
     BTM.start_test_LED(battery)
     Voc = BTM.meas_VOC()
     cell_Dict['Voc (V)'] = Voc
@@ -74,6 +74,7 @@ def starttest2():
     cell_Dict = {}
     battery = 1
     BTM.battery_selection(battery)
+    scan_cell()
     BTM.start_test_LED(battery)
     Voc = BTM.meas_VOC()
     cell_Dict['Voc (V)'] = Voc
