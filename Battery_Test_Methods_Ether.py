@@ -35,6 +35,7 @@ def query_Keithley(command):
 
 
 
+
 # a Keithley 2450 SourceMeter is used for the open voltage reading, voltage reading during discharge,
 # and both the source and meter for impedence testing
 #initialize connection and reset
@@ -227,7 +228,7 @@ def dc_Impedance():
 
 
 ## Ratio Capacity Test
-# returns lis of voltage and times    
+# returns list of voltage and times    
 
 # Takes voltage discharge for 30 seconds
 # Comapare to baseline of full capacity cells by impedence
@@ -247,7 +248,10 @@ def ratio_Capacity_BK8502(battery):
     voltageL = []           # list of voltage readings
     measTimeL = []          # list of times of readings
 
-    GPIO.output(17, 1)      # turn relay, thus DC Load, ON
+    # set relay to BK Load
+    GPIO.output(relays['Sense_BK_POS'], 1)      # relays ib to NO = BK Load 
+    GPIO.output(relays['Sense_BK_NEG'], 1)   
+    
     startTime = time.time()
 
     while testTime >= stopTime:    # loop until 30 seconds, stoptime has passed
@@ -261,14 +265,10 @@ def ratio_Capacity_BK8502(battery):
 
         time.sleep(1)      # sleep is in seconds    # 1 second between measurements
 
-    GPIO.output(17, 0)      # turn relay, thus DC Load, OFF
 
-    # turn relay, thus DC Load, OFF
-    if battery is 1:
-        GPIO.output(relays['R5'], 0)      # load pos = R5 # relays off to NC positions
-        GPIO.output(relays['R3'], 0)      # load gnd = R3 # relays off to NC positions
-    if battery is 2:
-        GPIO.output(relays['R8'], 0)      # load pos = R5 # relays off to NC positions
-        GPIO.output(relays['R3'], 0)      # load gnd = R3 # relays off to NC positions
+    # turn relay to NC, thus DC Load is OFF
+    # set relay back to sense 
+    GPIO.output(relays['Sense_BK_POS'], 0)      # relays off to NC = sense 
+    GPIO.output(relays['Sense_BK_NEG'], 0)   
 
     return currentL, voltageL, measTimeL
