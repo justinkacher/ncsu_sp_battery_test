@@ -13,7 +13,10 @@ from matplotlib.pyplot import title
 import config
 import scaletest
 #from PIL import *
-import Battery_Test_Methods_Ether
+import Battery_Test_Methods_Ether as BTM
+import pandas as pd
+from statistics import mean
+
 
 
 
@@ -49,60 +52,40 @@ def refreshscale():
 
 
 
-# def starttest1():
-#     tkcommands.checkstate1()
-#     errorlbl.configure(
-#         text = config.msgsite1
-#     )
-#     ID2num.configure(
-#         text = config.IDsite1
-#     )
-#     massvallbl.configure(
-#         text = config.scalevalue
-#     )
-#     IDnum.configure(
-#         text = config.IDscale
-#     )
+
 def starttest1():
+    cell_Dict = {}
     battery = 1
-    Battery_Test_Methods_Ether.ratio_Capacity_BK8502(battery)
+    BTM.battery_selection(battery)
+    BTM.start_test_LED(battery)
+    Voc = BTM.meas_VOC()
+    cell_Dict['Voc (V)'] = Voc
+    impedance = BTM.dc_Impedance()
+    cell_Dict['DC Impedance (Ohms)'] = impedance
+    voltage_list,time_list = BTM.ratio_Capacity_BK8502()
+    cell_Dict.update({'Capacity Time': time_list, 'Capacity Voltage': voltage_list})
+
+    df_battery_dict = pd.DataFrame({key: pd.Series(value) for key, value in cell_Dict.items()})
+    df_battery_dict.to_excel(fileFolder + 'Test cell ' + cell_Dict['Cell Number'] + '.xlsx')
+
+    BTM.finish_test_LED(battery)
 
 def starttest2():
-    battery = 2
-    Battery_Test_Methods_Ether.ratio_Capacity_BK8502(battery)
+    cell_Dict = {}
+    battery = 1
+    BTM.battery_selection(battery)
+    BTM.start_test_LED(battery)
+    Voc = BTM.meas_VOC()
+    cell_Dict['Voc (V)'] = Voc
+    impedance = BTM.dc_Impedance()
+    cell_Dict['DC Impedance (Ohms)'] = impedance
+    voltage_list,time_list = BTM.ratio_Capacity_BK8502()
+    cell_Dict.update({'Capacity Time': time_list, 'Capacity Voltage': voltage_list})
 
-# def starttest2():
-#     tkcommands.checkstate2()
-#     errorlbl2.configure(
-#         text = config.msgsite2
-#     )
-#     ID3num.configure(
-#         text = config.IDsite2
-#     )
-#     massvallbl.configure(
-#         text = config.scalevalue
-#     )
-#     IDnum.configure(
-#         text = config.IDscale
-#     )
-
-# def removetest1():
-#     tkcommands.rmvcheckstate1()
-#     errorlbl.configure(
-#         text = config.msgsite1
-#     )
-#     ID2num.configure(
-#         text = config.IDsite1
-#     )
-
-# def removetest2():
-#     tkcommands.rmvcheckstate2()
-#     errorlbl2.configure(
-#         text = config.msgsite2
-#     )
-#     ID3num.configure(
-#         text = config.IDsite2
-#     )
+    df_battery_dict = pd.DataFrame({key: pd.Series(value) for key, value in cell_Dict.items()})
+    df_battery_dict.to_excel(fileFolder + 'Test cell ' + cell_Dict['Cell Number'] + '.xlsx')
+    
+    BTM.finish_test_LED(battery)
 
 
 
@@ -174,10 +157,6 @@ titlelbl = tk.Label(
 titlelbl.place(y = 20, width = 1200)
 
 
-# canvas = Canvas(titleframe, width = 100, height = 100)
-# canvas.pack()
-# logo = ImageTk.PhotoImage('Logo.png')
-# canvas.create_image(20,20, anchor = NW, image = logo)
 
 
 
@@ -281,16 +260,16 @@ start1btn = tk.Button(
     command = starttest1
 )
 start1btn.grid(row = 5)
-start1btn.place(y= 400,x=25,width = 150, height = 50)
+start1btn.place(y= 400,x=25,width = 350, height = 50)
 
-remove1btn = tk.Button(
-    site1frame,
-    text = "Remove",
-    bg = '#ab5454',
-    #command = removetest1
-)
-remove1btn.grid(row = 5)
-remove1btn.place(y = 400,x=225,width = 150,height = 50)
+# remove1btn = tk.Button(
+#     site1frame,
+#     text = "Remove",
+#     bg = '#ab5454',
+#     #command = removetest1
+# )
+# remove1btn.grid(row = 5)
+# remove1btn.place(y = 400,x=225,width = 150,height = 50)
 
 errorlbl = Label(
     site1frame,
@@ -337,19 +316,19 @@ start2btn = tk.Button(
     site2frame,
     text = "Start",
     bg = '#8dc989',
-    #command = starttest2
+    command = starttest2
 )
 start2btn.grid(row = 5)
-start2btn.place(y= 400,x=25,width = 150, height = 50)
+start2btn.place(y= 400,x=25,width = 350, height = 50)
 
-remove2btn = tk.Button(
-    site2frame,
-    text = "Remove",
-    bg = '#ab5454',
-    #command = removetest2
-)
-remove2btn.grid(row = 5)
-remove2btn.place(y = 400,x=225,width = 150,height = 50)
+# remove2btn = tk.Button(
+#     site2frame,
+#     text = "Remove",
+#     bg = '#ab5454',
+#     #command = removetest2
+# )
+# remove2btn.grid(row = 5)
+# remove2btn.place(y = 400,x=225,width = 150,height = 50)
 
 errorlbl2 = Label(
     site2frame,
