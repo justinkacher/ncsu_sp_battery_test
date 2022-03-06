@@ -11,7 +11,7 @@ import RPi.GPIO
 
 #IP adress of keithly
 TCP_IP = ""
-TCP_Port = 
+TCP_Port = 5025
 
 #send commands to keithley via socket
 def send_Keithley(command):
