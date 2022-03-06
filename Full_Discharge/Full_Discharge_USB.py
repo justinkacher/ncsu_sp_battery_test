@@ -17,6 +17,12 @@ duration = 2000  # Set Duration To 1000 ms == 1 second
 
 # test change
 
+# sdfgaslkjasljkdljkasg
+#asldhkglajgd
+#alskjdflajdf
+#lashkdkglajsdfl
+
+
 ### User INPUT ###
 fileFolder = 'C:/Users/nwoodwa/Desktop/SolarPack/'
 
