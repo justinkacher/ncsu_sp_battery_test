@@ -10,7 +10,7 @@ import RPi.GPIO
 
 
 #IP adress of keithly
-TCP_IP = ""
+TCP_IP = "169.254.206.101"
 TCP_Port = 5025
 
 #send commands to keithley via socket
@@ -40,11 +40,10 @@ def query_Keithley(command):
 # and both the source and meter for impedence testing
 #initialize connection and reset
 #initialize connection and reset
-TCP_IP = "169.254.246.87"
-TCP_Port = 5025
+
 keithley = socket.socket()
 keithley.connect((TCP_IP, TCP_Port))
-keithley.send("*RST")
+send_Keithley("*RST")
 print("ID: ", query_Keithley("*IDN?"))
 send_Keithley('OUTP:SMOD HIMP')  # turn on high-impedance output mode; so battery wont drain while just sitting
 
@@ -52,8 +51,8 @@ send_Keithley('OUTP:SMOD HIMP')  # turn on high-impedance output mode; so batter
 # BK 8502 DC Load Supply is used for to discharge the cells at 10A
 # a relay is used to turn on/off the load supply connection
 import RPi.GPIO as GPIO
-GPIO.setmode(GPIO.board)
-GPIO.setup(17, GPIO.OUT)
+GPIO.setmode(GPIO.BOARD)
+
 
 # Relay k16: POS; NC =  battery 1, NO = nothing (battery 2)         # Battery_POS
 # Relay k15: NEG; NC =  battery 1, NO = nothing (battery 2)         # Battery_NEG
@@ -73,31 +72,31 @@ GPIO.setup(17, GPIO.OUT)
 relays = {'Battery_POS': 13, 'Battery_NEG': 15, 'Sense_BK_POS': 3, 'Sense_BK_NEG': 5, 'Force_NEG': 7, 'Force_POS': 11, 'LED_1': 19, 'LED_2': 21}
 
 # loop to set up each relay pin to output 
-for key, value in relays():
+for value in relays.values():
    GPIO.setup(value, GPIO.OUT)      # GPIO.setup(17, GPIO.OUT)
 
 
 # turn ON LED for which battery is being tested
 def start_test_LED(battery):
-    if battery is 1:
+    if battery == 1:
         GPIO.output(relays['LED_1'], 1)      # LED 1 = k13 # relays on to NO positions
-    if battery is 2:
+    if battery == 2:
         GPIO.output(relays['LED_2'], 1)      # LED 2 = k14 # relays on to NO positions
 
 # turn OFF LED for which battery is being tested
 def finish_test_LED(battery):
-    if battery is 1:
+    if battery == 1:
         GPIO.output(relays['LED_1'],0)      # LED 1 = k13 # relays off to NC positions
-    if battery is 2:
+    if battery == 2:
         GPIO.output(relays['LED_2'], 0)      # LED 2 = k14 # relays off to NC positions
 
 
 def battery_selection(battery):
-    if battery is 1:
+    if battery == 1:
         GPIO.output(relays['Battery_POS'], 0)   # relays off to NC position
         GPIO.output(relays['Battery_NEG'], 0)      
         GPIO.output(relays['Force_NEG'], 0)  
-    if battery is 2:
+    if battery == 2:
         GPIO.output(relays['Battery_POS'], 1)   # relays on to NO position
         GPIO.output(relays['Battery_NEG'], 1) 
         GPIO.output(relays['Force_POS'], 0)
@@ -205,12 +204,13 @@ def dc_Impedance():
     
         volt =query_Keithley('READ? "defbuffer1", SOUR')  # a ? is used for a query command otherwise is a set command
                                                           # defbuffer1 returns sense value
-        voltL_impedance.append(volt)
+        voltL_impedance.append(float(volt))
     
     send_Keithley('OUTP OFF')  # turn off keithley
     
     impedanceL = []
     for i in range(len(voltL_impedance)-1):
+        #print(type(voltL_impedance))
         DC_impedance = (voltL_impedance[i] - voltL_impedance[i+1]) / (currentL_impedance[i] - currentL_impedance[i+1])
         # print(DC_impedance)
         impedanceL.append(DC_impedance)
@@ -234,7 +234,7 @@ def dc_Impedance():
 # Comapare to baseline of full capacity cells by impedence
 
 # returns lists of currentL, voltageL , measTimeL
-def ratio_Capacity_BK8502(battery):
+def ratio_Capacity_BK8502():
 
 
     send_Keithley('*RST')                              # first line is to reset the instrument
@@ -251,19 +251,15 @@ def ratio_Capacity_BK8502(battery):
     # set relay to BK Load
     GPIO.output(relays['Sense_BK_POS'], 1)      # relays ib to NO = BK Load 
     GPIO.output(relays['Sense_BK_NEG'], 1)   
-    
+    time.sleep(1)
     startTime = time.time()
 
-    while testTime >= stopTime:    # loop until 30 seconds, stoptime has passed
-        send_Keithley('READ? "defbuffer1"')        # get voltage sense reading
-        voltage = recieve_Keithley()
-        # print(voltage)
+    while testTime <= stopTime:    # loop until 30 seconds, stoptime has passed
+        voltage = voltage_Reading()
         voltageL.append(float(voltage))
-
-        time = time.time() - startTime
-        measTimeL.append(float(time))
-
-        time.sleep(1)      # sleep is in seconds    # 1 second between measurements
+        testTime = time.time() - startTime
+        measTimeL.append(float(testTime))
+        time.sleep(.5)      # sleep is in seconds    # 1 second between measurements
 
 
     # turn relay to NC, thus DC Load is OFF
