@@ -13,6 +13,7 @@ from matplotlib.pyplot import title
 import config
 import scaletest
 #from PIL import *
+import Battery_Test_Methods_Ether
 
 
 
@@ -62,7 +63,13 @@ def refreshscale():
 #     IDnum.configure(
 #         text = config.IDscale
 #     )
+def starttest1():
+    battery = 1
+    Battery_Test_Methods_Ether.ratio_Capacity_BK8502(battery)
 
+def starttest2():
+    battery = 2
+    Battery_Test_Methods_Ether.ratio_Capacity_BK8502(battery)
 
 # def starttest2():
 #     tkcommands.checkstate2()
@@ -271,7 +278,7 @@ start1btn = tk.Button(
     site1frame,
     text = "Start",
     bg = '#8dc989',
-    #command = starttest1
+    command = starttest1
 )
 start1btn.grid(row = 5)
 start1btn.place(y= 400,x=25,width = 150, height = 50)
