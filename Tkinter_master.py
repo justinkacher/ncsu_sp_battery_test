@@ -10,21 +10,21 @@ import time
 from matplotlib.pyplot import title
 #from matplotlib import scale
 #import tkcommands
-import config
-import scaletest
+# import config
+# import scaletest
 #from PIL import *
 import Battery_Test_Methods_Ether as BTM
 import pandas as pd
 from statistics import mean
 
+fileFolder = "/home/pi/Documents/solarpack/partial_discharge"
 
-
-
+cell_Name = ""
  
 
 def scan_cell():
     cell_Name = input('>> Cell number (scan barcode)')
-    cell_Dict = {'Cell Number': cell_Name}
+    return cell_Name
 
 
 
@@ -55,18 +55,23 @@ def scan_cell():
 def starttest1():
     cell_Dict = {}
     battery = 1
+    
     BTM.battery_selection(battery)
-    scan_cell()
+    cell_Name = scan_cell()
+    cell_Dict = {'Cell Number' : cell_Name}
     BTM.start_test_LED(battery)
     Voc = BTM.meas_VOC()
+    print("Voc: ",Voc)
     cell_Dict['Voc (V)'] = Voc
     impedance = BTM.dc_Impedance()
+    print("impedance: ",impedance)
     cell_Dict['DC Impedance (Ohms)'] = impedance
     voltage_list,time_list = BTM.ratio_Capacity_BK8502()
+    print(voltage_list, " ", time_list)
     cell_Dict.update({'Capacity Time': time_list, 'Capacity Voltage': voltage_list})
 
     df_battery_dict = pd.DataFrame({key: pd.Series(value) for key, value in cell_Dict.items()})
-    df_battery_dict.to_excel(fileFolder + 'Test cell ' + cell_Dict['Cell Number'] + '.xlsx')
+    df_battery_dict.to_excel(fileFolder + '/Test cell ' + cell_Dict['Cell Number'] + '.xlsx')
 
     BTM.finish_test_LED(battery)
 
@@ -84,7 +89,7 @@ def starttest2():
     cell_Dict.update({'Capacity Time': time_list, 'Capacity Voltage': voltage_list})
 
     df_battery_dict = pd.DataFrame({key: pd.Series(value) for key, value in cell_Dict.items()})
-    df_battery_dict.to_excel(fileFolder + 'Test cell ' + cell_Dict['Cell Number'] + '.xlsx')
+    df_battery_dict.to_excel(fileFolder + '/Test cell ' + cell_Dict['Cell Number'] + '.xlsx')
     
     BTM.finish_test_LED(battery)
 
@@ -182,7 +187,7 @@ ID1lbl.place(y=60,width = 390)
 
 IDnum = tk.Label(
     scaleframe,
-    text = config.IDscale
+    # text = config.IDscale
 )
 IDnum.grid(row = 3)
 IDnum.place(y=100, width = 390)
@@ -208,7 +213,7 @@ readbtn.place(x = 25,y=250,width = 350, height = 100)
 
 readvallbl = tk.Label(
     scaleframe,
-    text = config.scalevalue
+    # text = config.scalevalue
     )
 readvallbl.grid(row = 6)
 readvallbl.place(y = 350, width = 390, height = 50)
@@ -240,7 +245,7 @@ ID2lbl.place(y=60,width = 390)
 
 ID2num = tk.Label(
     site1frame,
-    text = config.IDsite1
+    # text = config.IDsite1
 )
 ID2num.grid(row = 3)
 ID2num.place(y=100, width = 390)
@@ -300,7 +305,7 @@ ID3lbl.place(y=60,width = 390)
 
 ID3num = tk.Label(
     site2frame,
-    text = config.IDsite2
+    # text = config.IDsite2
 )
 ID3num.grid(row = 3)
 ID3num.place(y=100, width = 390)
