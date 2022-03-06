@@ -14,17 +14,19 @@ TCP_IP = ""
 TCP_Port = 
 
 #send commands to keithley via socket
-def send(s,command):
+def send_Keithley(command):
     command += "\n"
-    s.send(command.encode())
+    keithley.send(command.encode())
     return
 
-def recieve(s):
-    return s.recv(1024).decode()
+def recieve_Keithley():
+    return keithley.recv(1024).decode()
 
-def query(s,command):
-    send(s,command)
-    return recieve(s)
+
+def query_Keithley(command):
+    send_Keithley(command)
+    return recieve_Keithley()
+
 
 
 
