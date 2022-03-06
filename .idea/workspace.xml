@@ -19,9 +19,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="399bd4ca-f68b-43cc-99d5-d1f9dd58404d" name="Default Changelist" comment="Finished method prodecure">
-      <change afterPath="$PROJECT_DIR$/Initial Test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="399bd4ca-f68b-43cc-99d5-d1f9dd58404d" name="Default Changelist" comment="test upload">
+      <change beforePath="$PROJECT_DIR$/Full_Discharge/Full_Discharge_USB.py" beforeDir="false" afterPath="$PROJECT_DIR$/Full_Discharge/Full_Discharge_USB.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,9 +37,6 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GithubDefaultAccount">
-    <option name="defaultAccountId" value="4552ab25-701b-467d-8b4f-8826f662dfa7" />
-  </component>
   <component name="ProjectId" id="24ISBSxpeVnIBDzupXCjIeDR46S" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -51,10 +47,31 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$USER_HOME$" />
-    <property name="settings.editor.selected.configurable" value="org.jetbrains.plugins.github.ui.GithubSettingsConfigurable" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager" selected="Python.site1test">
+  <component name="RunManager" selected="Python.Barcode">
+    <configuration name="Barcode" type="PythonConfigurationType" factoryName="Python" singleton="false" temporary="true" nameIsGenerated="true">
+      <module name="ncsu_sp_battery_test" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$USER_HOME$/.conda/envs/SMU/bin/python" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Barcode.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration default="true" type="PythonConfigurationType" factoryName="Python" singleton="false">
       <module name="ncsu_sp_battery_test" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -120,6 +137,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.Barcode" />
         <item itemvalue="Python.site1test" />
       </list>
     </recent_temporary>
@@ -143,7 +161,9 @@
     <MESSAGE value="update" />
     <MESSAGE value=" 1" />
     <MESSAGE value="Finished method prodecure" />
-    <option name="LAST_COMMIT_MESSAGE" value="Finished method prodecure" />
+    <MESSAGE value="Finished initial test script" />
+    <MESSAGE value="test upload" />
+    <option name="LAST_COMMIT_MESSAGE" value="test upload" />
   </component>
   <component name="WindowStateProjectService">
     <state x="302" y="182" width="1167" height="682" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1643763052643">
@@ -155,35 +175,39 @@
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="627" y="284" key="FileChooserDialogImpl/0.0.1680.1050@0.0.1680.1050" timestamp="1644108875894" />
-    <state width="1659" height="304" key="GridCell.Tab.0.bottom" timestamp="1644272228170">
-      <screen x="0" y="0" width="1680" height="1050" />
+    <state width="1659" height="286" key="GridCell.Tab.0.bottom" timestamp="1646582968020">
+      <screen x="0" y="25" width="1680" height="1025" />
     </state>
-    <state width="1659" height="304" key="GridCell.Tab.0.bottom/0.0.1680.1050@0.0.1680.1050" timestamp="1644272228170" />
-    <state width="1659" height="304" key="GridCell.Tab.0.center" timestamp="1644272228167">
-      <screen x="0" y="0" width="1680" height="1050" />
+    <state width="1659" height="304" key="GridCell.Tab.0.bottom/0.0.1680.1050@0.0.1680.1050" timestamp="1646582278210" />
+    <state width="1659" height="286" key="GridCell.Tab.0.bottom/0.25.1680.1025@0.25.1680.1025" timestamp="1646582968020" />
+    <state width="1659" height="286" key="GridCell.Tab.0.center" timestamp="1646582968019">
+      <screen x="0" y="25" width="1680" height="1025" />
     </state>
-    <state width="1659" height="304" key="GridCell.Tab.0.center/0.0.1680.1050@0.0.1680.1050" timestamp="1644272228167" />
-    <state width="1659" height="304" key="GridCell.Tab.0.left" timestamp="1644272228165">
-      <screen x="0" y="0" width="1680" height="1050" />
+    <state width="1659" height="304" key="GridCell.Tab.0.center/0.0.1680.1050@0.0.1680.1050" timestamp="1646582278208" />
+    <state width="1659" height="286" key="GridCell.Tab.0.center/0.25.1680.1025@0.25.1680.1025" timestamp="1646582968019" />
+    <state width="1659" height="286" key="GridCell.Tab.0.left" timestamp="1646582968019">
+      <screen x="0" y="25" width="1680" height="1025" />
     </state>
-    <state width="1659" height="304" key="GridCell.Tab.0.left/0.0.1680.1050@0.0.1680.1050" timestamp="1644272228165" />
-    <state width="1659" height="304" key="GridCell.Tab.0.right" timestamp="1644272228168">
-      <screen x="0" y="0" width="1680" height="1050" />
+    <state width="1659" height="304" key="GridCell.Tab.0.left/0.0.1680.1050@0.0.1680.1050" timestamp="1646582278204" />
+    <state width="1659" height="286" key="GridCell.Tab.0.left/0.25.1680.1025@0.25.1680.1025" timestamp="1646582968019" />
+    <state width="1659" height="286" key="GridCell.Tab.0.right" timestamp="1646582968020">
+      <screen x="0" y="25" width="1680" height="1025" />
     </state>
-    <state width="1659" height="304" key="GridCell.Tab.0.right/0.0.1680.1050@0.0.1680.1050" timestamp="1644272228168" />
+    <state width="1659" height="304" key="GridCell.Tab.0.right/0.0.1680.1050@0.0.1680.1050" timestamp="1646582278209" />
+    <state width="1659" height="286" key="GridCell.Tab.0.right/0.25.1680.1025@0.25.1680.1025" timestamp="1646582968020" />
     <state x="168" y="91" key="MergeDialog" timestamp="1644272915568">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="168" y="91" key="MergeDialog/0.0.1680.1050@0.0.1680.1050" timestamp="1644272915568" />
-    <state x="347" y="180" key="SettingsEditor" timestamp="1643318177846">
+    <state x="347" y="180" key="SettingsEditor" timestamp="1646582964885">
       <screen x="0" y="25" width="1680" height="1025" />
     </state>
-    <state x="347" y="180" key="SettingsEditor/0.25.1680.1025@0.25.1680.1025" timestamp="1643318177846" />
-    <state x="629" y="462" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1644534082179">
+    <state x="347" y="180" key="SettingsEditor/0.25.1680.1025@0.25.1680.1025" timestamp="1646582964885" />
+    <state x="629" y="462" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1646584366941">
       <screen x="0" y="25" width="1680" height="1025" />
     </state>
-    <state x="629" y="448" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1680.1050@0.0.1680.1050" timestamp="1644533373292" />
-    <state x="629" y="462" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.25.1680.1025@0.25.1680.1025" timestamp="1644534082179" />
+    <state x="629" y="448" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1680.1050@0.0.1680.1050" timestamp="1644542723702" />
+    <state x="629" y="462" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.25.1680.1025@0.25.1680.1025" timestamp="1646584366941" />
     <state x="846" y="0" width="834" height="1050" key="dock-window-1" timestamp="1643319262949">
       <screen x="0" y="25" width="1680" height="1025" />
     </state>
