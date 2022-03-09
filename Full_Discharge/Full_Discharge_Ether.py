@@ -72,16 +72,54 @@ send_Keithley('OUTP:SMOD HIMP')  # turn on high-impedance output mode; so batter
 # bk_GND.write(1)
 # bk_POS.write(1)
 
-
+### Setup V 0.1
 ## write gpio pin
-import RPi.GPIO as GPIO
-GPIO.setmode(GPIO.board)
-relays = {'bk_POS': 17, 'bk_GND': 18}
-for key, value in relays():     # loop to set up each relay pin to output 
-   GPIO.setup(value, GPIO.OUT)      # GPIO.setup(17, GPIO.OUT)
+# import RPi.GPIO as GPIO
+# GPIO.setmode(GPIO.board)
+# relays = {'bk_POS': 17, 'bk_GND': 18}
+# for key, value in relays():     # loop to set up each relay pin to output 
+#    GPIO.setup(value, GPIO.OUT)      # GPIO.setup(17, GPIO.OUT)
 # ensures both relays are off; set to NC position
-GPIO.output(relays['bk_POS'], 1)
-GPIO.output(relays['bk_GND'], 1)
+# GPIO.output(relays['bk_POS'], 1)
+# GPIO.output(relays['bk_GND'], 1)
+
+
+### Setup V 0.2
+# BK 8502 DC Load Supply is used for to discharge the cells at 10A
+# a relay is used to turn on/off the load supply connection
+import RPi.GPIO as GPIO
+GPIO.setmode(GPIO.BOARD)
+
+
+# Relay k16: POS; NC =  battery 1, NO = nothing (battery 2)         # Battery_POS
+# Relay k15: NEG; NC =  battery 1, NO = nothing (battery 2)         # Battery_NEG
+
+# Relay k3: NEG; NC =  battery 1, NO = nothing (battery 2)          # Force_NEG
+# Relay k4: POS; NC =  battery 1, NO = nothing (battery 2)          # Force_POS
+
+# Relay k1: POS; NC = Keithely Sense; NO = BK Load                  # Sense_BK_POS
+# Relay k2: NEG; NC = Keithely Sense; NO = BK Load                  # Sense_BK_NEG
+
+
+# Relay k13: LED ground; NC = nothing, NO = Battery 1 indicator     # LED_1
+# Relay k14: LED ground; NC = nothing, NO = Battery 2 indicator     # LED_2
+
+
+
+relays = {'Battery_POS': 13, 'Battery_NEG': 15, 'Sense_BK_POS': 3, 'Sense_BK_NEG': 5, 'Force_NEG': 7, 'Force_POS': 11, 'LED_1': 19, 'LED_2': 21}
+
+
+# Battery 1 = Normally closed position
+GPIO.output(relays['Battery_POS'], 0)   # relays off to NC position
+GPIO.output(relays['Battery_NEG'], 0)      
+GPIO.output(relays['Force_NEG'], 0)  
+
+
+
+# loop to set up each relay pin to output 
+for value in relays.values():
+   GPIO.setup(value, GPIO.OUT)      # GPIO.setup(17, GPIO.OUT)
+
 
 
 cell_Dict = {}
@@ -131,7 +169,17 @@ cell_Dict = {'Cell Number': cell_Name}
 input('Press Enter to start testing >> ')
 
 # Test 1
-print('   Starting Test 1/3: Measuring Voc...')
+print('Measure AC Impedance using handhgeld tool')
+cell_AC_Impd = input('>> AC Impedance (milli-Ohm')
+cell_Dict = {'Cell AC Impedance': cell_AC_Impd}
+
+
+# Test 2
+print('   Starting Test 2/4: Measuring Voc...')
+
+# set relay to sense 
+GPIO.output(relays['Sense_BK_POS'], 0)      # relays off to NC = sense 
+GPIO.output(relays['Sense_BK_NEG'], 0)   
 
 set_forVoltageReading()
 
@@ -149,8 +197,14 @@ cell_Dict['Voc (V)'] = Voc
 print("      Voc is {:.2f}".format(Voc))
 
 
-# Test 2
-print("   Starting Test 2/3: Measuring DC Impedance...")
+# Test 3
+print("   Starting Test 3/4: Measuring DC Impedance...")
+
+# set relay to sense 
+GPIO.output(relays['Sense_BK_POS'], 0)      # relays off to NC = sense 
+GPIO.output(relays['Sense_BK_NEG'], 0) 
+
+# set KEITHLEY settings
 sourceVoltage = 2.65  # Charging: VSource > VBattery; Discharging: VS < VB # 18650 is 3.7v; max charging is 4.2v and min discharge final is 2.75
 voltageRange = 20  # 20mV, 200mV, 2V, 20V, 200V
 sourceLimit = np.linspace(0.1, 1, 10)     # returns array; start value, end value, number of points
@@ -219,9 +273,10 @@ measTimeL = []  # list of times of readings
 
 rollingList = []  # list of voltage rolling  averaging for determinging when we reach the end test voltLimit; helps to ignore random drops/spikes
 
-# turn relay to NO, thus DC Load ON
-GPIO.output(relays['bk_POS'], 0)
-GPIO.output(relays['bk_GND'], 0)
+# set relay to BK Load
+GPIO.output(relays['Sense_BK_POS'], 1)      # relays ib to NO = BK Load 
+GPIO.output(relays['Sense_BK_NEG'], 1)   
+time.sleep(1)
 startTime = time.time()
 
 while iteration >= 0:  # infinite while loop; breaks when voltLimit is reached
@@ -259,9 +314,9 @@ while iteration >= 0:  # infinite while loop; breaks when voltLimit is reached
 
 
 
-# turn relay to NC, thus DC Load Off
-GPIO.output(relays['bk_POS'], 1)
-GPIO.output(relays['bk_GND'], 1)
+# set relay back to sense 
+GPIO.output(relays['Sense_BK_POS'], 0)      # relays off to NC = sense 
+GPIO.output(relays['Sense_BK_NEG'], 0)  
 
 save_DF()
 print("TURN OFF BK 8502")
