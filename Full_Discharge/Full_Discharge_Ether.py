@@ -169,7 +169,13 @@ cell_Dict = {'Cell Number': cell_Name}
 input('Press Enter to start testing >> ')
 
 # Test 1
-print('   Starting Test 1/3: Measuring Voc...')
+print('Measure AC Impedance using handhgeld tool')
+cell_AC_Impd = input('>> AC Impedance (milli-Ohm')
+cell_Dict = {'Cell AC Impedance': cell_AC_Impd}
+
+
+# Test 2
+print('   Starting Test 2/4: Measuring Voc...')
 
 # set relay to sense 
 GPIO.output(relays['Sense_BK_POS'], 0)      # relays off to NC = sense 
@@ -191,8 +197,8 @@ cell_Dict['Voc (V)'] = Voc
 print("      Voc is {:.2f}".format(Voc))
 
 
-# Test 2
-print("   Starting Test 2/3: Measuring DC Impedance...")
+# Test 3
+print("   Starting Test 3/4: Measuring DC Impedance...")
 
 # set relay to sense 
 GPIO.output(relays['Sense_BK_POS'], 0)      # relays off to NC = sense 
