@@ -1,7 +1,9 @@
 from collections import namedtuple
 #from distutils.log import error
 from tkinter import *
+from tkinter import messagebox
 import tkinter as tk
+from tkinter import simpledialog
 from tkinter.constants import *
 from tkinter.ttk import Labelframe
 
@@ -16,11 +18,13 @@ from matplotlib.pyplot import title
 import Battery_Test_Methods_Ether as BTM
 import pandas as pd
 from statistics import mean
+import scaletest
 
 fileFolder = "/home/pi/Documents/solarpack/partial_discharge"
 
 cell_Name = ""
- 
+mass = 0 
+
 
 def scan_cell():
     cell_Name = input('>> Cell number (scan barcode)')
@@ -30,35 +34,44 @@ def scan_cell():
 
 
 
-# def readscale():
-#     scaletest.read()
-#     refreshscale()
-# def tarescale():
-#     scaletest.tare()
-#     refreshscale()
-# def refreshscale():
-#     massvallbl.configure(
-#         text = 
-#     )
-#     IDnum.configure(
-#         text = IDnum
-#     )
+def readscale():
+    mass = scaletest.read(scaletest.tare)
+    scaletest.refreshscale()
+def tarescale():
+    scaletest.tare = scaletest.tare()
+    scaletest.refreshscale()
+def refreshscale():
+    massvallbl.configure(
+        text = mass
+    )
+    IDnum.configure(
+        text = cell_Name
+    )
 
 
 
 
 
 
-
+'''
+scan cell
+measure mass
+load into holder
+press start
+take impedence and submit
+test will start after submission and LED will turn on
+'''
 
 
 def starttest1():
     cell_Dict = {}
     battery = 1
-    
     BTM.battery_selection(battery)
     cell_Name = scan_cell()
     cell_Dict = {'Cell Number' : cell_Name}
+    ID2num.update(text = cell_Name)
+    analogimpedence = simpledialog.askfloat("Analog Impedence","Measure Impedence using handheld device: Test will start once impedence is submitted",parent = window, minvalue = 0, maxvalue = 100)
+    cell_Dict['Analog Impedence'] = analogimpedence
     BTM.start_test_LED(battery)
     Voc = BTM.meas_VOC()
     print("Voc: ",Voc)
@@ -74,25 +87,35 @@ def starttest1():
     df_battery_dict.to_excel(fileFolder + '/Test cell ' + cell_Dict['Cell Number'] + '.xlsx')
 
     BTM.finish_test_LED(battery)
+    ID2num.update(text = "---")
+
 
 def starttest2():
     cell_Dict = {}
     battery = 1
+    
     BTM.battery_selection(battery)
-    scan_cell()
+    cell_Name = scan_cell()
+    cell_Dict = {'Cell Number' : cell_Name}
+    ID2num.update(text = cell_Name)
+    analogimpedence = simpledialog.askfloat("Analog Impedence","Measure Impedence using handheld device",parent = window, minvalue = 0, maxvalue = 100)
+    cell_Dict['Analog Impedence'] = analogimpedence
     BTM.start_test_LED(battery)
     Voc = BTM.meas_VOC()
+    print("Voc: ",Voc)
     cell_Dict['Voc (V)'] = Voc
     impedance = BTM.dc_Impedance()
+    print("impedance: ",impedance)
     cell_Dict['DC Impedance (Ohms)'] = impedance
     voltage_list,time_list = BTM.ratio_Capacity_BK8502()
+    print(voltage_list, " ", time_list)
     cell_Dict.update({'Capacity Time': time_list, 'Capacity Voltage': voltage_list})
 
     df_battery_dict = pd.DataFrame({key: pd.Series(value) for key, value in cell_Dict.items()})
     df_battery_dict.to_excel(fileFolder + '/Test cell ' + cell_Dict['Cell Number'] + '.xlsx')
-    
-    BTM.finish_test_LED(battery)
 
+    BTM.finish_test_LED(battery)
+    ID2num.update(text = "---")
 
 
 
@@ -196,7 +219,7 @@ tarebtn = tk.Button(
     scaleframe,
     text = "Tare",
     height = 5,
-    #command = tarescale
+    command = tarescale
     )
 tarebtn.grid(row = 4)
 tarebtn.place(x=25,y = 150,width = 350,height = 100)
@@ -205,7 +228,7 @@ readbtn = tk.Button(
     scaleframe,
     text = "Read",
     height = 5,
-    #command = readscale
+    command = readscale
 )
 readbtn.grid(row = 5)
 readbtn.place(x = 25,y=250,width = 350, height = 100)
@@ -213,7 +236,7 @@ readbtn.place(x = 25,y=250,width = 350, height = 100)
 
 readvallbl = tk.Label(
     scaleframe,
-    # text = config.scalevalue
+    text = mass
     )
 readvallbl.grid(row = 6)
 readvallbl.place(y = 350, width = 390, height = 50)
@@ -245,7 +268,7 @@ ID2lbl.place(y=60,width = 390)
 
 ID2num = tk.Label(
     site1frame,
-    # text = config.IDsite1
+    text = cell_Name
 )
 ID2num.grid(row = 3)
 ID2num.place(y=100, width = 390)
@@ -267,15 +290,6 @@ start1btn = tk.Button(
 )
 start1btn.grid(row = 5)
 start1btn.place(y= 400,x=25,width = 350, height = 50)
-
-# remove1btn = tk.Button(
-#     site1frame,
-#     text = "Remove",
-#     bg = '#ab5454',
-#     #command = removetest1
-# )
-# remove1btn.grid(row = 5)
-# remove1btn.place(y = 400,x=225,width = 150,height = 50)
 
 errorlbl = Label(
     site1frame,
@@ -305,7 +319,7 @@ ID3lbl.place(y=60,width = 390)
 
 ID3num = tk.Label(
     site2frame,
-    # text = config.IDsite2
+    text = cell_Name
 )
 ID3num.grid(row = 3)
 ID3num.place(y=100, width = 390)
@@ -327,14 +341,6 @@ start2btn = tk.Button(
 start2btn.grid(row = 5)
 start2btn.place(y= 400,x=25,width = 350, height = 50)
 
-# remove2btn = tk.Button(
-#     site2frame,
-#     text = "Remove",
-#     bg = '#ab5454',
-#     #command = removetest2
-# )
-# remove2btn.grid(row = 5)
-# remove2btn.place(y = 400,x=225,width = 150,height = 50)
 
 errorlbl2 = Label(
     site2frame,
