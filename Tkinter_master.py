@@ -219,7 +219,7 @@ tarebtn = tk.Button(
     scaleframe,
     text = "Tare",
     height = 5,
-    #command = tarescale
+    command = tarescale
     )
 tarebtn.grid(row = 4)
 tarebtn.place(x=25,y = 150,width = 350,height = 100)
@@ -228,7 +228,7 @@ readbtn = tk.Button(
     scaleframe,
     text = "Read",
     height = 5,
-    #command = readscale
+    command = readscale
 )
 readbtn.grid(row = 5)
 readbtn.place(x = 25,y=250,width = 350, height = 100)
@@ -236,7 +236,7 @@ readbtn.place(x = 25,y=250,width = 350, height = 100)
 
 readvallbl = tk.Label(
     scaleframe,
-    # text = config.scalevalue
+    text = mass
     )
 readvallbl.grid(row = 6)
 readvallbl.place(y = 350, width = 390, height = 50)
@@ -268,7 +268,7 @@ ID2lbl.place(y=60,width = 390)
 
 ID2num = tk.Label(
     site1frame,
-    # text = config.IDsite1
+    text = cell_Name
 )
 ID2num.grid(row = 3)
 ID2num.place(y=100, width = 390)
@@ -290,15 +290,6 @@ start1btn = tk.Button(
 )
 start1btn.grid(row = 5)
 start1btn.place(y= 400,x=25,width = 350, height = 50)
-
-# remove1btn = tk.Button(
-#     site1frame,
-#     text = "Remove",
-#     bg = '#ab5454',
-#     #command = removetest1
-# )
-# remove1btn.grid(row = 5)
-# remove1btn.place(y = 400,x=225,width = 150,height = 50)
 
 errorlbl = Label(
     site1frame,
@@ -328,7 +319,7 @@ ID3lbl.place(y=60,width = 390)
 
 ID3num = tk.Label(
     site2frame,
-    # text = config.IDsite2
+    text = cell_Name
 )
 ID3num.grid(row = 3)
 ID3num.place(y=100, width = 390)
@@ -350,14 +341,6 @@ start2btn = tk.Button(
 start2btn.grid(row = 5)
 start2btn.place(y= 400,x=25,width = 350, height = 50)
 
-# remove2btn = tk.Button(
-#     site2frame,
-#     text = "Remove",
-#     bg = '#ab5454',
-#     #command = removetest2
-# )
-# remove2btn.grid(row = 5)
-# remove2btn.place(y = 400,x=225,width = 150,height = 50)
 
 errorlbl2 = Label(
     site2frame,
