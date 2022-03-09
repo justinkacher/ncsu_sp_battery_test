@@ -1,7 +1,7 @@
 import config
-#from hx711 import HX711
-#import RPi.GPIO as GPIO
-#from RaspberryPi_Read import *
+from hx711 import HX711
+import RPi.GPIO as GPIO
+from RaspberryPi_Read import *
 
 
 print("test scale")
@@ -29,8 +29,13 @@ def read():
 
 
 
-'''
-#begin scale reading--------------------
+
+def readscale():
+    scaletest.read()
+    refreshscale()
+def tarescale():
+    scaletest.tare()
+    refreshscale()-----------
 num_measures=3                                     #number of measurements to be taken by scale (more will be more precise)
 readval = 0
 tare = 0
@@ -137,7 +142,7 @@ def takemeasure(tare):
 
 
 
-'''
+
 
 
 
