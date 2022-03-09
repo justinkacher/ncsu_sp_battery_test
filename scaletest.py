@@ -4,38 +4,22 @@ import RPi.GPIO as GPIO
 from RaspberryPi_Read import *
 
 
-print("test scale")
+
+
 def tare():
-    print("tareing")
-    config.scalevalue = "--"
-    #tare = tarescale()
-    #print(tare)
-    #return tare
+    tare = tarescale()
+    return tare
 
 
 
 def read():
-    config.IDscale = input("scale id")
-    #to be replaced with scan
-
-    print("reading")
-    #measureval = takemeasure(tare)
-    #print(measureval)
-    #config.scalevalue = measureval
-    #return measureval
+    measureval = takemeasure(tare)
+    return measureval
 
 
 
 
 
-
-
-def readscale():
-    scaletest.read()
-    refreshscale()
-def tarescale():
-    scaletest.tare()
-    refreshscale()-----------
 num_measures=3                                     #number of measurements to be taken by scale (more will be more precise)
 readval = 0
 tare = 0
@@ -139,8 +123,7 @@ def takemeasure(tare):
         
 
 
-
-
+initreset()
 
 
 
