@@ -64,8 +64,8 @@ GPIO.setmode(GPIO.BOARD)
 # Relay k2: NEG; NC = Keithely Sense; NO = BK Load                  # Sense_BK_NEG
 
 
-# Relay k13: LED ground; NC = nothing, NO = Battery 1 indicator     # LED_1
-# Relay k14: LED ground; NC = nothing, NO = Battery 2 indicator     # LED_2
+# Relay k5: LED ground; NC = White LED, NO = Red Battery 1 indicator     # LED_1
+# Relay k6: LED ground; NC = White LED, NO = Battery 2 indicator     # LED_2
 
 
 
