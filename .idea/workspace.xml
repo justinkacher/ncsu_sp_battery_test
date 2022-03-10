@@ -21,6 +21,8 @@
   <component name="ChangeListManager">
     <list default="true" id="399bd4ca-f68b-43cc-99d5-d1f9dd58404d" name="Default Changelist" comment="test upload">
       <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/ncsu_sp_battery_test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ncsu_sp_battery_test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -143,8 +145,18 @@
       </list>
     </recent_temporary>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <created>1646926511324</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1646926511324</updated>
+    </task>
+    <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -156,7 +168,6 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="update" />
@@ -165,57 +176,5 @@
     <MESSAGE value="Finished initial test script" />
     <MESSAGE value="test upload" />
     <option name="LAST_COMMIT_MESSAGE" value="test upload" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="302" y="182" width="1167" height="682" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1643763052643">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state x="302" y="182" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1050@0.0.1680.1050" timestamp="1643763052643" />
-    <state x="302" y="203" width="1167" height="682" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.25.1680.1025@0.25.1680.1025" timestamp="1643318412448" />
-    <state x="627" y="284" key="FileChooserDialogImpl" timestamp="1644108875894">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state x="627" y="284" key="FileChooserDialogImpl/0.0.1680.1050@0.0.1680.1050" timestamp="1644108875894" />
-    <state width="1659" height="286" key="GridCell.Tab.0.bottom" timestamp="1646582968020">
-      <screen x="0" y="25" width="1680" height="1025" />
-    </state>
-    <state width="1659" height="304" key="GridCell.Tab.0.bottom/0.0.1680.1050@0.0.1680.1050" timestamp="1646582278210" />
-    <state width="1659" height="286" key="GridCell.Tab.0.bottom/0.25.1680.1025@0.25.1680.1025" timestamp="1646582968020" />
-    <state width="1659" height="286" key="GridCell.Tab.0.center" timestamp="1646582968019">
-      <screen x="0" y="25" width="1680" height="1025" />
-    </state>
-    <state width="1659" height="304" key="GridCell.Tab.0.center/0.0.1680.1050@0.0.1680.1050" timestamp="1646582278208" />
-    <state width="1659" height="286" key="GridCell.Tab.0.center/0.25.1680.1025@0.25.1680.1025" timestamp="1646582968019" />
-    <state width="1659" height="286" key="GridCell.Tab.0.left" timestamp="1646582968019">
-      <screen x="0" y="25" width="1680" height="1025" />
-    </state>
-    <state width="1659" height="304" key="GridCell.Tab.0.left/0.0.1680.1050@0.0.1680.1050" timestamp="1646582278204" />
-    <state width="1659" height="286" key="GridCell.Tab.0.left/0.25.1680.1025@0.25.1680.1025" timestamp="1646582968019" />
-    <state width="1659" height="286" key="GridCell.Tab.0.right" timestamp="1646582968020">
-      <screen x="0" y="25" width="1680" height="1025" />
-    </state>
-    <state width="1659" height="304" key="GridCell.Tab.0.right/0.0.1680.1050@0.0.1680.1050" timestamp="1646582278209" />
-    <state width="1659" height="286" key="GridCell.Tab.0.right/0.25.1680.1025@0.25.1680.1025" timestamp="1646582968020" />
-    <state x="168" y="91" key="MergeDialog" timestamp="1644272915568">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state x="168" y="91" key="MergeDialog/0.0.1680.1050@0.0.1680.1050" timestamp="1644272915568" />
-    <state x="347" y="180" key="SettingsEditor" timestamp="1646582964885">
-      <screen x="0" y="25" width="1680" height="1025" />
-    </state>
-    <state x="347" y="180" key="SettingsEditor/0.25.1680.1025@0.25.1680.1025" timestamp="1646582964885" />
-    <state x="629" y="462" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1646584366941">
-      <screen x="0" y="25" width="1680" height="1025" />
-    </state>
-    <state x="629" y="448" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1680.1050@0.0.1680.1050" timestamp="1644542723702" />
-    <state x="629" y="462" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.25.1680.1025@0.25.1680.1025" timestamp="1646584366941" />
-    <state x="846" y="0" width="834" height="1050" key="dock-window-1" timestamp="1643319262949">
-      <screen x="0" y="25" width="1680" height="1025" />
-    </state>
-    <state x="846" y="0" width="834" height="1050" key="dock-window-1/0.25.1680.1025@0.25.1680.1025" timestamp="1643319262949" />
-    <state x="505" y="233" width="670" height="676" key="search.everywhere.popup" timestamp="1644534863794">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state x="505" y="233" width="670" height="676" key="search.everywhere.popup/0.0.1680.1050@0.0.1680.1050" timestamp="1644534863794" />
   </component>
 </project>
