@@ -48,7 +48,7 @@ cell_Name = ""
 
 
 
-
+mass = 0
 
 
 
@@ -62,8 +62,9 @@ def starttest1():
     # cell_Name = scan_cell()
     cell_Dict = {'Cell Number' : cell_Name}
     answer = analogimpedence = simpledialog.askfloat("Analog Impedence","Measure Impedence using handheld device:\n\nTest will start once impedence is submitted",parent = window, minvalue = 0, maxvalue = 100)
-
-    print(answer)
+    cell_Dict['Analog Impedence'] = analogimpedence
+    cell_Dict['Mass in grams'] = mass
+    #print(answer)
     # BTM.start_test_LED(battery)
     # Voc = BTM.meas_VOC()
     # print("Voc: ",Voc)
@@ -77,7 +78,7 @@ def starttest1():
 
     # df_battery_dict = pd.DataFrame({key: pd.Series(value) for key, value in cell_Dict.items()})
     # df_battery_dict.to_excel(fileFolder + '/Test cell ' + cell_Dict['Cell Number'] + '.xlsx')
-
+    print(cell_Dict)
     # BTM.finish_test_LED(battery)
 
 # def starttest2():

@@ -54,10 +54,10 @@ def refreshscale():
 
 
 '''
+press start
 scan cell
 measure mass
 load into holder
-press start
 take impedence and submit
 test will start after submission and LED will turn on
 '''
@@ -70,6 +70,7 @@ def starttest1():
     cell_Name = scan_cell()
     cell_Dict = {'Cell Number' : cell_Name}
     ID2num.update(text = cell_Name)
+    cell_Dict['Mass in grams'] = mass
     analogimpedence = simpledialog.askfloat("Analog Impedence","Measure Impedence using handheld device: Test will start once impedence is submitted",parent = window, minvalue = 0, maxvalue = 100)
     cell_Dict['Analog Impedence'] = analogimpedence
     BTM.start_test_LED(battery)
@@ -85,20 +86,20 @@ def starttest1():
 
     df_battery_dict = pd.DataFrame({key: pd.Series(value) for key, value in cell_Dict.items()})
     df_battery_dict.to_excel(fileFolder + '/Test cell ' + cell_Dict['Cell Number'] + '.xlsx')
-
+    print(cell_Dict)
     BTM.finish_test_LED(battery)
     ID2num.update(text = "---")
 
 
 def starttest2():
     cell_Dict = {}
-    battery = 1
-    
+    battery = 2
     BTM.battery_selection(battery)
     cell_Name = scan_cell()
     cell_Dict = {'Cell Number' : cell_Name}
     ID2num.update(text = cell_Name)
-    analogimpedence = simpledialog.askfloat("Analog Impedence","Measure Impedence using handheld device",parent = window, minvalue = 0, maxvalue = 100)
+    cell_Dict['Mass in grams'] = mass
+    analogimpedence = simpledialog.askfloat("Analog Impedence","Measure Impedence using handheld device: Test will start once impedence is submitted",parent = window, minvalue = 0, maxvalue = 100)
     cell_Dict['Analog Impedence'] = analogimpedence
     BTM.start_test_LED(battery)
     Voc = BTM.meas_VOC()
@@ -113,7 +114,7 @@ def starttest2():
 
     df_battery_dict = pd.DataFrame({key: pd.Series(value) for key, value in cell_Dict.items()})
     df_battery_dict.to_excel(fileFolder + '/Test cell ' + cell_Dict['Cell Number'] + '.xlsx')
-
+    print(cell_Dict)
     BTM.finish_test_LED(battery)
     ID2num.update(text = "---")
 
