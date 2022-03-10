@@ -97,7 +97,7 @@ def starttest1():
 
     else:
         print("Battery already tested")
-        # add a pop up
+        simpledialog.Dialog(window,"battery already tested")
         
 
 def starttest2():
@@ -131,7 +131,7 @@ def starttest2():
         ID2num.update(text = "---")
     else:
         print("Battery already tested")
-        # add a pop up      
+        simpledialog.Dialog(window,"battery already tested")  
 
 
 

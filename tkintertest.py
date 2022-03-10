@@ -57,7 +57,7 @@ mass = 0
 def starttest1():
     cell_Dict = {}
     battery = 1
-    
+    simpledialog.Dialog(window,"battery already tested")
     # BTM.battery_selection(battery)
     # cell_Name = scan_cell()
     cell_Dict = {'Cell Number' : cell_Name}
