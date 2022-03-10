@@ -24,14 +24,36 @@ num_measures=3                                     #number of measurements to be
 readval = 0
 tare = 0
 
+
+
+
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(17, GPIO.OUT)
+
+
+
+# NEW PIN NUMBERS
+# Was pin 3 and 2 for pins and gain respectfully
+# now pins 29 and 31 respectfully
 def initreset():
-    hx711 = HX711(                                      #set pins and gain
-                dout_pin=3,
-                pd_sck_pin=2,
+    hx711 = HX711(                                     #set pins and gain
+                dout_pin=29,
+                pd_sck_pin=31,   
                 channel='A',
                 gain=128
             )
     hx711.reset()                                       #reset board
+
+
+# OLD CODE
+# def initreset():
+#     hx711 = HX711(                                     #set pins and gain
+#                 dout_pin=3,
+#                 pd_sck_pin=2,   
+#                 channel='A',
+#                 gain=128
+#             )
+#     hx711.reset()                                       #reset board
 
 
 def average(list):                                  #takes average of each measure taken
@@ -66,13 +88,14 @@ def twotodec(num):                                  #converts two's compliment o
     return convertednum
 
 
+# NEW PIN NUMBERS
 def readscale():                                    #takes raw measuremnts from scale
     #set up pins, set gain
     while True:
         try:
             hx711 = HX711(
-                dout_pin=2,
-                pd_sck_pin=3,
+                dout_pin=29,                     #
+                pd_sck_pin=31,                   #
                 channel='A',
                 gain=128
             )
@@ -85,6 +108,34 @@ def readscale():                                    #takes raw measuremnts from 
             pass
         finally:
             GPIO.cleanup()                                  # always do a GPIO cleanup in your scripts!
+
+
+
+
+
+
+
+
+# OLD pins
+# def readscale():                                    #takes raw measuremnts from scale
+#     #set up pins, set gain
+#     while True:
+#         try:
+#             hx711 = HX711(
+#                 dout_pin=2,                     #
+#                 pd_sck_pin=3,                   #
+#                 channel='A',
+#                 gain=128
+#             )
+
+#             hx711.reset()                                   # Before we start, reset the HX711 (not obligate)
+#             measures = hx711.get_raw_data(num_measures)     #taking measurement num_measures # of times
+#             return measures
+            
+#         except: 
+#             pass
+#         finally:
+#             GPIO.cleanup()                                  # always do a GPIO cleanup in your scripts!
 
 
 
