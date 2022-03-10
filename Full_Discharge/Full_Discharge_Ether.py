@@ -169,13 +169,17 @@ cell_Dict = {'Cell Number': cell_Name}
 input('Press Enter to start testing >> ')
 
 # Test 1
+
+
+
+# Test 2
 print('Measure AC Impedance using handhgeld tool')
 cell_AC_Impd = input('>> AC Impedance (milli-Ohm')
 cell_Dict = {'Cell AC Impedance': cell_AC_Impd}
 
 
 # Test 2
-print('   Starting Test 2/4: Measuring Voc...')
+print('   Starting Test 1/3: Measuring Voc...')
 
 # set relay to sense 
 GPIO.output(relays['Sense_BK_POS'], 0)      # relays off to NC = sense 
@@ -198,7 +202,7 @@ print("      Voc is {:.2f}".format(Voc))
 
 
 # Test 3
-print("   Starting Test 3/4: Measuring DC Impedance...")
+print("   Starting Test 2/3: Measuring DC Impedance...")
 
 # set relay to sense 
 GPIO.output(relays['Sense_BK_POS'], 0)      # relays off to NC = sense 
@@ -260,8 +264,8 @@ print('      Impedance is {:.1f} m-Ohm'.format(impedance))
 
 # Test 4
 print("Disconnect Keithley Force wires and connect BK 8502 DC Load & then turn on")
-input("Press Enter to start test 3 >>")
-print("   Starting Test 4/4: Measuring Total Discharge...")
+input("Press Enter to start Full Discharge Test >>")
+print("   Starting Test 3/3: Measuring Total Discharge...")
 
 send_Keithley('*RST')  # first line is to reset the instrument # 2-Wire mode by default
 set_forVoltageReading()

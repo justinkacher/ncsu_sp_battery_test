@@ -6,6 +6,7 @@ import tkinter as tk
 from tkinter import simpledialog
 from tkinter.constants import *
 from tkinter.ttk import Labelframe
+import os
 
 import time
 
@@ -19,6 +20,7 @@ import Battery_Test_Methods_Ether as BTM
 import pandas as pd
 from statistics import mean
 import scaletest
+
 
 fileFolder = "/home/pi/Documents/solarpack/partial_discharge"
 
@@ -67,58 +69,79 @@ def starttest1():
     cell_Dict = {}
     battery = 1
     BTM.battery_selection(battery)
-    cell_Name = scan_cell()
-    cell_Dict = {'Cell Number' : cell_Name}
-    ID2num.update(text = cell_Name)
-    cell_Dict['Mass in grams'] = mass
-    analogimpedence = simpledialog.askfloat("Analog Impedence","Measure Impedence using handheld device: Test will start once impedence is submitted",parent = window, minvalue = 0, maxvalue = 100)
-    cell_Dict['Analog Impedence'] = analogimpedence
-    BTM.start_test_LED(battery)
-    Voc = BTM.meas_VOC()
-    print("Voc: ",Voc)
-    cell_Dict['Voc (V)'] = Voc
-    impedance = BTM.dc_Impedance()
-    print("impedance: ",impedance)
-    cell_Dict['DC Impedance (Ohms)'] = impedance
-    voltage_list,time_list = BTM.ratio_Capacity_BK8502()
-    print(voltage_list, " ", time_list)
-    cell_Dict.update({'Capacity Time': time_list, 'Capacity Voltage': voltage_list})
+    cell_Num = scan_cell()
+    cell_Dict = {'Cell Number' : cell_Num}
+    ID2num.update(text = cell_Num)
+    
+    # check that the battery has not already been tested
+    if check_Name(cell_Num) is True:
+        cell_Dict['Mass in grams'] = mass
+        analogimpedence = simpledialog.askfloat("Analog Impedence","Measure Impedence using handheld device: Test will start once impedence is submitted",parent = window, minvalue = 0, maxvalue = 100)
+        cell_Dict['Analog Impedence'] = analogimpedence
+        BTM.start_test_LED(battery)
+        Voc = BTM.meas_VOC()
+        print("Voc: ",Voc)
+        cell_Dict['Voc (V)'] = Voc
+        impedance = BTM.dc_Impedance()
+        print("impedance: ",impedance)
+        cell_Dict['DC Impedance (Ohms)'] = impedance
+        voltage_list,time_list = BTM.ratio_Capacity_BK8502()
+        print(voltage_list, " ", time_list)
+        cell_Dict.update({'Capacity Time': time_list, 'Capacity Voltage': voltage_list})
 
-    df_battery_dict = pd.DataFrame({key: pd.Series(value) for key, value in cell_Dict.items()})
-    df_battery_dict.to_excel(fileFolder + '/Test cell ' + cell_Dict['Cell Number'] + '.xlsx')
-    print(cell_Dict)
-    BTM.finish_test_LED(battery)
-    ID2num.update(text = "---")
+        df_battery_dict = pd.DataFrame({key: pd.Series(value) for key, value in cell_Dict.items()})
+        df_battery_dict.to_excel(fileFolder + '/Test cell ' + cell_Dict['Cell Number'] + '.xlsx')
+        print(cell_Dict)
+        BTM.finish_test_LED(battery)
+        ID2num.update(text = "---")
 
+    else:
+        print("Battery already tested")
+        # add a pop up
+        
 
 def starttest2():
     cell_Dict = {}
     battery = 2
     BTM.battery_selection(battery)
-    cell_Name = scan_cell()
-    cell_Dict = {'Cell Number' : cell_Name}
-    ID2num.update(text = cell_Name)
-    cell_Dict['Mass in grams'] = mass
-    analogimpedence = simpledialog.askfloat("Analog Impedence","Measure Impedence using handheld device: Test will start once impedence is submitted",parent = window, minvalue = 0, maxvalue = 100)
-    cell_Dict['Analog Impedence'] = analogimpedence
-    BTM.start_test_LED(battery)
-    Voc = BTM.meas_VOC()
-    print("Voc: ",Voc)
-    cell_Dict['Voc (V)'] = Voc
-    impedance = BTM.dc_Impedance()
-    print("impedance: ",impedance)
-    cell_Dict['DC Impedance (Ohms)'] = impedance
-    voltage_list,time_list = BTM.ratio_Capacity_BK8502()
-    print(voltage_list, " ", time_list)
-    cell_Dict.update({'Capacity Time': time_list, 'Capacity Voltage': voltage_list})
+    cell_Num = scan_cell()
+    cell_Dict = {'Cell Number' : cell_Num}
+    ID2num.update(text = cell_Num)
+    
+    # check that the battery has not already been tested
+    if check_Name(cell_Num) is True:
+        cell_Dict['Mass in grams'] = mass
+        analogimpedence = simpledialog.askfloat("Analog Impedence","Measure Impedence using handheld device: Test will start once impedence is submitted",parent = window, minvalue = 0, maxvalue = 100)
+        cell_Dict['Analog Impedence'] = analogimpedence
+        BTM.start_test_LED(battery)
+        Voc = BTM.meas_VOC()
+        print("Voc: ",Voc)
+        cell_Dict['Voc (V)'] = Voc
+        impedance = BTM.dc_Impedance()
+        print("impedance: ",impedance)
+        cell_Dict['DC Impedance (Ohms)'] = impedance
+        voltage_list,time_list = BTM.ratio_Capacity_BK8502()
+        print(voltage_list, " ", time_list)
+        cell_Dict.update({'Capacity Time': time_list, 'Capacity Voltage': voltage_list})
 
-    df_battery_dict = pd.DataFrame({key: pd.Series(value) for key, value in cell_Dict.items()})
-    df_battery_dict.to_excel(fileFolder + '/Test cell ' + cell_Dict['Cell Number'] + '.xlsx')
-    print(cell_Dict)
-    BTM.finish_test_LED(battery)
-    ID2num.update(text = "---")
+        df_battery_dict = pd.DataFrame({key: pd.Series(value) for key, value in cell_Dict.items()})
+        df_battery_dict.to_excel(fileFolder + '/Test cell ' + cell_Dict['Cell Number'] + '.xlsx')
+        print(cell_Dict)
+        BTM.finish_test_LED(battery)
+        ID2num.update(text = "---")
+    else:
+        print("Battery already tested")
+        # add a pop up      
 
 
+
+# this function checks to see if there is already a document with the same name +> cell aready tested
+# returns True or False
+def check_Name(cell_Num):
+        fileNames = os.listdir(fileFolder)
+        full_cell_name = 'Test cell ' + cell_Num + '.xlsx'
+        bool_Val = full_cell_name in fileNames
+        return bool_Val
 
 
 
