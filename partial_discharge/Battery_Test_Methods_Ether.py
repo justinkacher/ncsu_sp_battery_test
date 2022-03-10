@@ -54,18 +54,18 @@ import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BOARD)
 
 
-# Relay k16: POS; NC =  battery 1, NO = nothing (battery 2)         # Battery_POS
-# Relay k15: NEG; NC =  battery 1, NO = nothing (battery 2)         # Battery_NEG
+# Relay k16, GPIO 13: POS; NC =  battery 1, NO = nothing (battery 2)         # Battery_POS
+# Relay k15, GPIO 15: NEG; NC =  battery 1, NO = nothing (battery 2)         # Battery_NEG
 
-# Relay k3: NEG; NC =  battery 1, NO = nothing (battery 2)          # Force_NEG
-# Relay k4: POS; NC =  battery 1, NO = nothing (battery 2)          # Force_POS
+# Relay k3, GPIO 7: NEG; NC =  battery 1, NO = nothing (battery 2)          # Force_NEG
+# Relay k4, GPIO 11: POS; NC =  battery 1, NO = nothing (battery 2)          # Force_POS
 
-# Relay k1: POS; NC = Keithely Sense; NO = BK Load                  # Sense_BK_POS
-# Relay k2: NEG; NC = Keithely Sense; NO = BK Load                  # Sense_BK_NEG
+# Relay k1, GPIO 3: POS; NC = Keithely Sense; NO = BK Load                  # Sense_BK_POS
+# Relay k2, GPIO 5: NEG; NC = Keithely Sense; NO = BK Load                  # Sense_BK_NEG
 
 
-# Relay k5: LED ground; NC = White LED, NO = Red Battery 1 indicator     # LED_1
-# Relay k6: LED ground; NC = White LED, NO = Battery 2 indicator     # LED_2
+# Relay k5, GPIO 19: LED ground; NC = White LED, NO = Red Battery 1 indicator     # LED_1
+# Relay k6, GPIO 21: LED ground; NC = White LED, NO = Battery 2 indicator     # LED_2
 
 
 
