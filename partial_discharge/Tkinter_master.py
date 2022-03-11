@@ -71,7 +71,7 @@ def starttest1():
     BTM.battery_selection(battery)
     cell_Num = scan_cell()
     cell_Dict = {'Cell Number' : cell_Num}
-    ID2num.update(text = cell_Num)
+    # ID2num.update(text = cell_Num)
     
     # check that the battery has not already been tested
     if check_Name(cell_Num) is False:
@@ -93,7 +93,7 @@ def starttest1():
         df_battery_dict.to_excel(fileFolder + '/Test cell ' + cell_Dict['Cell Number'] + '.xlsx')
         print(cell_Dict)
         BTM.finish_test_LED(battery)
-        ID2num.update(text = "---")
+        # ID2num.update(text = "---")
 
     else:
         print("Battery already tested")
@@ -106,7 +106,7 @@ def starttest2():
     BTM.battery_selection(battery)
     cell_Num = scan_cell()
     cell_Dict = {'Cell Number' : cell_Num}
-    ID2num.update(text = cell_Num)
+    # ID2num.update(text = cell_Num)
     
     # check that the battery has not already been tested
     if check_Name(cell_Num) is False:
@@ -128,7 +128,7 @@ def starttest2():
         df_battery_dict.to_excel(fileFolder + '/Test cell ' + cell_Dict['Cell Number'] + '.xlsx')
         print(cell_Dict)
         BTM.finish_test_LED(battery)
-        ID2num.update(text = "---")
+        # ID2num.update(text = "---")
     else:
         print("Battery already tested")
         simpledialog.Dialog(window,"battery already tested")  
@@ -151,7 +151,7 @@ window = tk.Tk()
 window.title("21700 Battery Profile")
 window.geometry("1200x700")
 window.resizable(0,0)
-window.grid_rowconfigure(1,weight = 1)
+window.grid_rowconfigure(1, weight = 1)
 window.grid_columnconfigure(2,weight = 1)
 
 

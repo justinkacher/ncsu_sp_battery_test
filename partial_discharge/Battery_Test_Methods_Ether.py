@@ -71,9 +71,14 @@ GPIO.setmode(GPIO.BOARD)
 
 relays = {'Battery_POS': 13, 'Battery_NEG': 15, 'Sense_BK_POS': 3, 'Sense_BK_NEG': 5, 'Force_NEG': 7, 'Force_POS': 11, 'LED_1': 21, 'LED_2': 19}
 
-# loop to set up each relay pin to output 
+# 0 is NO
+# 1 is NC
+
+# loop to set up each relay pin to output
+# set all to NC postion
 for value in relays.values():
    GPIO.setup(value, GPIO.OUT)      # GPIO.setup(17, GPIO.OUT)
+   GPIO.output(value, 0)
 
 
 # turn ON LED for which battery is being tested
@@ -86,20 +91,20 @@ def start_test_LED(battery):
 # turn OFF LED for which battery is being tested
 def finish_test_LED(battery):
     if battery == 1:
-        GPIO.output(relays['LED_1'], 1)      # LED 1 = k13 # relays off to NC positions
+        GPIO.output(relays['LED_1'], 1)      # LED 1 = k13 # relays to NC positions
     if battery == 2:
-        GPIO.output(relays['LED_2'], 1)      # LED 2 = k14 # relays off to NC positions
+        GPIO.output(relays['LED_2'], 0)      # LED 2 = k14 # relays to NO positions
 
 
 def battery_selection(battery):
     if battery == 1:
-        GPIO.output(relays['Battery_POS'], 1)   # relays off to NC position
+        GPIO.output(relays['Battery_POS'], 1)   # relays to NC position
         GPIO.output(relays['Battery_NEG'], 1)
         GPIO.output(relays['Force_NEG'], 1)
     if battery == 2:
         GPIO.output(relays['Battery_POS'], 0)   # relays on to NO position
         GPIO.output(relays['Battery_NEG'], 0)
-        GPIO.output(relays['Force_POS'], 1)
+        GPIO.output(relays['Force_POS'], 0)
 
 
 def set_forVoltageReading():
