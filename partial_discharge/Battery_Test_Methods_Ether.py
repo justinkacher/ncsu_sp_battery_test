@@ -77,7 +77,7 @@ relays = {'Battery_POS': 13, 'Battery_NEG': 15, 'Sense_BK_POS': 3, 'Sense_BK_NEG
 # loop to set up each relay pin to output
 # set all to NC postion
 for value in relays.values():
-   GPIO.setup(value, GPIO.OUT)      # GPIO.setup(17, GPIO.OUT)
+   GPIO.setup(value, GPIO.OUT)
    GPIO.output(value, 0)
 
 

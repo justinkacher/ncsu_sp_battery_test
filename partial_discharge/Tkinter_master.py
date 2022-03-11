@@ -7,6 +7,7 @@ from tkinter import simpledialog
 from tkinter.constants import *
 from tkinter.ttk import Labelframe
 import os
+import RPi.GPIO
 
 import time
 
@@ -384,7 +385,7 @@ errorlbl2.place(y=500, width = 390)
 window.mainloop()
 
 
-
+GPIO.cleanup()      # clean up = reset GPIO pins at end
 
 
 
