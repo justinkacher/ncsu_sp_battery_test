@@ -19,7 +19,7 @@ from matplotlib.pyplot import title
 import Battery_Test_Methods_Ether as BTM
 import pandas as pd
 from statistics import mean
-import scaletest
+#import scaletest
 
 
 fileFolder = "/home/pi/Documents/solarpack/partial_discharge"
@@ -36,19 +36,19 @@ def scan_cell():
 
 
 
-def readscale():
-    mass = scaletest.read(scaletest.tare)
-    scaletest.refreshscale()
-def tarescale():
-    scaletest.tare = scaletest.tare()
-    scaletest.refreshscale()
-def refreshscale():
-    massvallbl.configure(
-        text = mass
-    )
-    IDnum.configure(
-        text = cell_Name
-    )
+# def readscale():
+#     mass = scaletest.read(scaletest.tare)
+#     scaletest.refreshscale()
+# def tarescale():
+#     scaletest.tare = scaletest.tare()
+#     scaletest.refreshscale()
+# def refreshscale():
+#     massvallbl.configure(
+#         text = mass
+#     )
+#     IDnum.configure(
+#         text = cell_Name
+#     )
 
 
 
@@ -243,7 +243,7 @@ tarebtn = tk.Button(
     scaleframe,
     text = "Tare",
     height = 5,
-    command = tarescale
+    #command = tarescale
     )
 tarebtn.grid(row = 4)
 tarebtn.place(x=25,y = 150,width = 350,height = 100)
@@ -252,7 +252,7 @@ readbtn = tk.Button(
     scaleframe,
     text = "Read",
     height = 5,
-    command = readscale
+    #command = readscale
 )
 readbtn.grid(row = 5)
 readbtn.place(x = 25,y=250,width = 350, height = 100)
