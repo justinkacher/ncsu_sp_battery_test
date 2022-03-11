@@ -64,12 +64,12 @@ GPIO.setmode(GPIO.BOARD)
 # Relay k2, GPIO 5: NEG; NC = Keithely Sense; NO = BK Load                  # Sense_BK_NEG
 
 
-# Relay k5, GPIO 19: LED ground; NC = White LED, NO = Red Battery 1 indicator     # LED_1
-# Relay k6, GPIO 21: LED ground; NC = White LED, NO = Battery 2 indicator     # LED_2
+# Relay k6, GPIO 21: LED ground; NC = White LED, NO = Red Battery 1 indicator     # LED_1
+# Relay k5, GPIO 19: LED ground; NC = White LED, NO = Battery 2 indicator     # LED_2
 
 
 
-relays = {'Battery_POS': 13, 'Battery_NEG': 15, 'Sense_BK_POS': 3, 'Sense_BK_NEG': 5, 'Force_NEG': 7, 'Force_POS': 11, 'LED_1': 19, 'LED_2': 21}
+relays = {'Battery_POS': 13, 'Battery_NEG': 15, 'Sense_BK_POS': 3, 'Sense_BK_NEG': 5, 'Force_NEG': 7, 'Force_POS': 11, 'LED_1': 21, 'LED_2': 19}
 
 # loop to set up each relay pin to output 
 for value in relays.values():

@@ -74,7 +74,7 @@ def starttest1():
     ID2num.update(text = cell_Num)
     
     # check that the battery has not already been tested
-    if check_Name(cell_Num) is True:
+    if check_Name(cell_Num) is False:
         cell_Dict['Mass in grams'] = mass
         analogimpedence = simpledialog.askfloat("Analog Impedence","Measure Impedence using handheld device: Test will start once impedence is submitted",parent = window, minvalue = 0, maxvalue = 100)
         cell_Dict['Analog Impedence'] = analogimpedence
@@ -109,7 +109,7 @@ def starttest2():
     ID2num.update(text = cell_Num)
     
     # check that the battery has not already been tested
-    if check_Name(cell_Num) is True:
+    if check_Name(cell_Num) is False:
         cell_Dict['Mass in grams'] = mass
         analogimpedence = simpledialog.askfloat("Analog Impedence","Measure Impedence using handheld device: Test will start once impedence is submitted",parent = window, minvalue = 0, maxvalue = 100)
         cell_Dict['Analog Impedence'] = analogimpedence
