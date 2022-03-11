@@ -23,9 +23,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="399bd4ca-f68b-43cc-99d5-d1f9dd58404d" name="Default Changelist" comment="test upload">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/partial_discharge/Battery_Test_Methods_Ether.py" beforeDir="false" afterPath="$PROJECT_DIR$/partial_discharge/Battery_Test_Methods_Ether.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/partial_discharge/Tkinter_master.py" beforeDir="false" afterPath="$PROJECT_DIR$/partial_discharge/Tkinter_master.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

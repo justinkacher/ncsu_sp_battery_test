@@ -79,27 +79,27 @@ for value in relays.values():
 # turn ON LED for which battery is being tested
 def start_test_LED(battery):
     if battery == 1:
-        GPIO.output(relays['LED_1'], 1)      # LED 1 = k13 # relays on to NO positions
+        GPIO.output(relays['LED_1'], 0)      # LED 1 = k13 # relays on to NO positions
     if battery == 2:
-        GPIO.output(relays['LED_2'], 1)      # LED 2 = k14 # relays on to NO positions
+        GPIO.output(relays['LED_2'], 0)      # LED 2 = k14 # relays on to NO positions
 
 # turn OFF LED for which battery is being tested
 def finish_test_LED(battery):
     if battery == 1:
-        GPIO.output(relays['LED_1'],0)      # LED 1 = k13 # relays off to NC positions
+        GPIO.output(relays['LED_1'], 1)      # LED 1 = k13 # relays off to NC positions
     if battery == 2:
-        GPIO.output(relays['LED_2'], 0)      # LED 2 = k14 # relays off to NC positions
+        GPIO.output(relays['LED_2'], 1)      # LED 2 = k14 # relays off to NC positions
 
 
 def battery_selection(battery):
     if battery == 1:
-        GPIO.output(relays['Battery_POS'], 0)   # relays off to NC position
-        GPIO.output(relays['Battery_NEG'], 0)      
-        GPIO.output(relays['Force_NEG'], 0)  
+        GPIO.output(relays['Battery_POS'], 1)   # relays off to NC position
+        GPIO.output(relays['Battery_NEG'], 1)
+        GPIO.output(relays['Force_NEG'], 1)
     if battery == 2:
-        GPIO.output(relays['Battery_POS'], 1)   # relays on to NO position
-        GPIO.output(relays['Battery_NEG'], 1) 
-        GPIO.output(relays['Force_POS'], 0)
+        GPIO.output(relays['Battery_POS'], 0)   # relays on to NO position
+        GPIO.output(relays['Battery_NEG'], 0)
+        GPIO.output(relays['Force_POS'], 1)
 
 
 def set_forVoltageReading():
@@ -138,8 +138,8 @@ def meas_VOC():
     set_forVoltageReading()
     
     # set relay to sense 
-    GPIO.output(relays['Sense_BK_POS'], 0)      # relays off to NC = sense 
-    GPIO.output(relays['Sense_BK_NEG'], 0)      
+    GPIO.output(relays['Sense_BK_POS'], 1)      # relays off to NC = sense
+    GPIO.output(relays['Sense_BK_NEG'], 1)
 
 
     # loop 5 times and compute the average Voc
@@ -170,8 +170,8 @@ def meas_VOC():
 def dc_Impedance():
 
     # set relay to sense 
-    GPIO.output(relays['Sense_BK_POS'], 0)      # relays off to NC = sense 
-    GPIO.output(relays['Sense_BK_NEG'], 0)      
+    GPIO.output(relays['Sense_BK_POS'], 1)      # relays off to NC = sense
+    GPIO.output(relays['Sense_BK_NEG'], 1)
     
     sourceVoltage = 2.65  # Charging: VSource > VBattery; Discharging: VS < VB # 18650 is 3.7v; max charging is 4.2v and min discharge final is 2.75
     voltageRange = 20  # 20mV, 200mV, 2V, 20V, 200V
@@ -249,8 +249,8 @@ def ratio_Capacity_BK8502():
     measTimeL = []          # list of times of readings
 
     # set relay to BK Load
-    GPIO.output(relays['Sense_BK_POS'], 1)      # relays ib to NO = BK Load 
-    GPIO.output(relays['Sense_BK_NEG'], 1)   
+    GPIO.output(relays['Sense_BK_POS'], 0)      # relays ib to NO = BK Load
+    GPIO.output(relays['Sense_BK_NEG'], 0)
     time.sleep(1)
     startTime = time.time()
 
@@ -264,7 +264,7 @@ def ratio_Capacity_BK8502():
 
     # turn relay to NC, thus DC Load is OFF
     # set relay back to sense 
-    GPIO.output(relays['Sense_BK_POS'], 0)      # relays off to NC = sense 
-    GPIO.output(relays['Sense_BK_NEG'], 0)   
+    GPIO.output(relays['Sense_BK_POS'], 1)      # relays off to NC = sense
+    GPIO.output(relays['Sense_BK_NEG'], 1)
 
     return voltageL, measTimeL
