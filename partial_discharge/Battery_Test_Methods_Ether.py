@@ -10,7 +10,7 @@ import RPi.GPIO
 
 
 #IP adress of keithly
-TCP_IP = "169.254.206.101"
+TCP_IP = "169.254.201.87"
 TCP_Port = 5025
 
 #send commands to keithley via socket
@@ -77,8 +77,8 @@ relays = {'Battery_POS': 13, 'Battery_NEG': 15, 'Sense_BK_POS': 3, 'Sense_BK_NEG
 # loop to set up each relay pin to output
 # set all to NC postion
 for value in relays.values():
-   GPIO.setup(value, GPIO.OUT)
-   GPIO.output(value, 0)
+   GPIO.setup(value, GPIO.OUT)      # GPIO.setup(17, GPIO.OUT)
+   GPIO.output(value,1)
 
 
 # turn ON LED for which battery is being tested
@@ -93,7 +93,7 @@ def finish_test_LED(battery):
     if battery == 1:
         GPIO.output(relays['LED_1'], 1)      # LED 1 = k13 # relays to NC positions
     if battery == 2:
-        GPIO.output(relays['LED_2'], 0)      # LED 2 = k14 # relays to NO positions
+        GPIO.output(relays['LED_2'], 1)      # LED 2 = k14 # relays to NO positions
 
 
 def battery_selection(battery):
@@ -140,6 +140,10 @@ def SMU(sourceLimit):
 def meas_VOC():
     
     # set kethley settings
+    send_Keithley("*RST")
+    send_Keithley('OUTP:SMOD HIMP')  # turn on high-impedance output mode; so battery wont drain while just sitting
+
+
     set_forVoltageReading()
     
     # set relay to sense 
@@ -167,7 +171,7 @@ def meas_VOC():
 # (V2-V1)/(I2-I1) = DC internal resistance
 # current sweep: current limit is linearly changed and voltage response is observed, giving the resistance as the slope of the lined
 # Kiethley: set voltage source to discharge or charge and ues current limit to set the constant current level
-    
+    "169.254.193.101"
 # battery connection Keithley:
 # four sense probe. Keithley measure current in terms of ohm
 # Sense Hi and Force Hi connect to positive terminal
@@ -202,7 +206,7 @@ def dc_Impedance():
     voltL_impedance = []
     for i in range(len(sourceLimit)):
         send_Keithley(f'SOUR:VOLT:ILIM {sourceLimit[i]}')  # set source (current) limit
-        time.sleep(0.1)
+        time.sleep(0.25)
     
         curr = query_Keithley('READ? "defbuffer1"')
         currentL_impedance.append(float(curr))
@@ -210,7 +214,8 @@ def dc_Impedance():
         volt =query_Keithley('READ? "defbuffer1", SOUR')  # a ? is used for a query command otherwise is a set command
                                                           # defbuffer1 returns sense value
         voltL_impedance.append(float(volt))
-    
+        # print(curr)
+        # print(sourceLimit[i])
     send_Keithley('OUTP OFF')  # turn off keithley
     
     impedanceL = []
@@ -246,7 +251,8 @@ def ratio_Capacity_BK8502():
     send_Keithley('OUTP:SMOD HIMP')                    # turn on high-impedance output mode
 #    send('SENS:CURR:RSEN OFF')                # set to 4-wire sense mode  # OFF = 2-Wire mode # by default?
     send_Keithley('SENS:FUNC "VOLT"')                  # set measure, sense, to current
-    send_Keithley('SENS:CURR:RANG:AUTO ON')            # set current range to auto
+    send_Keithley('SOUR:VOLT:RANG 20')            # set current range to auto
+    # set_forVoltageReading()
 
     stopTime = 30           # discharge for 30 seconds
     testTime = 0            # initiate testTime to zero seconds
