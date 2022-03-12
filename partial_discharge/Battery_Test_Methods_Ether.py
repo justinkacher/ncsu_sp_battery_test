@@ -7,6 +7,7 @@ from statistics import mean
 import socket
 import time
 import RPi.GPIO
+import Tkinter_master
 
 
 #IP adress of keithly
@@ -40,7 +41,7 @@ def query_Keithley(command):
 # and both the source and meter for impedence testing
 #initialize connection and reset
 #initialize connection and reset
-
+TCP_IP = Tkinter_master.TCP_IP
 keithley = socket.socket()
 keithley.connect((TCP_IP, TCP_Port))
 send_Keithley("*RST")

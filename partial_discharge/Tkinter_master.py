@@ -16,7 +16,7 @@ from matplotlib.pyplot import title
 # import config
 # import scaletest
 #from PIL import *
-import Battery_Test_Methods_Ether as BTM
+
 import pandas as pd
 from statistics import mean
 #import scaletest
@@ -384,8 +384,9 @@ errorlbl2.place(y=500, width = 390)
 
 
 
-
-
+TCP_IP = simpledialog.askstring("Keithley 2450 IP Adress","Enter IP Adress on Keithley 2450 device\nMenu->communication->LAN->Gateway",parent = window, minvalue = 0, maxvalue = 100)
+        
+import Battery_Test_Methods_Ether as BTM
 
 
 window.mainloop()
