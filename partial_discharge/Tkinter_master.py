@@ -28,7 +28,8 @@ mass = 0
 
 
 def scan_cell():
-    cell_Name = input('>> Cell number (scan barcode)')
+    # cell_Name = input('>> Cell number (scan barcode)')
+    cell_Name = simpledialog.askstring("Battery ID Number","Scan the Battery Cell to be tested",parent = window)
     return cell_Name
 
 
