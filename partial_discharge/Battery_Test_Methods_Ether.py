@@ -7,7 +7,7 @@ from statistics import mean
 import socket
 import time
 import RPi.GPIO
-import Tkinter_master
+#import Tkinter_master
 
 
 #IP adress of keithly
@@ -41,12 +41,13 @@ def query_Keithley(command):
 # and both the source and meter for impedence testing
 #initialize connection and reset
 #initialize connection and reset
-TCP_IP = Tkinter_master.TCP_IP
 keithley = socket.socket()
-keithley.connect((TCP_IP, TCP_Port))
-send_Keithley("*RST")
-print("ID: ", query_Keithley("*IDN?"))
-send_Keithley('OUTP:SMOD HIMP')  # turn on high-impedance output mode; so battery wont drain while just sitting
+def connect(IP):
+    
+    keithley.connect((IP, TCP_Port))    #keithley.connect((TCP_IP, TCP_Port))
+    send_Keithley("*RST")
+    print("ID: ", query_Keithley("*IDN?"))
+    send_Keithley('OUTP:SMOD HIMP')  # turn on high-impedance output mode; so battery wont drain while just sitting
 
 
 # BK 8502 DC Load Supply is used for to discharge the cells at 10A
