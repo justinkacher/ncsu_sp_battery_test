@@ -7,9 +7,8 @@ from tkinter import simpledialog
 from tkinter.constants import *
 from tkinter.ttk import Labelframe
 import os
-
+import Battery_Test_Methods_Ether as BTM
 import time
-
 from matplotlib.pyplot import title
 #from matplotlib import scale
 #import tkcommands
@@ -151,8 +150,9 @@ def check_Name(cell_Num):
         return bool_Val
 
 
-
-
+def connect():
+    IP = simpledialog.askstring("Keithley IP Adress","Menu -> communication -> LAN -> IP Adress",parent = window)
+    BTM.connect(IP)
 
 window = tk.Tk()
 window.title("21700 Battery Profile")
@@ -215,7 +215,13 @@ titlelbl = tk.Label(
     font = ('Arial',35)
 )
 titlelbl.place(y = 20, width = 1200)
-
+connectbutton = tk.Button(
+    titleframe,
+    text = "Connect to Keithley 2450",
+    command = connect,
+    font = ('Arial',12)
+)
+connectbutton.place(y=0,x=1000, width = 200, height = 100)
 
 
 
@@ -384,13 +390,9 @@ errorlbl2.place(y=500, width = 390)
 
 
 
-TCP_IP = simpledialog.askstring("Keithley 2450 IP Adress","Enter IP Adress on Keithley 2450 device\nMenu->communication->LAN->Gateway",parent = window, minvalue = 0, maxvalue = 100)
-        
-import Battery_Test_Methods_Ether as BTM
 
 
 window.mainloop()
-
 
 
 
