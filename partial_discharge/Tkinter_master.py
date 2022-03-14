@@ -67,78 +67,93 @@ test will start after submission and LED will turn on
 
 
 def starttest1():
-    cell_Dict = {}
-    battery = 1
-    BTM.battery_selection(battery)
-    cell_Num = scan_cell()
-    cell_Dict = {'Cell Number' : cell_Num}
-    # ID2num.update(text = cell_Num)
-    
-    # check that the battery has not already been tested
-    if check_Name(cell_Num) is False:
-        # cell_Dict['Mass in grams'] = mass
-        analogimpedence = simpledialog.askfloat("Analog Impedence","Measure Impedence using handheld device: Test will start once impedence is submitted",parent = window, minvalue = 0, maxvalue = 100)
-        cell_Dict['Analog Impedence'] = analogimpedence
-        BTM.start_test_LED(battery)
-        Voc = BTM.meas_VOC()
-        print("Voc: ",Voc)
-        cell_Dict['Voc (V)'] = Voc
-        impedance = BTM.dc_Impedance()
-        print("impedance: ",impedance)
-        cell_Dict['DC Resistance (Ohms)'] = impedance
-        if impedance > 40 or impedance < 0:
-            print("Test DC Resistance ERROR. Please Retest")
-        else:    
-            voltage_list,time_list = BTM.ratio_Capacity_BK8502()
-            # print(voltage_list, " ", time_list)
-            cell_Dict.update({'Capacity Time': time_list, 'Capacity Voltage': voltage_list})
+    try:
+        # BTM.test() 
+        cell_Dict = {}
+        battery = 1
+        BTM.battery_selection(battery)
+        cell_Num = scan_cell()
+        cell_Dict = {'Cell Number' : cell_Num}
+        # ID2num.update(text = cell_Num)
+        
+        # check that the battery has not already been tested
+        if check_Name(cell_Num) is False:
+            # cell_Dict['Mass in grams'] = mass
+            analogimpedence = simpledialog.askfloat("Analog Impedence","Measure Impedence using handheld device: Test will start once impedence is submitted",parent = window, minvalue = 0, maxvalue = 100)
+            cell_Dict['Analog Impedence'] = analogimpedence
+            BTM.start_test_LED(battery)
+            Voc = BTM.meas_VOC()
+            print("Voc: ",Voc)
+            data1lbl.update(
+                text = "Mass: \n\nOpen Circuit Volatage: \n\nDC Internal Resistance: \n\nAC Internal Resistance: \n\nCapacity Ratio: ",
 
-            if voltage_list[-1] > (.99*Voc):
-                print("Test Capacity ERROR. Please Retest")
-            else: # continue     
-                df_battery_dict = pd.DataFrame({key: pd.Series(value) for key, value in cell_Dict.items()})
-                df_battery_dict.to_excel(fileFolder + '/Test cell ' + cell_Dict['Cell Number'] + '.xlsx')
-                print("Battery File Save")
-        BTM.finish_test_LED(battery)
-        # ID2num.update(text = "---")    
-    else:
-        print("Battery already tested")
-        simpledialog.Dialog(window,"battery already tested")
+            )
+            cell_Dict['Voc (V)'] = Voc
+            impedance = BTM.dc_Impedance()
+            print("impedance: ",impedance)
+            data1lbl.update(
+                text = "Mass: \n\nOpen Circuit Volatage: \n\nDC Internal Resistance: \n\nAC Internal Resistance: \n\nCapacity Ratio: ",
 
+            )
+            cell_Dict['DC Resistance (Ohms)'] = impedance
+            if impedance > 40 or impedance < 0:
+                print("Test DC Resistance ERROR. Please Retest")
+                simpledialog.Dialog(window,"Please Retest")
+            else:    
+                voltage_list,time_list = BTM.ratio_Capacity_BK8502()
+                # print(voltage_list, " ", time_list)
+                cell_Dict.update({'Capacity Time': time_list, 'Capacity Voltage': voltage_list})
+
+                if voltage_list[-1] > (.99*Voc):
+                    print("Test Capacity ERROR. Please Retest")
+                    simpledialog.Dialog(window,"Please Retest")
+
+                else: # continue     
+                    df_battery_dict = pd.DataFrame({key: pd.Series(value) for key, value in cell_Dict.items()})
+                    df_battery_dict.to_excel(fileFolder + '/Test cell ' + cell_Dict['Cell Number'] + '.xlsx')
+                    print("Battery File Save")
+            BTM.finish_test_LED(battery)
+            # ID2num.update(text = "---")    
+        else:
+            print("Battery already tested")
+            simpledialog.Dialog(window,"battery already tested")
+    except:
+        simpledialog.Dialog(window,"LAN ERROR")
             
 
 def starttest2():
-    cell_Dict = {}
-    battery = 2
-    BTM.battery_selection(battery)
-    cell_Num = scan_cell()
-    cell_Dict = {'Cell Number' : cell_Num}
-    # ID2num.update(text = cell_Num)
+    simpledialog.Dialog(window,"ERROR")
+    # cell_Dict = {}
+    # battery = 2
+    # BTM.battery_selection(battery)
+    # cell_Num = scan_cell()
+    # cell_Dict = {'Cell Number' : cell_Num}
+    # # ID2num.update(text = cell_Num)
     
-    # check that the battery has not already been tested
-    if check_Name(cell_Num) is False:
-        cell_Dict['Mass in grams'] = mass
-        analogimpedence = simpledialog.askfloat("Analog Impedence","Measure Impedence using handheld device: Test will start once impedence is submitted",parent = window, minvalue = 0, maxvalue = 100)
-        cell_Dict['Analog Impedence'] = analogimpedence
-        BTM.start_test_LED(battery)
-        Voc = BTM.meas_VOC()
-        print("Voc: ",Voc)
-        cell_Dict['Voc (V)'] = Voc
-        impedance = BTM.dc_Impedance()
-        print("impedance: ",impedance)
-        cell_Dict['DC Impedance (Ohms)'] = impedance
-        voltage_list,time_list = BTM.ratio_Capacity_BK8502()
-        print(voltage_list, " ", time_list)
-        cell_Dict.update({'Capacity Time': time_list, 'Capacity Voltage': voltage_list})
+    # # check that the battery has not already been tested
+    # if check_Name(cell_Num) is False:
+    #     cell_Dict['Mass in grams'] = mass
+    #     analogimpedence = simpledialog.askfloat("Analog Impedence","Measure Impedence using handheld device: Test will start once impedence is submitted",parent = window, minvalue = 2, maxvalue = 20)
+    #     cell_Dict['Analog Impedence'] = analogimpedence
+    #     BTM.start_test_LED(battery)
+    #     Voc = BTM.meas_VOC()
+    #     print("Voc: ",Voc)
+    #     cell_Dict['Voc (V)'] = Voc
+    #     impedance = BTM.dc_Impedance()
+    #     print("impedance: ",impedance)
+    #     cell_Dict['DC Impedance (Ohms)'] = impedance
+    #     voltage_list,time_list = BTM.ratio_Capacity_BK8502()
+    #     print(voltage_list, " ", time_list)
+    #     cell_Dict.update({'Capacity Time': time_list, 'Capacity Voltage': voltage_list})
 
-        df_battery_dict = pd.DataFrame({key: pd.Series(value) for key, value in cell_Dict.items()})
-        df_battery_dict.to_excel(fileFolder + '/Test cell ' + cell_Dict['Cell Number'] + '.xlsx')
-        print(cell_Dict)
-        BTM.finish_test_LED(battery)
-        # ID2num.update(text = "---")
-    else:
-        print("Battery already tested")
-        simpledialog.Dialog(window,"battery already tested")  
+    #     df_battery_dict = pd.DataFrame({key: pd.Series(value) for key, value in cell_Dict.items()})
+    #     df_battery_dict.to_excel(fileFolder + '/Test cell ' + cell_Dict['Cell Number'] + '.xlsx')
+    #     print(cell_Dict)
+    #     BTM.finish_test_LED(battery)
+    #     # ID2num.update(text = "---")
+    # else:
+    #     print("Battery already tested")
+    #     simpledialog.Dialog(window,"battery already tested")  
 
 
 
@@ -152,8 +167,11 @@ def check_Name(cell_Num):
 
 
 def connect():
-    IP = simpledialog.askstring("Keithley IP Adress","Menu -> communication -> LAN -> IP Adress",parent = window)
-    BTM.connect(IP)
+    try:
+        IP = simpledialog.askstring("Keithley IP Adress","Menu -> communication -> LAN -> IP Adress",parent = window)
+        BTM.connect(IP)
+    except:
+        simpledialog.Dialog(window,"LAN ERROR")
 
 window = tk.Tk()
 window.title("21700 Battery Profile")
