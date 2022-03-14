@@ -48,7 +48,8 @@ def connect(IP):
     send_Keithley("*RST")
     print("ID: ", query_Keithley("*IDN?"))
     send_Keithley('OUTP:SMOD HIMP')  # turn on high-impedance output mode; so battery wont drain while just sitting
-
+# def test():
+#     return "ID: ", query_Keithley("*IDN?")
 
 # BK 8502 DC Load Supply is used for to discharge the cells at 10A
 # a relay is used to turn on/off the load supply connection
