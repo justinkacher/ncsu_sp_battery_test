@@ -33,7 +33,7 @@ new_Files = fileNames
 df_measurements = {}
 resitance_dict = {}
 
-print('test')
+
 
 ##df4 = df4.reindex(range( max(len(df4), len(c)) ))
 ##df4['three'] = pd.Series(c)
