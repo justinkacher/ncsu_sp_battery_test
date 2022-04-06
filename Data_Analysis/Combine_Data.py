@@ -8,14 +8,17 @@ import json
 ### Test Files
 # finds which test files are not currently in the
 
+folder = 'Q:\Shared drives\SolarPack\Teams\Electrical\Project Teams\Battery\Battery Test Plan\Tested Batteries\partial_discharge'
+masterFile = folder + '/Master_Data.json'
 
+# folder = 'C:/Users/nwoodwa/Documents/SolarPack'
+# masterFile = 'C:/Users/nwoodwa/Documents/SolarPack/Master_Data.json'
 
-folder = 'C:/Users/nwoodwa/Documents/SolarPack'
 
 # battery serial number is test
 ## tests are saved using: df_battery_dict.to_excel(fileFolder + '/Test cell ' + cell_Dict['Cell Number'] + '.xlsx') # line 113 Tkinter_master
 folderContents = os.listdir(folder)    # returns list of folder and file name .Type for the specified folder
-print(folderContents)
+# print(folderContents)
 
 new_Files = []
 for item in folderContents:
@@ -27,7 +30,7 @@ for item in folderContents:
     # compare all fileNames to master file names
     # if not in master: add data
 
-print(new_Files)
+# print(new_Files)
 
 # open master files
 # xls = pd.ExcelFile('{}/{}.xlsx'.format(folder, file))
@@ -67,17 +70,19 @@ for file in new_Files:
         skipped.append(file)
 
 print(skipped)
+# 51
+#['Test cell MP42A01558.xlsx', 'Test cell MP42A01523.xlsx', 'Test cell MP42A01550.xlsx', 'Test cell MP42A01546.xlsx', 'Test cell MP42A01559.xlsx', 'Test cell MP42A01543.xlsx', 'Test cell MP42A01521.xlsx', 'Test cell MP42A01552.xlsx', 'Test cell MP42A01555.xlsx', 'Test cell MP42A01565.xlsx', 'Test cell MP42A01556.xlsx', 'Test cell MP42A01522.xlsx', 'Test cell MP42A01529.xlsx', 'Test cell MP42A01562.xlsx', 'Test cell MP42A01531.xlsx', 'Test cell MP42A01551.xlsx', 'Test cell MP42A01544.xlsx', 'Test cell MP42A01554.xlsx', 'Test cell MP42A01539.xlsx', 'Test cell MP42A01563.xlsx', 'Test cell MP42A01549.xlsx', 'Test cell MP42A01564.xlsx', 'Test cell MP42A01530.xlsx', 'Test cell MP42A01542.xlsx', 'Test cell MP42A01548.xlsx', 'Test cell MP42A01533.xlsx', 'Test cell MP42A01515.xlsx', 'Test cell MP42A01545.xlsx', 'Test cell MP42A01528.xlsx', 'Test cell MP42A01535.xlsx', 'Test cell MP42A01537.xlsx', 'Test cell MP42A01527.xlsx', 'Test cell MP42A01524.xlsx', 'Test cell MP42A01525.xlsx', 'Test cell MP42A01561.xlsx', 'Test cell MP42A01517.xlsx', 'Test cell MP42A01518.xlsx', 'Test cell test MP42A01553.xlsx', 'Test cell MP42A01547.xlsx', 'Test cell MP42A01536.xlsx', 'Test cell MP42A01557.xlsx', 'Test cell MP42A01516.xlsx', 'Test cell MP42A01532.xlsx', 'Test cell MP42A01540.xlsx', 'Test cell MP42A01519.xlsx', 'Test cell MP42A01526.xlsx', 'Test cell MP42A01541.xlsx', 'Test cell MP42A01560.xlsx', 'Test cell MP42A01534.xlsx', 'Test cell MP42A01538.xlsx', 'Test cell MP42A01520.xlsx']
 
-print(cell_number)
-
-print(master['impedance'][cell_number])
-print(master['voc'][cell_number])
-print(master['resistance'][cell_number])
-print(master['cap_volt'][cell_number])
-print(master['cap_time'][cell_number])
-
-
-print(master)
+# print(cell_number)
+#
+# print(master['impedance'][cell_number])
+# print(master['voc'][cell_number])
+# print(master['resistance'][cell_number])
+# print(master['cap_volt'][cell_number])
+# print(master['cap_time'][cell_number])
+#
+#
+# print(master)
 
 
 
@@ -105,5 +110,5 @@ print(master)
 # print(json_object)
 
 # save .json
-with open(folder +'/'+"Master_Data.json", "w") as outfile:
+with open(masterFile, "w") as outfile:
     json.dump(master, outfile)
