@@ -8,7 +8,7 @@ import json
 ### Test Files
 # finds which test files are not currently in the
 
-folder = 'Q:\Shared drives\SolarPack\Teams\Electrical\Project Teams\Battery\Battery Test Plan\Tested Batteries\partial_discharge'
+folder = '/Volumes/GoogleDrive-115458662593069358043/Shared drives/SolarPack/Teams/Electrical/Project Teams/Battery/Battery Test Plan/Tested Batteries/partial_discharge'
 masterFile = folder + '/Master_Data.json'
 
 # folder = 'C:/Users/nwoodwa/Documents/SolarPack'
@@ -108,6 +108,11 @@ print(skipped)
 # create json
 # json_object = json.dumps(master, indent=4)
 # print(json_object)
+
+
+# sort dict by name
+for key in list(master.keys()):
+	master[key] = dict(sorted(master[key].items()))
 
 # save .json
 with open(masterFile, "w") as outfile:
