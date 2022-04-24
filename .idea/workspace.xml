@@ -22,10 +22,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="399bd4ca-f68b-43cc-99d5-d1f9dd58404d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/ncsu_sp_battery_test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ncsu_sp_battery_test.iml" afterDir="false" />
+    <list default="true" id="399bd4ca-f68b-43cc-99d5-d1f9dd58404d" name="Default Changelist" comment="saves excel">
+      <change afterPath="$PROJECT_DIR$/Data_Analysis/Analyze_Resistance.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Data_Analysis/Analyze_Data.py" beforeDir="false" afterPath="$PROJECT_DIR$/Data_Analysis/Analyze_Data.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Data_Analysis/Combine_Data.py" beforeDir="false" afterPath="$PROJECT_DIR$/Data_Analysis/Combine_Data.py" afterDir="false" />
@@ -133,7 +131,7 @@
       </console-settings>
     </option>
   </component>
-  <component name="RunManager" selected="Python.Analyze_Data">
+  <component name="RunManager" selected="Python.Analyze_Resistance">
     <configuration name="Analyze_Data" type="PythonConfigurationType" factoryName="Python" singleton="false" temporary="true">
       <module name="ncsu_sp_battery_test" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -147,6 +145,27 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Data_Analysis/Analyze_Data.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Analyze_Resistance" type="PythonConfigurationType" factoryName="Python" singleton="false" temporary="true" nameIsGenerated="true">
+      <module name="ncsu_sp_battery_test" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$USER_HOME$/.conda/envs/SMU/bin/python" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Data_Analysis" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Data_Analysis/Analyze_Resistance.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -262,8 +281,9 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.Analyze_Data" />
+        <item itemvalue="Python.Analyze_Resistance" />
         <item itemvalue="Python.Combine_Data" />
+        <item itemvalue="Python.Analyze_Data" />
         <item itemvalue="Python.Barcode" />
         <item itemvalue="Python.site1test" />
       </list>
@@ -295,7 +315,14 @@
       <option name="project" value="LOCAL" />
       <updated>1649207111564</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="saves excel">
+      <created>1650222587396</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1650222587396</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -355,7 +382,8 @@
     <MESSAGE value="Finished initial test script" />
     <MESSAGE value="test upload" />
     <MESSAGE value="finished combined_data" />
-    <option name="LAST_COMMIT_MESSAGE" value="finished combined_data" />
+    <MESSAGE value="saves excel" />
+    <option name="LAST_COMMIT_MESSAGE" value="saves excel" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/Data_Analysis/Combine_Data.py">

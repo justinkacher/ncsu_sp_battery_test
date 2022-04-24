@@ -8,8 +8,11 @@ import json
 ### Test Files
 # finds which test files are not currently in the
 
-folder = '/Volumes/GoogleDrive-115458662593069358043/Shared drives/SolarPack/Teams/Electrical/Project Teams/Battery/Battery Test Plan/Tested Batteries/partial_discharge'
+folder = '/Volumes/GoogleDrive-115458662593069358043/Shared drives/SolarPack/Teams/Electrical/Project Teams/Battery/Battery Test Plan/Partial Discharge/All Tested through April 23/partial_discharge'
+    #'/Volumes/GoogleDrive-115458662593069358043/Shared drives/SolarPack/Teams/Electrical/Project Teams/Battery/Battery Test Plan/Tested Batteries/partial_discharge'
 masterFile = folder + '/Master_Data.json'
+
+
 
 # folder = 'C:/Users/nwoodwa/Documents/SolarPack'
 # masterFile = 'C:/Users/nwoodwa/Documents/SolarPack/Master_Data.json'
@@ -58,7 +61,7 @@ for file in new_Files:
         xls = pd.ExcelFile('{}/{}'.format(folder, file))
         df_measurements = pd.read_excel(xls)
 
-        cell_number = df_measurements['Cell Number'].iloc[0]
+        cell_number = df_measurements['Cell Number'].iloc[0].upper()
         # cell_number = file[-16:-5]  # Test cell [cell number]
 
         master['impedance'][cell_number] = df_measurements['Analog Impedence'].iloc[0]
@@ -70,11 +73,11 @@ for file in new_Files:
         skipped.append(file)
 
 print(skipped)
-# 51
-#['Test cell MP42A01558.xlsx', 'Test cell MP42A01523.xlsx', 'Test cell MP42A01550.xlsx', 'Test cell MP42A01546.xlsx', 'Test cell MP42A01559.xlsx', 'Test cell MP42A01543.xlsx', 'Test cell MP42A01521.xlsx', 'Test cell MP42A01552.xlsx', 'Test cell MP42A01555.xlsx', 'Test cell MP42A01565.xlsx', 'Test cell MP42A01556.xlsx', 'Test cell MP42A01522.xlsx', 'Test cell MP42A01529.xlsx', 'Test cell MP42A01562.xlsx', 'Test cell MP42A01531.xlsx', 'Test cell MP42A01551.xlsx', 'Test cell MP42A01544.xlsx', 'Test cell MP42A01554.xlsx', 'Test cell MP42A01539.xlsx', 'Test cell MP42A01563.xlsx', 'Test cell MP42A01549.xlsx', 'Test cell MP42A01564.xlsx', 'Test cell MP42A01530.xlsx', 'Test cell MP42A01542.xlsx', 'Test cell MP42A01548.xlsx', 'Test cell MP42A01533.xlsx', 'Test cell MP42A01515.xlsx', 'Test cell MP42A01545.xlsx', 'Test cell MP42A01528.xlsx', 'Test cell MP42A01535.xlsx', 'Test cell MP42A01537.xlsx', 'Test cell MP42A01527.xlsx', 'Test cell MP42A01524.xlsx', 'Test cell MP42A01525.xlsx', 'Test cell MP42A01561.xlsx', 'Test cell MP42A01517.xlsx', 'Test cell MP42A01518.xlsx', 'Test cell test MP42A01553.xlsx', 'Test cell MP42A01547.xlsx', 'Test cell MP42A01536.xlsx', 'Test cell MP42A01557.xlsx', 'Test cell MP42A01516.xlsx', 'Test cell MP42A01532.xlsx', 'Test cell MP42A01540.xlsx', 'Test cell MP42A01519.xlsx', 'Test cell MP42A01526.xlsx', 'Test cell MP42A01541.xlsx', 'Test cell MP42A01560.xlsx', 'Test cell MP42A01534.xlsx', 'Test cell MP42A01538.xlsx', 'Test cell MP42A01520.xlsx']
+print(len(skipped))
 
-# print(cell_number)
-#
+# Issue is Needs to be correct to : 'DC Resistance (Ohms)'
+# All files 1515 to 1599 were tested on March 6
+
 # print(master['impedance'][cell_number])
 # print(master['voc'][cell_number])
 # print(master['resistance'][cell_number])
