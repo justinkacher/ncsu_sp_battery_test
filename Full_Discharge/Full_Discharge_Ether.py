@@ -116,14 +116,19 @@ GPIO.output(relays['Force_NEG'], 0)
 
 
 
-# loop to set up each relay pin to output 
+# loop to set up each relay pin to output
+# set all to NC postion
 for value in relays.values():
    GPIO.setup(value, GPIO.OUT)      # GPIO.setup(17, GPIO.OUT)
+   GPIO.output(value, 1)
 
+## Set relays to battery 1
+GPIO.output(relays['Battery_POS'], 1)   # relays to NC position
+GPIO.output(relays['Battery_NEG'], 1)
+GPIO.output(relays['Force_NEG'], 1)
 
 
 cell_Dict = {}
-
 
 # function to save the dataframe
 # function to be called after test 1 and 2, and every 5 minutes during capasicty discharge test 3
@@ -168,18 +173,14 @@ cell_Dict = {'Cell Number': cell_Name}
 
 input('Press Enter to start testing >> ')
 
-# Test 1
-
-
-
-# Test 2
-print('Measure AC Impedance using handhgeld tool')
-cell_AC_Impd = input('>> AC Impedance (milli-Ohm')
-cell_Dict = {'Cell AC Impedance': cell_AC_Impd}
-
+# # Test 1
+# print('Measure AC Impedance using handhgeld tool')
+# cell_AC_Impd = input('>> AC Impedance (milli-Ohm')
+# cell_Dict = {'Cell AC Impedance': cell_AC_Impd}
+#
 
 # Test 2
-print('   Starting Test 1/3: Measuring Voc...')
+print('   Starting Measuring Voc...')
 
 # set relay to sense 
 GPIO.output(relays['Sense_BK_POS'], 0)      # relays off to NC = sense 
@@ -202,11 +203,11 @@ print("      Voc is {:.2f}".format(Voc))
 
 
 # Test 3
-print("   Starting Test 2/3: Measuring DC Impedance...")
+print("   Starting Measuring DC Impedance...")
 
-# set relay to sense 
-GPIO.output(relays['Sense_BK_POS'], 0)      # relays off to NC = sense 
-GPIO.output(relays['Sense_BK_NEG'], 0) 
+# set relay to sense
+GPIO.output(relays['Sense_BK_POS'], 1)      # relays off to NC = sense
+GPIO.output(relays['Sense_BK_NEG'], 1)
 
 # set KEITHLEY settings
 sourceVoltage = 2.65  # Charging: VSource > VBattery; Discharging: VS < VB # 18650 is 3.7v; max charging is 4.2v and min discharge final is 2.75
@@ -263,23 +264,21 @@ print('      Impedance is {:.1f} m-Ohm'.format(impedance))
 
 
 # Test 4
-print("Disconnect Keithley Force wires and connect BK 8502 DC Load & then turn on")
-input("Press Enter to start Full Discharge Test >>")
-print("   Starting Test 3/3: Measuring Total Discharge...")
+print("   Starting Measuring Total Discharge...")
 
 send_Keithley('*RST')  # first line is to reset the instrument # 2-Wire mode by default
 set_forVoltageReading()
 
 iteration = 1  # iteration must start at 1 for Keithly write
-voltLimit = 3.3  # voltage which to stop the test
+voltLimit = 2.75  # voltage which to stop the test
 voltageL = []  # list of voltage readings
 measTimeL = []  # list of times of readings
 
 rollingList = []  # list of voltage rolling  averaging for determinging when we reach the end test voltLimit; helps to ignore random drops/spikes
 
 # set relay to BK Load
-GPIO.output(relays['Sense_BK_POS'], 1)      # relays ib to NO = BK Load 
-GPIO.output(relays['Sense_BK_NEG'], 1)   
+GPIO.output(relays['Sense_BK_POS'], 0)      # relays ib to NO = BK Load
+GPIO.output(relays['Sense_BK_NEG'], 0)
 time.sleep(1)
 startTime = time.time()
 
@@ -319,8 +318,8 @@ while iteration >= 0:  # infinite while loop; breaks when voltLimit is reached
 
 
 # set relay back to sense 
-GPIO.output(relays['Sense_BK_POS'], 0)      # relays off to NC = sense 
-GPIO.output(relays['Sense_BK_NEG'], 0)  
+GPIO.output(relays['Sense_BK_POS'], 1)      # relays off to NC = sense
+GPIO.output(relays['Sense_BK_NEG'], 1)
 
 save_DF()
 print("TURN OFF BK 8502")

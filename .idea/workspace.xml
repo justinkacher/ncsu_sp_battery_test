@@ -22,11 +22,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="399bd4ca-f68b-43cc-99d5-d1f9dd58404d" name="Default Changelist" comment="saves excel">
-      <change afterPath="$PROJECT_DIR$/Data_Analysis/Analyze_Resistance.py" afterDir="false" />
+    <list default="true" id="399bd4ca-f68b-43cc-99d5-d1f9dd58404d" name="Default Changelist" comment="Resistance">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Data_Analysis/Analyze_Data.py" beforeDir="false" afterPath="$PROJECT_DIR$/Data_Analysis/Analyze_Data.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Data_Analysis/Combine_Data.py" beforeDir="false" afterPath="$PROJECT_DIR$/Data_Analysis/Combine_Data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Full_Discharge/Full_Discharge_Ether.py" beforeDir="false" afterPath="$PROJECT_DIR$/Full_Discharge/Full_Discharge_Ether.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/partial_discharge/Battery_Test_Methods_Ether.py" beforeDir="false" afterPath="$PROJECT_DIR$/partial_discharge/Battery_Test_Methods_Ether.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -322,7 +321,14 @@
       <option name="project" value="LOCAL" />
       <updated>1650222587396</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Resistance">
+      <created>1650843803379</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1650843803379</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -383,7 +389,8 @@
     <MESSAGE value="test upload" />
     <MESSAGE value="finished combined_data" />
     <MESSAGE value="saves excel" />
-    <option name="LAST_COMMIT_MESSAGE" value="saves excel" />
+    <MESSAGE value="Resistance" />
+    <option name="LAST_COMMIT_MESSAGE" value="Resistance" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/Data_Analysis/Combine_Data.py">

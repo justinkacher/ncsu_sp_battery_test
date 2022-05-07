@@ -57,22 +57,30 @@ import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BOARD)
 
 
-# Relay k16, GPIO 13: POS; NC =  battery 1, NO = nothing (battery 2)         # Battery_POS
-# Relay k15, GPIO 15: NEG; NC =  battery 1, NO = nothing (battery 2)         # Battery_NEG
+# Relay k16: POS; NC =  battery 1, NO = nothing (battery 2)         # Battery_POS
+# Relay k15: NEG; NC =  battery 1, NO = nothing (battery 2)         # Battery_NEG
 
-# Relay k3, GPIO 7: NEG; NC =  battery 1, NO = nothing (battery 2)          # Force_NEG
-# Relay k4, GPIO 11: POS; NC =  battery 1, NO = nothing (battery 2)          # Force_POS
+# Relay k3: NEG; NC =  battery 1, NO = nothing (battery 2)          # Force_NEG
+# Relay k4: POS; NC =  battery 1, NO = nothing (battery 2)          # Force_POS
 
-# Relay k1, GPIO 3: POS; NC = Keithely Sense; NO = BK Load                  # Sense_BK_POS
-# Relay k2, GPIO 5: NEG; NC = Keithely Sense; NO = BK Load                  # Sense_BK_NEG
-
-
-# Relay k6, GPIO 21: LED ground; NC = White LED, NO = Red Battery 1 indicator     # LED_1
-# Relay k5, GPIO 19: LED ground; NC = White LED, NO = Battery 2 indicator     # LED_2
+# Relay k1: POS; NC = Keithely Sense; NO = BK Load                  # Sense_BK_POS
+# Relay k2: NEG; NC = Keithely Sense; NO = BK Load                  # Sense_BK_NEG
 
 
+# Relay k13: LED ground; NC = nothing, NO = Battery 1 indicator     # LED_1
+# Relay k14: LED ground; NC = nothing, NO = Battery 2 indicator     # LED_2
 
-relays = {'Battery_POS': 13, 'Battery_NEG': 15, 'Sense_BK_POS': 3, 'Sense_BK_NEG': 5, 'Force_NEG': 7, 'Force_POS': 11, 'LED_1': 21, 'LED_2': 19}
+
+
+relays = {'Battery_POS': 13, 'Battery_NEG': 15, 'Sense_BK_POS': 3, 'Sense_BK_NEG': 5, 'Force_NEG': 7, 'Force_POS': 11, 'LED_1': 19, 'LED_2': 21}
+
+
+# Battery 1 = Normally closed position
+GPIO.output(relays['Battery_POS'], 0)   # relays off to NC position
+GPIO.output(relays['Battery_NEG'], 0)
+GPIO.output(relays['Force_NEG'], 0)
+
+
 
 # 0 is NO
 # 1 is NC
@@ -81,7 +89,7 @@ relays = {'Battery_POS': 13, 'Battery_NEG': 15, 'Sense_BK_POS': 3, 'Sense_BK_NEG
 # set all to NC postion
 for value in relays.values():
    GPIO.setup(value, GPIO.OUT)      # GPIO.setup(17, GPIO.OUT)
-   GPIO.output(value,1)
+   GPIO.output(value, 1)
 
 
 # turn ON LED for which battery is being tested
