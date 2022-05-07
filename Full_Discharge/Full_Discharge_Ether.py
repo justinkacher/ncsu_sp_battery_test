@@ -1,3 +1,25 @@
+#### USER INPUT ####
+
+TCP_IP = "169.254.16.235"
+
+fileFolder = '/home/pi/Documents/full_discharge'
+
+### End of User Input ###
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## This script is to be ran for each cell to be tested
 ## Tests: Voc, Impedance, FULL Capacity Discharge
 
@@ -13,15 +35,7 @@ import numpy as np
 from scipy.stats import linregress
 from statistics import mean
 
-import winsound
-frequency = 2500  # Set Frequency To 2500 Hertz
-duration = 2000  # Set Duration To 1000 ms == 1 second
 
-
-### User INPUT ###
-fileFolder = 'C:/Users/nwoodwa/Desktop/SolarPack/'
-
-### End of User Input ###
 
 # a Keithley 2450 SourceMeter is used for the open voltage reading, voltage reading during discharge,
 # and both the source and meter for impedence testing
@@ -48,11 +62,10 @@ def query_Keithley(command):
 
 
 #initialize connection and reset
-TCP_IP = "169.254.246.87"
 TCP_Port = 5025
 keithley = socket.socket()
 keithley.connect((TCP_IP, TCP_Port))
-keithley.send("*RST")
+send_Keithley("*RST")
 print("ID: ", query_Keithley("*IDN?"))
 
 send_Keithley('OUTP:SMOD HIMP')  # turn on high-impedance output mode; so battery wont drain while just sitting
@@ -106,15 +119,7 @@ GPIO.setmode(GPIO.BOARD)
 
 
 
-relays = {'Battery_POS': 13, 'Battery_NEG': 15, 'Sense_BK_POS': 3, 'Sense_BK_NEG': 5, 'Force_NEG': 7, 'Force_POS': 11, 'LED_1': 19, 'LED_2': 21}
-
-
-# Battery 1 = Normally closed position
-GPIO.output(relays['Battery_POS'], 0)   # relays off to NC position
-GPIO.output(relays['Battery_NEG'], 0)      
-GPIO.output(relays['Force_NEG'], 0)  
-
-
+relays = {'Battery_POS': 13, 'Battery_NEG': 15, 'Sense_BK_POS': 3, 'Sense_BK_NEG': 5, 'Force_NEG': 7, 'Force_POS': 11, 'LED_1': 21, 'LED_2': 19}
 
 # loop to set up each relay pin to output
 # set all to NC postion
@@ -122,10 +127,10 @@ for value in relays.values():
    GPIO.setup(value, GPIO.OUT)      # GPIO.setup(17, GPIO.OUT)
    GPIO.output(value, 1)
 
-## Set relays to battery 1
-GPIO.output(relays['Battery_POS'], 1)   # relays to NC position
-GPIO.output(relays['Battery_NEG'], 1)
-GPIO.output(relays['Force_NEG'], 1)
+# Battery 1 = Normally closed position
+GPIO.output(relays['Battery_POS'], 0)   # relays off to NC position
+GPIO.output(relays['Battery_NEG'], 0)      
+GPIO.output(relays['Force_NEG'], 0)  
 
 
 cell_Dict = {}
@@ -137,7 +142,9 @@ def save_DF():
     # uses series so columns can be of differnt length
 
     df_battery_dict = pd.DataFrame({key: pd.Series(value) for key, value in cell_Dict.items()})
-    df_battery_dict.to_excel(fileFolder + 'Test cell ' + cell_Dict['Cell Number'] + '.xlsx')
+    df_battery_dict.to_excel(fileFolder + '/Test cell ' + cell_Dict['Cell Number'] + '.xlsx')
+    print('saved')
+
 
 def set_forVoltageReading():
     send_Keithley('SOUR:VOLT:RANG 20')
@@ -241,7 +248,7 @@ for i in range(len(sourceLimit)):
 
     volt =query_Keithley('READ? "defbuffer1", SOUR')  # a ? is used for a query command otherwise is a set command
                                                       # defbuffer1 returns sense value
-    voltL_impedance.append(volt)
+    voltL_impedance.append(float(volt))
 
 send_Keithley('OUTP OFF')  # turn off keithley
 
@@ -270,7 +277,7 @@ send_Keithley('*RST')  # first line is to reset the instrument # 2-Wire mode by 
 set_forVoltageReading()
 
 iteration = 1  # iteration must start at 1 for Keithly write
-voltLimit = 2.75  # voltage which to stop the test
+voltLimit = 2.55  # voltage which to stop the test
 voltageL = []  # list of voltage readings
 measTimeL = []  # list of times of readings
 
@@ -324,4 +331,3 @@ GPIO.output(relays['Sense_BK_NEG'], 1)
 save_DF()
 print("TURN OFF BK 8502")
 print("Testing Complete")
-winsound.Beep(frequency, duration)
