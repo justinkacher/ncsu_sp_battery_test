@@ -5,6 +5,9 @@ import json
 import statistics
 import math
 
+###
+# This file is for combinging all the partial discharges into a single master .json
+# Along with saving each test as its own excel doc by name
 
 folder = '/Volumes/GoogleDrive-115458662593069358043/Shared drives/SolarPack/Teams/Electrical/Project Teams/Battery/Battery Test Plan/Partial Discharge/All Tested through April 23/partial_discharge'
 #'/Volumes/GoogleDrive-115458662593069358043/Shared drives/SolarPack/Teams/Electrical/Project Teams/Battery/Battery Test Plan/Tested Batteries/partial_discharge'

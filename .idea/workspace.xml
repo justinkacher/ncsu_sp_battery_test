@@ -22,10 +22,11 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="399bd4ca-f68b-43cc-99d5-d1f9dd58404d" name="Default Changelist" comment="Resistance">
+    <list default="true" id="399bd4ca-f68b-43cc-99d5-d1f9dd58404d" name="Default Changelist" comment="updated full test">
+      <change afterPath="$PROJECT_DIR$/Data_Analysis/Analyze_Partial_Capacity.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Full_Discharge/Full_Discharge_Ether.py" beforeDir="false" afterPath="$PROJECT_DIR$/Full_Discharge/Full_Discharge_Ether.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/partial_discharge/Battery_Test_Methods_Ether.py" beforeDir="false" afterPath="$PROJECT_DIR$/partial_discharge/Battery_Test_Methods_Ether.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Data_Analysis/Analyze_Data.py" beforeDir="false" afterPath="$PROJECT_DIR$/Data_Analysis/Analyze_Data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Data_Analysis/Analyze_Resistance.py" beforeDir="false" afterPath="$PROJECT_DIR$/Data_Analysis/Analyze_Resistance.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -328,7 +329,14 @@
       <option name="project" value="LOCAL" />
       <updated>1650843803379</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="updated full test">
+      <created>1651951859716</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1651951859716</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -390,7 +398,8 @@
     <MESSAGE value="finished combined_data" />
     <MESSAGE value="saves excel" />
     <MESSAGE value="Resistance" />
-    <option name="LAST_COMMIT_MESSAGE" value="Resistance" />
+    <MESSAGE value="updated full test" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated full test" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/Data_Analysis/Combine_Data.py">

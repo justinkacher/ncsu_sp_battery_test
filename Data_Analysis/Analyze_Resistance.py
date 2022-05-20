@@ -23,33 +23,33 @@ master = json.load(f)       # returns dictionary
 
 cells_tested = list(master['resistance'].keys())
 
-# total_res = []
-# for cell in cells_tested:
-# 	res = master['resistance'][cell]
-# 	total_res.append(res)
-#
-# res_mean = 	statistics.mean(total_res)
-# res_std = statistics.stdev(total_res)
-#
-#
-# min = res_mean - res_std*3
-# max = res_mean + res_std*3
-#
-# print(res_mean)
-# print(res_std)
-# print(min)
-# print(max)
-#
-# out_of_range = {}
-# for cell in cells_tested:
-# 	res = master['resistance'][cell]
-# 	if res < min or res > max:
-# 		out_of_range[cell] = res
-#
-#
-# print(out_of_range)
-# print(len(out_of_range))
-#
+total_res = []
+for cell in cells_tested:
+	res = master['resistance'][cell]
+	total_res.append(res)
+
+res_mean = 	statistics.mean(total_res)
+res_std = statistics.stdev(total_res)
+
+
+min = res_mean - res_std*3
+max = res_mean + res_std*3
+
+print(res_mean)
+print(res_std)
+print(min)
+print(max)
+
+out_of_range = {}
+for cell in cells_tested:
+	res = master['resistance'][cell]
+	if res < min or res > max:
+		out_of_range[cell] = res
+
+
+print(out_of_range)
+print(len(out_of_range))
+
 #
 # Run 1
 # 18.775770238345547
@@ -70,7 +70,6 @@ cells_tested = list(master['resistance'].keys())
 
 # Pull out one cell that is close to mean for each 100
 # group cells by number by 100
-
 grouping = {}
 for i in range(18):
 	min_g = (100*i)
