@@ -22,11 +22,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="399bd4ca-f68b-43cc-99d5-d1f9dd58404d" name="Default Changelist" comment="updated full test">
-      <change afterPath="$PROJECT_DIR$/Data_Analysis/Analyze_Partial_Capacity.py" afterDir="false" />
+    <list default="true" id="399bd4ca-f68b-43cc-99d5-d1f9dd58404d" name="Default Changelist" comment="calculate slope">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Data_Analysis/Analyze_Data.py" beforeDir="false" afterPath="$PROJECT_DIR$/Data_Analysis/Analyze_Data.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Data_Analysis/Analyze_Resistance.py" beforeDir="false" afterPath="$PROJECT_DIR$/Data_Analysis/Analyze_Resistance.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Data_Analysis/Analyze_Partial_Capacity.py" beforeDir="false" afterPath="$PROJECT_DIR$/Data_Analysis/Analyze_Partial_Capacity.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -131,7 +129,7 @@
       </console-settings>
     </option>
   </component>
-  <component name="RunManager" selected="Python.Analyze_Resistance">
+  <component name="RunManager" selected="Python.Analyze_Partial_Capacity">
     <configuration name="Analyze_Data" type="PythonConfigurationType" factoryName="Python" singleton="false" temporary="true">
       <module name="ncsu_sp_battery_test" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -145,6 +143,27 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Data_Analysis/Analyze_Data.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Analyze_Partial_Capacity" type="PythonConfigurationType" factoryName="Python" singleton="false" temporary="true" nameIsGenerated="true">
+      <module name="ncsu_sp_battery_test" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$USER_HOME$/.conda/envs/SMU/bin/python" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Data_Analysis" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Data_Analysis/Analyze_Partial_Capacity.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -258,34 +277,13 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="site1test" type="PythonConfigurationType" factoryName="Python" singleton="false" temporary="true" nameIsGenerated="true">
-      <module name="ncsu_sp_battery_test" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="$USER_HOME$/.conda/envs/SMU/bin/python" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/site1test.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.Analyze_Partial_Capacity" />
         <item itemvalue="Python.Analyze_Resistance" />
         <item itemvalue="Python.Combine_Data" />
         <item itemvalue="Python.Analyze_Data" />
         <item itemvalue="Python.Barcode" />
-        <item itemvalue="Python.site1test" />
       </list>
     </recent_temporary>
   </component>
@@ -336,7 +334,14 @@
       <option name="project" value="LOCAL" />
       <updated>1651951859716</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="calculate slope">
+      <created>1653018069304</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1653018069304</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -399,7 +404,8 @@
     <MESSAGE value="saves excel" />
     <MESSAGE value="Resistance" />
     <MESSAGE value="updated full test" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated full test" />
+    <MESSAGE value="calculate slope" />
+    <option name="LAST_COMMIT_MESSAGE" value="calculate slope" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/Data_Analysis/Combine_Data.py">
