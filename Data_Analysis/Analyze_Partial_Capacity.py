@@ -44,16 +44,19 @@ for cell in cells_tested[:15]:
 	total_slope = (cap_volt[-1] - cap_volt[0]) / ( cap_time[-1] - cap_time[0])
 	volt_drop = cap_volt[-1] - cap_volt[0]
 
+
 	cell_dict['mean slope'] = mean_slope
 	cell_dict['total slope'] = total_slope
 	cell_dict['volt drop'] = volt_drop
+	cell_dict['Voc'] =  master['voc'][cell]
+	cell_dict['DC Resistance'] = master['resistance'][cell]
 
 	capacityTest_dict[cell] = cell_dict
 
-print(capacityTest_dict)
+# print(capacityTest_dict)
 
 cap_json = json.dumps(capacityTest_dict, indent=4)
-
+print(cap_json)
 
 
 
