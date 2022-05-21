@@ -57,8 +57,8 @@ def save_dict(dict, name):
 
 groupings = math.ceil(len(cells_tested)/100)		# math.ceil rounds up, math.floor rounds down #round rounds up or down at .5
 print(groupings)
-grouped = {}
 
+grouped = {}
 skipped = []
 for i in range(groupings):
 	print(i)
